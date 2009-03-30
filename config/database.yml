@@ -2,24 +2,24 @@
 
 development:
   adapter: mysql
-  database: site_development
-  username: root
+  database: tld3_development
+  username: tld
   password: 
   host: localhost
   encoding: utf8
   
 test:
   adapter: mysql
-  database: site_test
-  username: root
+  database: tld3_test
+  username: tld
   password: 
   host: localhost
   encoding: utf8
   
 staging:
   adapter: mysql
-  database: site_staging
-  username: site
+  database: tld3_staging
+  username: tld
   password: <%= File.read(PASSWORD_FILE).chomp if File.readable? PASSWORD_FILE %>
   host: localhost
   encoding: utf8
@@ -27,8 +27,8 @@ staging:
   
 production:
   adapter: mysql
-  database: site_production
-  username: site
+  database: tld3_production
+  username: tld
   password: <%= File.read(PASSWORD_FILE).chomp if File.readable? PASSWORD_FILE %>
   host: localhost
   encoding: utf8
