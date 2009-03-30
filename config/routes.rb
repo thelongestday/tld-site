@@ -1,5 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.comatose_admin
+  map.comatose_root ''
+
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products
 
