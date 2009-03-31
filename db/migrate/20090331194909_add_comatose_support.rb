@@ -5,7 +5,7 @@ module Comatose
   end
 end
 
-class <%= class_name %> < ActiveRecord::Migration
+class AddComatoseSupport < ActiveRecord::Migration
 
   # Schema for Comatose version 0.7+
   def self.up
