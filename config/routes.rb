@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.comatose_admin 
+
+  map.comatose_root ''
+
 
   map.comatose_admin
   map.comatose_root ''
