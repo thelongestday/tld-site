@@ -1,0 +1,53 @@
+CREATE TABLE `comatose_page_versions` (
+  `id` int(11) NOT NULL auto_increment,
+  `comatose_page_id` int(11) default NULL,
+  `version` int(11) default NULL,
+  `parent_id` int(11) default NULL,
+  `full_path` text,
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `keywords` varchar(255) default NULL,
+  `body` text,
+  `filter_type` varchar(25) default 'Textile',
+  `author` varchar(255) default NULL,
+  `position` int(11) default '0',
+  `updated_on` datetime default NULL,
+  `created_on` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `comatose_pages` (
+  `id` int(11) NOT NULL auto_increment,
+  `parent_id` int(11) default NULL,
+  `full_path` text,
+  `title` varchar(255) default NULL,
+  `slug` varchar(255) default NULL,
+  `keywords` varchar(255) default NULL,
+  `body` text,
+  `filter_type` varchar(25) default 'Textile',
+  `author` varchar(255) default NULL,
+  `position` int(11) default '0',
+  `version` int(11) default NULL,
+  `updated_on` datetime default NULL,
+  `created_on` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `punters` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  `state` varchar(255) default NULL,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) NOT NULL,
+  UNIQUE KEY `unique_schema_migrations` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO schema_migrations (version) VALUES ('20090331195807');
+
+INSERT INTO schema_migrations (version) VALUES ('20090404152138');
