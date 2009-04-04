@@ -25,6 +25,8 @@ Rails::Initializer.run do |config|
              :lib => 'will_paginate', 
              :source => 'http://gems.github.com', 
              :version => '~> 2.3.8'
+
+  config.gem 'rubyist-aasm', :version => '~> 2.0.5', :lib => 'aasm', :source => "http://gems.github.com"
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
