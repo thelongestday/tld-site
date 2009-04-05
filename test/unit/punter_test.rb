@@ -46,10 +46,11 @@ class PunterTest < ActiveSupport::TestCase
       assert_equal 'da7beef01d68e7350d736f30f8eff4d6cd444f87', @punter.salted_password
     end
 
-    should "set token correctly" do
+    should "set token correctly and disable password when it does so" do
       Punter.expects(:random_salt).returns('ABC')
       @punter.set_token!
       assert_equal 'e8fe100f61378807', @punter.authentication_token
+      assert_equal 'unhashable', @punter.salted_password
     end
 
   end

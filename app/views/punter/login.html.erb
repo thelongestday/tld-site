@@ -1,0 +1,15 @@
+
+<p>Please login with your email address and password.</p>
+
+<% form_for :punter, @punter, :url => { :action => :login } do |f| %>
+
+  <p><%= f.label :email %>: <%= f.text_field :email %></p>
+  <p><%= f.label :password %>: <%= f.password_field :password %></p>
+
+  <%= submit_tag "Login" %>
+
+<% end %>
+
+<p><%= link_to "Forgotten password", :action => 'reset' %></p>
+
+<p>Problems? Please mail <font face="courier"><a href="mailto:site@thelongestday.net">site@thelongestday.net</a></font></p>

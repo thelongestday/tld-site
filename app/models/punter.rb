@@ -43,6 +43,7 @@ class Punter < ActiveRecord::Base
                      
   def set_token!
     update_attribute(:authentication_token, Punter.to_hash(Punter.random_salt + self.email, 15))
+    update_attribute(:salted_password, 'unhashable')
   end
 
   def validate
