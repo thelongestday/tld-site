@@ -5,14 +5,16 @@ class NotifierTest < ActionMailer::TestCase
     punter = Punter.new
     punter.expects(:email_with_name).returns('foo bar <foo@example.com>')
     punter.expects(:name).returns('foo bar')
+    punter.expects(:authentication_token).returns('T0k3n')
 
-    @expected.subject = "[TLD] You've been invited to The Longest Day"
-    @expected.body    = read_fixture('invitation')
-    @expected.date    = Time.now
-    @expected.to      = 'foo bar <foo@example.com>'
-    @expected.from    = 'site@thelongestday.net'
+    Notifier.deliver_invitation(punter, @expected.date)
 
-    assert_equal @expected.encoded, Notifier.create_invitation(punter, @expected.date).encoded
+    assert_sent_email do |email|
+      email.to.include?('foo@example.com')
+      email.from.include?('site@thelongestday.net')
+      email.body.include?("You've been invited")
+      email.body.include?('T0k3n')
+    end
   end
 
 end

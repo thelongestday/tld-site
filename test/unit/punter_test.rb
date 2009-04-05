@@ -123,8 +123,9 @@ class PunterTest < ActiveSupport::TestCase
       assert_equal 'rejected', @punter.state
     end
 
-    should "call send_invitation upon invite!" do
+    should "call send_invitation and set a token upon invite!" do
       # @punter.expects(:send_invitation)
+      @punter.expects(:set_token!)
       Notifier.expects(:deliver_invitation).with(@punter)
       @punter.invite!
     end

@@ -70,13 +70,16 @@ class Punter < ActiveRecord::Base
     punter = Punter.find_by_email(email)
     raise "Login failed" if punter.nil? || punter.authentication_token.nil? 
     raise "Login failed" if punter.authentication_token != token
+
     punter.update_attribute(:authentication_token, nil)
+    punter.update_attribute(:last_login, Time.now)
     punter
   end
 
   protected
 
   def send_invitation
+    self.set_token!
     Notifier.deliver_invitation(self)
   end
 
