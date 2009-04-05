@@ -53,4 +53,25 @@ class PunterControllerTest < ActionController::TestCase
     should_redirect_to("Login page") { login_path }
   end
 
+  context "on GET to :confirm" do
+    context "with incorrect parameters" do
+      setup do
+        Punter.expects(:authenticate_by_token).with('foo@example.com', 'abc').raises(RuntimeError)
+        get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
+      end
+      should_set_the_flash_to :notice => 'Que?'
+      should_redirect_to("Login page") { login_path }
+    end
+
+    context "with correct parameters" do
+      setup do
+        @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+        Punter.expects(:authenticate_by_token).with('foo@example.com', 'abc').returns(@punter)
+        get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
+      end
+      should_set_session(:punter_id) { @punter.id }
+      should_redirect_to("User info page") { user_show_path }
+    end
+
+  end
 end

@@ -25,6 +25,23 @@ class PunterController < ApplicationController
   end
 
   def confirm
+    session[:punter_id ] = nil
+    unless params.has_key?(:email) && params.has_key?(:token)
+      # FIXME: doubt this can happen, no routing
+      flash[:notice] = 'Incorrect user confirmation details.'
+      redirect_to login_path
+    end
+
+    begin
+      punter = Punter.authenticate_by_token(params[:email], params[:token])
+    rescue
+      flash[:notice] = 'Incorrect user confirmation details.'
+      redirect_to login_path
+      return
+    end
+
+    session[:punter_id] = punter.id
+    redirect_to user_show_path
   end
 
   def edit
