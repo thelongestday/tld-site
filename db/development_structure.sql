@@ -14,7 +14,7 @@ CREATE TABLE `comatose_page_versions` (
   `updated_on` datetime default NULL,
   `created_on` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comatose_pages` (
   `id` int(11) NOT NULL auto_increment,
@@ -31,23 +31,29 @@ CREATE TABLE `comatose_pages` (
   `updated_on` datetime default NULL,
   `created_on` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `punters` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) default NULL,
-  `email` varchar(255) default NULL,
+  `name` varchar(128) default NULL,
+  `email` varchar(128) default NULL,
   `state` varchar(255) default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
+  `salt` varchar(64) default NULL,
+  `salted_password` varchar(64) default NULL,
+  `authentication_token` varchar(16) default NULL,
+  `last_login` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
   UNIQUE KEY `unique_schema_migrations` (`version`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO schema_migrations (version) VALUES ('20090331195807');
 
 INSERT INTO schema_migrations (version) VALUES ('20090404152138');
+
+INSERT INTO schema_migrations (version) VALUES ('20090405113812');

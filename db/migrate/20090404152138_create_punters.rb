@@ -1,8 +1,8 @@
 class CreatePunters < ActiveRecord::Migration
   def self.up
     create_table :punters do |t|
-      t.string :name
-      t.string :email
+      t.string :name, :limit => 128
+      t.string :email, :limit => 128
       t.string :state
 
       t.timestamps

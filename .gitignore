@@ -1,3 +1,4 @@
+config/initializers/authentication.rb
 log/*
 tmp/**/*
 db/schema.rb
