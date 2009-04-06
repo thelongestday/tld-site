@@ -2,7 +2,7 @@
 set :rails_env, 'production'
 
 # Who are we?
-set :application, 'site'
+set :application, 'tld-site'
 set :repository, "git@github.com:thelongestday/#{application}.git"
 set :scm, "git"
 set :deploy_via, :remote_cache
