@@ -30,6 +30,5 @@ production:
   database: tld3_production
   username: tld
   password: <%= File.read(PASSWORD_FILE).chomp if File.readable? PASSWORD_FILE %>
-  host: localhost
+  host: 172.16.1.254
   encoding: utf8
-  socket: /var/lib/mysql/mysql.sock

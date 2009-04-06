@@ -3,19 +3,19 @@ set :rails_env, 'production'
 
 # Who are we?
 set :application, 'site'
-set :repository, "git@github.com:thoughtbot/#{application}.git"
+set :repository, "git@github.com:thelongestday/#{application}.git"
 set :scm, "git"
 set :deploy_via, :remote_cache
 set :branch, "production"
 
 # Where to deploy to?
-role :web, "production.example.com"
-role :app, "production.example.com"
-role :db,  "production.example.com", :primary => true
+role :web, "www.thelongestday.net"
+role :app, "www.thelongestday.net"
+role :db,  "www.thelongestday.net", :primary => true
 
 # Deploy details
-set :user, "#{application}"
-set :deploy_to, "/home/#{user}/apps/#{application}"
+set :user, "rails"
+set :deploy_to, "/usr/local/www/rails/tld3"
 set :use_sudo, false
 set :checkout, 'export'
 
