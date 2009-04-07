@@ -1,4 +1,8 @@
 class PunterController < ApplicationController
+  include PunterSystem
+
+  before_filter :login_required, :only => [ :show ]
+  before_filter :admin_required, :only => [ :reject ]
   def login
     session[:punter_id] = nil
 
@@ -8,14 +12,18 @@ class PunterController < ApplicationController
       return
     end
     begin
-      punter = Punter.authenticate_by_email(params[:punter][:email], params[:punter][:password])
-    rescue
+      punter = Punter.authenticate_by_password(params[:punter][:email], params[:punter][:password])
+    rescue RuntimeError
       flash[:notice] = 'Incorrect details entered. Please try again.'
       return
     end
 
     session[:punter_id] = punter.id
-    redirect_to user_show_path
+    if session[:after_login]
+      redirect_to(session[:after_login])
+    else
+      redirect_to user_show_path
+    end
   end
 
   def logout
@@ -53,4 +61,8 @@ class PunterController < ApplicationController
   def show
   end
 
+  def reject
+    render :show
+  end
 end
+

@@ -44,8 +44,9 @@ CREATE TABLE `punters` (
   `salted_password` varchar(64) default NULL,
   `authentication_token` varchar(16) default NULL,
   `last_login` datetime default NULL,
+  `admin` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
@@ -57,3 +58,5 @@ INSERT INTO schema_migrations (version) VALUES ('20090331195807');
 INSERT INTO schema_migrations (version) VALUES ('20090404152138');
 
 INSERT INTO schema_migrations (version) VALUES ('20090405113812');
+
+INSERT INTO schema_migrations (version) VALUES ('20090407192913');
