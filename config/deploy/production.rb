@@ -7,6 +7,7 @@ set :repository, "git@github.com:thelongestday/#{application}.git"
 set :scm, "git"
 set :deploy_via, :remote_cache
 set :branch, "production"
+ssh_options[:forward_agent] = true
 
 # Where to deploy to?
 role :web, "www.thelongestday.net"
