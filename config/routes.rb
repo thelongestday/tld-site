@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.comatose_admin
-  map.comatose_root ''
+  map.comatose_root '', :layout=> 'tld'
 
   map.with_options :controller => 'punter' do |m|
     m.login  '/login',      :action => 'login'
