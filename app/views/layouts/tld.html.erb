@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=<%= Comatose.config.content_type %>"/>
+    <meta name="Generator" content="Comatose"/>
+    <meta name="Keywords" content="<%= @page.keywords %>"/>
+    <title><%= @page.title %></title>
+    <link rel="stylesheet" type="text/css" href="http://bork.thelongestday.net/stylesheets/site-tld2009.css" >
+  </head>
+  <body>
+  <div id="short_page"> 
+    <table align="center" border="0" cellpadding="0" cellspacing="10" width="1000" height="459">
+      <tbody>
+        <tr>
+          <td valign="top" width="900" height="439">
+            <blockquote>
+              <p class="style28">
+                <%= yield %>
+              </p>
+            </blockquote>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
