@@ -6,9 +6,12 @@ class Punter < ActiveRecord::Base
   validates_uniqueness_of :email
   validates_length_of :name, :within => 6 .. 128
   validates_length_of :email, :maximum => 128
-  validates_confirmation_of :password
 
-  attr_accessor :password, :password_confirmation
+  attr_accessor :password, :password_confirmation, :set_new_password
+  
+  validates_presence_of :password, :if => :validate_password?
+  validates_length_of :password, :within => 6 .. 64, :if => :validate_password?
+  validates_confirmation_of :password, :if => :validate_password?
 
   include AASM
 
@@ -21,6 +24,7 @@ class Punter < ActiveRecord::Base
 
   aasm_event :invite do
     transitions :from => :new, :to => :invited
+    transitions :from => :invited, :to => :invited
   end
 
   aasm_event :confirm do
@@ -35,6 +39,18 @@ class Punter < ActiveRecord::Base
     "#{self.name} <#{self.email}>"
   end
 
+  def validate_password?
+    self.set_new_password
+  end
+
+  def must_set_password?
+    self.salt.nil?
+  end
+
+  def name_with_email
+    self.email_with_name
+  end
+
   def set_password!
     update_attribute(:salt, Punter.random_salt)
     update_attribute(:salted_password, Punter.to_hash(self.salt + @password))
@@ -44,6 +60,7 @@ class Punter < ActiveRecord::Base
                      
   def set_token!
     update_attribute(:authentication_token, Punter.to_hash(Punter.random_salt + self.email, 15))
+    update_attribute(:salt, nil)
     update_attribute(:salted_password, 'unhashable')
   end
 
@@ -52,7 +69,7 @@ class Punter < ActiveRecord::Base
       errors.add :email, "doesn't look like a proper email address" unless RFC822::EmailAddress.match(self.email)
     end
     
-    if @password != @password_confirmation # could both be nil
+    if self.validate_password? && @password != @password_confirmation # could both be nil
       errors.add :password, "don't match"
       errors.add :password_confirmation, "don't match"
     end
@@ -68,10 +85,9 @@ class Punter < ActiveRecord::Base
     punter
   end
 
-  def self.authenticate_by_token(email, token)
-    punter = Punter.find_by_email(email)
-    raise(PunterException, 'Login failed') if punter.nil? || punter.authentication_token.nil? 
-    raise(PunterException, 'Login failed') if punter.authentication_token != token
+  def self.authenticate_by_token(token)
+    punter = Punter.find_by_authentication_token(token)
+    raise(PunterException, 'Login failed') if punter.nil? || punter.authentication_token != token
 
     punter.update_attribute(:authentication_token, nil)
     punter.update_attribute(:last_login, Time.now)

@@ -1,2 +1,3 @@
-<h1>Punter#edit</h1>
-<p>Find me in app/views/punter/edit.html.erb</p>
+<p><%=h @punter.name_with_email %></p>
+
+<%= link_to 'Change password', :action => :edit %>

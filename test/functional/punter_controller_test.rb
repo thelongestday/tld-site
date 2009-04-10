@@ -1,6 +1,9 @@
 require 'test_helper'
 
 class PunterControllerTest < ActionController::TestCase
+
+  include PunterTestHelper
+
   context "on GET to :login" do
     setup  { get :login }
     should_set_session(:punter_id) { nil }
@@ -67,7 +70,7 @@ class PunterControllerTest < ActionController::TestCase
   context "on GET to :confirm" do
     context "with incorrect parameters" do
       setup do
-        Punter.expects(:authenticate_by_token).with('foo@example.com', 'abc').raises(RuntimeError)
+        Punter.expects(:authenticate_by_token).with('abc').raises(RuntimeError)
         get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
       end
       should_set_the_flash_to :notice => 'Que?'
@@ -77,11 +80,15 @@ class PunterControllerTest < ActionController::TestCase
     context "with correct parameters" do
       setup do
         @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
-        Punter.expects(:authenticate_by_token).with('foo@example.com', 'abc').returns(@punter)
-        get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
+        @punter.invite!
+        Punter.expects(:authenticate_by_token).with('abc').returns(@punter)
+        @punter.expects(:confirm!)
+        get :confirm, { :token => 'abc' } 
       end
+
       should_set_session(:punter_id) { @punter.id }
-      should_redirect_to("User info page") { user_show_path }
+      should_redirect_to("User edit page") { user_edit_path }
+      
     end
 
   end
@@ -89,6 +96,7 @@ class PunterControllerTest < ActionController::TestCase
   context "as a consumer of PunterSystem" do
     context "calling login_required without a punter_id in session" do
       setup { get :show }
+      should_not_assign_to :punter
       should_redirect_to("Login page") { login_path }
       should_set_the_flash_to /Please login/
     end
@@ -99,6 +107,7 @@ class PunterControllerTest < ActionController::TestCase
         Punter.expects(:find).with(732).returns(nil)
         get :show
       end
+      should_not_assign_to :punter
       should_redirect_to("Login page") { login_path }
       should_set_the_flash_to /Please login/
     end
@@ -109,11 +118,13 @@ class PunterControllerTest < ActionController::TestCase
         Punter.expects(:find).with(732).returns(Punter.create!(:name => 'foo bar', :email => 'foo@example.com'))
         get :show
       end
+      should_assign_to :punter, :equals => @punter
       should_respond_with :success
     end
 
     context "calling admin_required without a punter_id in session" do
       setup { get :reject }
+      should_not_assign_to :punter
       should_redirect_to("Login page") { login_path }
       should_set_the_flash_to /Please login/
     end
@@ -124,31 +135,34 @@ class PunterControllerTest < ActionController::TestCase
         Punter.expects(:find).with(732).returns(nil)
         get :reject
       end
+      should_not_assign_to :punter
       should_redirect_to("Login page") { login_path }
       should_set_the_flash_to /Please login/
     end
 
-    context "calling admin_required with a legitmmate punter_id in session that isn't an admin" do
+    context "calling admin_required with a legitimate punter_id in session that isn't an admin" do
       setup do
         session[:punter_id] = 732
         @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
-        Punter.expects(:find).with(732).twice.returns(@punter)
         @punter.expects(:admin?).returns(false)
+        Punter.expects(:find).with(732).returns(@punter)
         get :reject
       end
+      should_not_assign_to :punter
       should_redirect_to("Login page") { login_path }
       should_set_the_flash_to /Please login/
     end
 
-    context "calling admin_required with a legitmmate punter_id in session that is an admin" do
+    context "calling admin_required with a legitimate punter_id in session that is an admin" do
       setup do
         session[:punter_id] = 732
         @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
-        Punter.expects(:find).with(732).twice.returns(@punter)
+        Punter.expects(:find).with(732).returns(@punter)
         @punter.expects(:admin?).returns(true)
         get :reject
       end
-      should_render_template :show
+      should_assign_to :punter, :equals => @punter
+      should_render_template :show # :reject renders :show
     end
   end
 

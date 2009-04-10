@@ -15,16 +15,6 @@ class PunterTest < ActiveSupport::TestCase
     should_ensure_length_in_range :email, (0.. 128)
     should_allow_values_for :email, "a@b.com"
 
-    # should_validate_confirmation_of :password
-    should "validate confirmation of :password" do
-      @punter.password = 'hashmeup'
-      @punter.valid?
-      assert_contains @punter.errors.on(:password), "don't match"
-      assert_contains @punter.errors.on(:password_confirmation), "don't match"
-      @punter.password_confirmation = 'hashmeup'
-      assert_valid @punter
-    end
-
     should "create a email address with display name" do
       assert_equal 'foo bar <foo@example.com>', @punter.email_with_name
     end
@@ -39,7 +29,6 @@ class PunterTest < ActiveSupport::TestCase
 
     should "set password correctly" do
       @punter.password = 'hashmeup'
-      @punter.password_confirmation = 'hashmeup'
       Punter.expects(:random_salt).returns('ABC')
       @punter.set_password!
       assert_equal 'ABC', @punter.salt
@@ -51,13 +40,32 @@ class PunterTest < ActiveSupport::TestCase
       @punter.set_token!
       assert_equal 'e8fe100f61378807', @punter.authentication_token
       assert_equal 'unhashable', @punter.salted_password
+      assert_equal nil, @punter.salt
+    end
+  end
+
+  context "Punter setting new password" do
+    setup do
+      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com', :password => 'foobar')
+      @punter.set_new_password = true
     end
 
+    should_validate_presence_of :password
+    should_ensure_length_in_range :password, (6 .. 64)
+
+    should "validate confirmation of :password" do
+      @punter.password = 'hashmeup'
+      @punter.valid?
+      assert_contains @punter.errors.on(:password), "don't match"
+      assert_contains @punter.errors.on(:password_confirmation), "don't match"
+      @punter.password_confirmation = 'hashmeup'
+      assert_valid @punter
+    end
   end
 
   context "A known punter" do
     setup do
-      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com', :password => 'foobar', :password_confirmation => 'foobar')
+      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com', :password => 'foobar')
       @punter.set_password!
     end
     
@@ -79,28 +87,20 @@ class PunterTest < ActiveSupport::TestCase
       assert_in_delta Time.now, punter.last_login, 5
     end
 
-    should "not authenticate using wrong email and token" do
-      assert_raise(PunterException) { Punter.authenticate_by_token('bar@example.com', 'foobar') }
-    end
-
-    should "not authenticate using right email and token if one isn't set" do
-      assert_raise(PunterException) { Punter.authenticate_by_token('foo@example.com', 'foobar') }
-    end
-
-    should "not authenticate using right email and wrong token" do
+    should "not authenticate using wrong token" do
       @punter.set_token!
-      assert_raise(PunterException) { Punter.authenticate_by_token('foo@example.com', 'foobar') }
+      assert_raise(PunterException) { Punter.authenticate_by_token('foobar') }
     end
 
-    should "authenticate using right email and right token" do
+    should "authenticate using right token" do
       @punter.set_token!
-      punter = Punter.authenticate_by_token('foo@example.com', @punter.authentication_token) 
+      punter = Punter.authenticate_by_token(@punter.authentication_token) 
       assert_equal punter, @punter
     end
     
     should "clear token after authenticating with it" do
       @punter.set_token!
-      punter = Punter.authenticate_by_token('foo@example.com', @punter.authentication_token) 
+      punter = Punter.authenticate_by_token(@punter.authentication_token) 
       assert_nil punter.authentication_token
     end
   end
@@ -153,9 +153,9 @@ class PunterTest < ActiveSupport::TestCase
       assert_equal 'rejected', @punter.state
     end
 
-    should "not become re-invited" do
-      assert_raise(AASM::InvalidTransition) { @punter.invite! }
-    end
+#    should "not become re-invited" do
+#      assert_raise(AASM::InvalidTransition) { @punter.invite! }
+#    end
   end
 
   context "A confirmed punter" do

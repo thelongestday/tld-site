@@ -1,8 +1,11 @@
 class PunterController < ApplicationController
   include PunterSystem
 
-  before_filter :login_required, :only => [ :show ]
+  before_filter :login_required, :only => [ :show, :edit, :update ]
   before_filter :admin_required, :only => [ :reject ]
+  verify :params => :punter, :only => [ :update ], :redirect_to => :user_show_path
+
+
   def login
     session[:punter_id] = nil
 
@@ -34,22 +37,24 @@ class PunterController < ApplicationController
 
   def confirm
     session[:punter_id ] = nil
-    unless params.has_key?(:email) && params.has_key?(:token)
+    unless params.has_key?(:token)
       # FIXME: doubt this can happen, no routing
       flash[:notice] = 'Incorrect user confirmation details.'
       redirect_to login_path
     end
 
     begin
-      punter = Punter.authenticate_by_token(params[:email], params[:token])
+      punter = Punter.authenticate_by_token(params[:token])
     rescue
       flash[:notice] = 'Incorrect user confirmation details.'
       redirect_to login_path
       return
     end
 
+    punter.confirm!
+    
     session[:punter_id] = punter.id
-    redirect_to user_show_path
+    redirect_to user_edit_path
   end
 
   def edit
@@ -58,11 +63,15 @@ class PunterController < ApplicationController
   def reset
   end
 
-  def show
-  end
-
   def reject
     render :show
   end
+
+  def show
+  end
+
+  def update
+  end
+
 end
 

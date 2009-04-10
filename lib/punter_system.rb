@@ -1,24 +1,32 @@
+require 'punter_exception'
+
 module PunterSystem
 
+  protected
+
   def login_required
-    if session[:punter_id] && Punter.find(session[:punter_id])
-      return
-    else
+    begin
+      raise PunterException unless session[:punter_id]
+      @punter = Punter.find(session[:punter_id])
+      raise PunterException unless @punter
+    rescue PunterException
       flash[:error] = "Please login."
       return_here_after_login
       redirect_to login_path
-      return
     end
   end
 
   def admin_required
-    if session[:punter_id] && Punter.find(session[:punter_id]) && Punter.find(session[:punter_id]).admin?
-      return
-    else
+    begin
+      raise PunterException unless session[:punter_id]
+      punter = Punter.find(session[:punter_id])
+      raise PunterException unless punter
+      raise PunterException unless punter.admin?
+      @punter = punter
+    rescue PunterException
       flash[:error] = "Please login."
       return_here_after_login
       redirect_to login_path
-      return
     end
   end
 

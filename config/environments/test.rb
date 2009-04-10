@@ -21,6 +21,8 @@ config.action_controller.allow_forgery_protection    = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
+config.action_mailer.default_url_options = { :host => 'localhost', :port=>3000 } 
+
 config.gem 'mocha', 
            :version => '>= 0.9.5'
 config.gem 'thoughtbot-factory_girl', 
