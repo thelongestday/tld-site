@@ -2,6 +2,7 @@ config/initializers/authentication.rb
 log/*
 tmp/**/*
 db/schema.rb
+db/snap
 db/*.sqlite3
 public/system
 *.DS_Store
