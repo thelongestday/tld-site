@@ -53,7 +53,7 @@ class PunterControllerTest < ActionController::TestCase
         post :login, :punter => { :email => 'foo@example.com', :password => 'foobar' }
       end
       should_set_session(:punter_id) { @punter.id }
-      should_redirect_to("Stored URI") { '/over/here' }
+      should_redirect_to("stored URI") { '/over/here' }
     end
   end
 

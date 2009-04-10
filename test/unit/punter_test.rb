@@ -62,11 +62,11 @@ class PunterTest < ActiveSupport::TestCase
     end
     
     should "not authenticate using wrong email and password" do
-      assert_raise(RuntimeError) { Punter.authenticate_by_password('bar@example.com', 'foobar') }
+      assert_raise(PunterException) { Punter.authenticate_by_password('bar@example.com', 'foobar') }
     end
 
     should "not authenticate using right email but wrong password" do
-      assert_raise(RuntimeError) { Punter.authenticate_by_password('foo@example.com', 'barfoo') }
+      assert_raise(PunterException) { Punter.authenticate_by_password('foo@example.com', 'barfoo') }
     end
 
     should "authenticate using right email and right password" do
@@ -80,16 +80,16 @@ class PunterTest < ActiveSupport::TestCase
     end
 
     should "not authenticate using wrong email and token" do
-      assert_raise(RuntimeError) { Punter.authenticate_by_token('bar@example.com', 'foobar') }
+      assert_raise(PunterException) { Punter.authenticate_by_token('bar@example.com', 'foobar') }
     end
 
     should "not authenticate using right email and token if one isn't set" do
-      assert_raise(RuntimeError) { Punter.authenticate_by_token('foo@example.com', 'foobar') }
+      assert_raise(PunterException) { Punter.authenticate_by_token('foo@example.com', 'foobar') }
     end
 
     should "not authenticate using right email and wrong token" do
       @punter.set_token!
-      assert_raise(RuntimeError) { Punter.authenticate_by_token('foo@example.com', 'foobar') }
+      assert_raise(PunterException) { Punter.authenticate_by_token('foo@example.com', 'foobar') }
     end
 
     should "authenticate using right email and right token" do
@@ -174,5 +174,19 @@ class PunterTest < ActiveSupport::TestCase
       assert_raise(AASM::InvalidTransition) { @punter.invite! }
     end
   end
+
+  context "A punter from last year's system" do
+    setup do
+      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@zomo.co.uk',
+                               :salt => '6eeec920da40d27aa865146aeca2e65ccc74d52e',
+                               :salted_password => '2316248c680b3548894eb57633b9feac5c0ffa78')
+    end
+
+    should "authenticate with last year's password" do
+      assert_equal @punter, Punter.authenticate_by_password('foo@zomo.co.uk', 'foofoo')
+    end
+  end
+
+
 
 end

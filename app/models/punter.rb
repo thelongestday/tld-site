@@ -1,4 +1,5 @@
 require 'regex'
+require 'punter_exception'
 
 class Punter < ActiveRecord::Base
   validates_presence_of :name, :email
@@ -59,9 +60,9 @@ class Punter < ActiveRecord::Base
 
   def self.authenticate_by_password(email, password)
     punter = Punter.find_by_email(email)
-    raise "Login failed" if punter.nil?
+    raise(PunterException, 'Login failed') if punter.nil?
     punter = Punter.find_by_email_and_salted_password(email, Punter.to_hash(punter.salt + password))
-    raise "Login failed" if punter.nil?
+    raise(PunterException, 'Login failed') if punter.nil?
 
     punter.update_attribute(:last_login, Time.now)
     punter
@@ -69,8 +70,8 @@ class Punter < ActiveRecord::Base
 
   def self.authenticate_by_token(email, token)
     punter = Punter.find_by_email(email)
-    raise "Login failed" if punter.nil? || punter.authentication_token.nil? 
-    raise "Login failed" if punter.authentication_token != token
+    raise(PunterException, 'Login failed') if punter.nil? || punter.authentication_token.nil? 
+    raise(PunterException, 'Login failed') if punter.authentication_token != token
 
     punter.update_attribute(:authentication_token, nil)
     punter.update_attribute(:last_login, Time.now)
@@ -91,7 +92,6 @@ class Punter < ActiveRecord::Base
   def self.random_salt
     [Array.new(6){rand(256).chr}.join].pack("m").chomp
   end
-
 
 end
 
