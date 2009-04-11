@@ -1,7 +1,7 @@
 class AddAuthenticationToPunter < ActiveRecord::Migration
   def self.up
-    add_column :punters, :salt, :string, :limit => 64
-    add_column :punters, :salted_password, :string, :limit => 64
+    add_column :punters, :salt, :string, :limit => 64, :default => ''
+    add_column :punters, :salted_password, :string, :limit => 64, :default => ''
     add_column :punters, :authentication_token, :string, :limit => 16
     add_column :punters, :last_login, :datetime
   end

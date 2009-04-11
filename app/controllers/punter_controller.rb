@@ -71,6 +71,13 @@ class PunterController < ApplicationController
   end
 
   def update
+    params[:punter].delete(:admin)
+    if @punter.update_attributes(params[:punter])
+      flash[:notice] = 'Details updated.'
+      redirect_to user_show_path
+    else
+      render :edit
+    end
   end
 
 end

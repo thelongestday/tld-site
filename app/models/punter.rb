@@ -7,11 +7,13 @@ class Punter < ActiveRecord::Base
   validates_length_of :name, :within => 6 .. 128
   validates_length_of :email, :maximum => 128
 
-  attr_accessor :password, :password_confirmation, :set_new_password
-  
   validates_presence_of :password, :if => :validate_password?
   validates_length_of :password, :within => 6 .. 64, :if => :validate_password?
-  validates_confirmation_of :password, :if => :validate_password?
+
+  before_save :set_password
+  after_save :clear_tmp_password
+
+  attr_accessor :password, :password_confirmation, :set_new_password
 
   include AASM
 
@@ -35,33 +37,37 @@ class Punter < ActiveRecord::Base
     transitions :from => [ :new, :invited, :confirmed ], :to => :rejected
   end
 
+  def clear_tmp_password
+    self.password = nil
+    self.password_confirmation = nil
+    self.set_new_password = nil
+  end
+
   def email_with_name 
     "#{self.name} <#{self.email}>"
-  end
-
-  def validate_password?
-    self.set_new_password
-  end
-
-  def must_set_password?
-    self.salt.nil?
   end
 
   def name_with_email
     self.email_with_name
   end
 
+  def set_password
+    if self.set_new_password
+      salt = Punter.random_salt
+      self.salt = salt
+      self.salted_password = Punter.to_hash(salt + @password)
+    end
+  end
+
   def set_password!
-    update_attribute(:salt, Punter.random_salt)
-    update_attribute(:salted_password, Punter.to_hash(self.salt + @password))
-    @password = nil
-    @password_confirmation = nil
+    self.set_password
+    self.save!
   end
                      
   def set_token!
     update_attribute(:authentication_token, Punter.to_hash(Punter.random_salt + self.email, 15))
-    update_attribute(:salt, nil)
-    update_attribute(:salted_password, 'unhashable')
+    update_attribute(:salt, '')
+    update_attribute(:salted_password, '')
   end
 
   def validate
@@ -69,10 +75,14 @@ class Punter < ActiveRecord::Base
       errors.add :email, "doesn't look like a proper email address" unless RFC822::EmailAddress.match(self.email)
     end
     
-    if self.validate_password? && @password != @password_confirmation # could both be nil
-      errors.add :password, "don't match"
-      errors.add :password_confirmation, "don't match"
-    end
+   if self.validate_password? && @password != @password_confirmation # could both be nil
+     errors.add :password, "don't match"
+     errors.add :password_confirmation, "don't match"
+   end
+  end
+
+  def validate_password?
+    self.set_new_password 
   end
 
   def self.authenticate_by_password(email, password)

@@ -40,13 +40,13 @@ CREATE TABLE `punters` (
   `state` varchar(255) default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
-  `salt` varchar(64) default NULL,
-  `salted_password` varchar(64) default NULL,
+  `salt` varchar(64) default '',
+  `salted_password` varchar(64) default '',
   `authentication_token` varchar(16) default NULL,
   `last_login` datetime default NULL,
   `admin` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,

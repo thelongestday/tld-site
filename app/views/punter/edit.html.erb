@@ -1,7 +1,7 @@
 <p><%=h @punter.name_with_email %></p>
 
 <% form_for :punter, @punter, :url => { :action => :update } do |f| %>
-
+  <%= f.error_messages %>
   <p><%= f.label :password %>: <%= f.password_field :password %> <%= @punter.must_set_password? ? 'required' : '' %></p>
   <p><%= f.label :password_confirmation %>: <%= f.password_field :password_confirmation %> <%= @punter.must_set_password? ? 'required' : '' %></p>
 

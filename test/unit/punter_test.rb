@@ -27,20 +27,30 @@ class PunterTest < ActiveSupport::TestCase
       assert_not_equal Punter.random_salt, Punter.random_salt
     end
 
-    should "set password correctly" do
+    should "set password correctly if set_new_password is true" do
       @punter.password = 'hashmeup'
+      @punter.password_confirmation = 'hashmeup'
+      @punter.set_new_password = true
       Punter.expects(:random_salt).returns('ABC')
-      @punter.set_password!
+      @punter.set_password
       assert_equal 'ABC', @punter.salt
       assert_equal 'da7beef01d68e7350d736f30f8eff4d6cd444f87', @punter.salted_password
+    end
+    
+    should "not set password is set_new_password is false" do
+      @punter.password = 'hashmeup'
+      @punter.password_confirmation = 'hashmeup'
+      Punter.expects(:random_salt).never
+      @punter.set_password
+      assert_equal '', @punter.salt
     end
 
     should "set token correctly and disable password when it does so" do
       Punter.expects(:random_salt).returns('ABC')
       @punter.set_token!
       assert_equal 'e8fe100f61378807', @punter.authentication_token
-      assert_equal 'unhashable', @punter.salted_password
-      assert_equal nil, @punter.salt
+      assert_equal '', @punter.salted_password
+      assert_equal '', @punter.salt
     end
   end
 
@@ -63,10 +73,21 @@ class PunterTest < ActiveSupport::TestCase
     end
   end
 
+  context "A punter with default empty strings for salt, salted_password" do
+    setup do
+      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+    end
+
+    should "not be able to log in" do
+      assert_raise(PunterException) { Punter.authenticate_by_password('foo@example.com', '') }
+    end
+  end
+
+
   context "A known punter" do
     setup do
-      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com', :password => 'foobar')
-      @punter.set_password!
+      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com',
+                               :password => 'foobar', :password_confirmation => 'foobar', :set_new_password => true)
     end
     
     should "not authenticate using wrong email and password" do
