@@ -1,0 +1,15 @@
+.form-field {
+  margin-bottom:5px;
+}
+.form-field label {
+  float:left;
+  width:120px;
+  text-align:right;
+}
+
+.form-submit {
+  text-align:right;
+  margin-top:5px;
+  margin-bottom:5px;
+  margin-left:130px;
+}
