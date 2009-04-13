@@ -2,7 +2,6 @@ require 'test_helper'
 
 class ComatoseAdminControllerTest < ActionController::TestCase
   include PunterTestHelper
-  fixtures :comatose_pages
 
   context "on GET to :comatose_admin calls :admin_required when not logged in" do
     setup do
@@ -22,9 +21,11 @@ class ComatoseAdminControllerTest < ActionController::TestCase
   context "on GET to :comatose_admin calls :admin_required when logged in as an admin" do
     setup do
       login_as_admin
+      @controller.expects(:render)
       get :index
     end
     should_respond_with :success
-  end
+   end
+
 end
 
