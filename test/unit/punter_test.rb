@@ -172,10 +172,6 @@ class PunterTest < ActiveSupport::TestCase
       @punter.reject!
       assert_equal 'rejected', @punter.state
     end
-
-#    should "not become re-invited" do
-#      assert_raise(AASM::InvalidTransition) { @punter.invite! }
-#    end
   end
 
   context "A confirmed punter" do

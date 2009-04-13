@@ -13,6 +13,10 @@ class Punter < ActiveRecord::Base
   before_save :set_password
   after_save :clear_tmp_password
 
+  has_many :invitations
+  has_many :invitees, :through => :invitations
+  has_many :inviters, :through => :invitations
+
   attr_accessor :password, :password_confirmation, :set_new_password
 
   include AASM
@@ -25,12 +29,12 @@ class Punter < ActiveRecord::Base
   aasm_state :rejected
 
   aasm_event :invite do
-    transitions :from => :new, :to => :invited
+    transitions :from => :new,     :to => :invited
     transitions :from => :invited, :to => :invited
   end
 
   aasm_event :confirm do
-    transitions :from => :invited, :to => :confirmed
+    transitions :from => :invited,   :to => :confirmed
     transitions :from => :confirmed, :to => :confirmed
   end
 
