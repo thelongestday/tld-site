@@ -31,6 +31,7 @@ class Punter < ActiveRecord::Base
 
   aasm_event :confirm do
     transitions :from => :invited, :to => :confirmed
+    transitions :from => :confirmed, :to => :confirmed
   end
 
   aasm_event :reject do
