@@ -16,7 +16,7 @@ class PunterController < ApplicationController
     end
     begin
       punter = Punter.authenticate_by_password(params[:punter][:email], params[:punter][:password])
-    rescue RuntimeError
+    rescue PunterException
       flash[:notice] = 'Incorrect details entered. Please try again.'
       return
     end

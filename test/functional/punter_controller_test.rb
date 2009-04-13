@@ -31,7 +31,7 @@ class PunterControllerTest < ActionController::TestCase
   context "on POST to :login" do
     context "with incorrect user details" do
       setup do
-        Punter.expects(:authenticate_by_password).with('foo@example.com', 'foobar').raises(RuntimeError)
+        Punter.expects(:authenticate_by_password).with('foo@example.com', 'foobar').raises(PunterException)
         post :login, :punter => { :email => 'foo@example.com', :password => 'foobar' }
       end
     should_set_the_flash_to :notice => 'Incorrect details entered. Please try again.'
