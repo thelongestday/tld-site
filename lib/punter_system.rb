@@ -30,6 +30,22 @@ module PunterSystem
     end
   end
 
+  def page_filter
+    if params[:index] == 'invitees'
+      login_required
+    elsif params[:index] == 'attendees'
+      login_required
+      return unless @punter
+      unless @punter.has_ticket?
+        flash[:notice] = 'You need to buy a ticket to see that page.'
+        redirect_to user_show_path
+        return
+      end
+    else
+      true
+    end
+  end
+
   def return_here_after_login
     session[:after_login] = request.request_uri
   end

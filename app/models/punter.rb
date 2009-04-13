@@ -48,6 +48,10 @@ class Punter < ActiveRecord::Base
     "#{self.name} <#{self.email}>"
   end
 
+  def has_ticket?
+    false
+  end
+
   def name_with_email
     self.email_with_name
   end

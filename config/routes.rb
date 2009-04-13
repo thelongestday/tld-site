@@ -11,6 +11,8 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.comatose_admin
-  map.comatose_root '', :index => 'the-longest-day-2009', :layout=> 'tld'
+  map.comatose_root 'invitees',  :index => 'invitees',             :layout => 'tld'
+  map.comatose_root 'attendees', :index => 'attendees',            :layout => 'tld'
+  map.comatose_root '',          :index => 'the-longest-day-2009', :layout => 'tld'
 
 end
