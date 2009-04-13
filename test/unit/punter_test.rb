@@ -8,7 +8,7 @@ class PunterTest < ActiveSupport::TestCase
     end
 
     should_validate_presence_of :name, :email
-    should_ensure_length_in_range :name, (6 .. 128)
+    should_ensure_length_in_range :name, (3 .. 128)
 
     should_validate_uniqueness_of :email
     should_not_allow_values_for :email, "notreallyandemail address", :message => "doesn't look like a proper email address"

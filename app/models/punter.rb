@@ -4,7 +4,7 @@ require 'punter_exception'
 class Punter < ActiveRecord::Base
   validates_presence_of :name, :email
   validates_uniqueness_of :email
-  validates_length_of :name, :within => 6 .. 128
+  validates_length_of :name, :within => 3 .. 128
   validates_length_of :email, :maximum => 128
 
   validates_presence_of :password, :if => :validate_password?
