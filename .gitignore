@@ -1,4 +1,4 @@
-config/initializers/authentication.rb
+config/salt
 log/*
 tmp/**/*
 db/schema.rb

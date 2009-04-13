@@ -20,3 +20,5 @@ config.action_mailer.default_url_options = { :host => 'localhost', :port=>3000 }
 
 HOST = 'localhost'
 
+SALT_FILE = File.join(RAILS_ROOT, 'config', 'salt')  
+SITE_SALT = File.read(SALT_FILE)

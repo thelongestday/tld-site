@@ -39,3 +39,6 @@ HOST = 'localhost'
 require 'factory_girl'
 require 'mocha'
 begin require 'redgreen'; rescue LoadError; end
+
+SALT_FILE = File.join(RAILS_ROOT, 'config', 'salt')  
+SITE_SALT = File.read(SALT_FILE)
