@@ -33,6 +33,15 @@ CREATE TABLE `comatose_pages` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `invitations` (
+  `id` int(11) NOT NULL auto_increment,
+  `inviter_id` int(11) default NULL,
+  `invitee_id` int(11) default NULL,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `punters` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(128) default NULL,
@@ -60,3 +69,5 @@ INSERT INTO schema_migrations (version) VALUES ('20090404152138');
 INSERT INTO schema_migrations (version) VALUES ('20090405113812');
 
 INSERT INTO schema_migrations (version) VALUES ('20090407192913');
+
+INSERT INTO schema_migrations (version) VALUES ('20090413150112');

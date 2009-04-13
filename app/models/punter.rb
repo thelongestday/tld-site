@@ -13,9 +13,10 @@ class Punter < ActiveRecord::Base
   before_save :set_password
   after_save :clear_tmp_password
 
-  has_many :invitations
-  has_many :invitees, :through => :invitations
-  has_many :inviters, :through => :invitations
+  has_many :sent_invitations, :foreign_key => 'inviter_id', :class_name => 'Invitation'
+  has_many :received_invitations, :foreign_key => 'invitee_id', :class_name => 'Invitation'
+  has_many :invitees, :through => :sent_invitations, :source => :invitee
+  has_many :inviters, :through => :received_invitations, :source => :inviter
 
   attr_accessor :password, :password_confirmation, :set_new_password
 

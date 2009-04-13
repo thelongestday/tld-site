@@ -36,6 +36,7 @@ module PunterSystem
     elsif params[:index] == 'attendees'
       login_required
       return unless @punter
+
       unless @punter.has_ticket?
         flash[:notice] = 'You need to buy a ticket to see that page.'
         redirect_to user_show_path

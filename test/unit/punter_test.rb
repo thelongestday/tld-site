@@ -203,6 +203,4 @@ class PunterTest < ActiveSupport::TestCase
     end
   end
 
-
-
 end
