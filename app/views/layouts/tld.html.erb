@@ -4,23 +4,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=<%= Comatose.config.content_type %>"/>
     <meta name="Generator" content="Comatose"/>
-    <meta name="Keywords" content="<%= @page.keywords %>"/>
-    <title><%= @page.title %></title>
+    <% if @page %>
+      <meta name="Keywords" content="<%= @page.keywords %>"/>
+      <title><%= @page.title %></title>
+    <% else %>
+      <meta name="Keywords" content="The Longest Day 2009 <%= controller.action_name %>"/>
+      <title><%= controller.action_name %></title>
+    <% end %>
+
     <link rel="stylesheet" type="text/css" href="http://bork.thelongestday.net/tld2009.css" >
   </head>
   <body>
-  <div id="short_page"> 
-    <table align="center" border="0" cellpadding="0" cellspacing="10" width="1000" height="459">
-      <tbody>
-        <tr>
-          <td valign="top" width="900" height="439">
-            <blockquote>
-              <p class="style28">
-                <%= yield %>
-              </p>
-            </blockquote>
-          </td>
-        </tr>
+    <div id="short_page"> 
+      <table align="center" border="0" cellpadding="0" cellspacing="10" width="1000" height="459">
+        <tbody>
+          <tr>
+            <td valign="top" width="900" height="439">
+              <blockquote>
+                <p class="style28">
+                  <%= yield %>
+                </p>
+              </blockquote>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </body>
