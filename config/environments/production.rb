@@ -19,4 +19,4 @@ config.action_mailer.raise_delivery_errors = false
 config.action_mailer.default_url_options = { :host => 'site.thelongestday.net' }
 
 SALT_FILE = File.join(RAILS_ROOT, '..', '..', 'shared', 'config', 'salt')  
-SITE_SALT = File.read(SALT_FILE)
+SITE_SALT = File.exists?(SALT_FILE) ? File.read(SALT_FILE) : 'nosalt'
