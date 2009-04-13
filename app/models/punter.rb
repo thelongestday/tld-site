@@ -59,6 +59,10 @@ class Punter < ActiveRecord::Base
     end
   end
 
+  def reset!
+    self.send_invitation
+  end
+
   def set_password!
     self.set_password
     self.save!

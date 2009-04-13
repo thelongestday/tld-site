@@ -63,7 +63,7 @@ class PunterControllerTest < ActionController::TestCase
   context "on GET to :logout" do
     setup { get :logout }
     should_set_session(:punter_id) { nil }
-    should_set_the_flash_to :notice => 'You have logged out.'
+    should_set_the_flash_to /You have logged out/
     should_redirect_to("Login page") { login_path }
   end
 
@@ -73,7 +73,7 @@ class PunterControllerTest < ActionController::TestCase
         Punter.expects(:authenticate_by_token).with('abc').raises(RuntimeError)
         get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
       end
-      should_set_the_flash_to :notice => 'Que?'
+      should_set_the_flash_to /Incorrect/
       should_redirect_to("Login page") { login_path }
     end
 
@@ -87,8 +87,47 @@ class PunterControllerTest < ActionController::TestCase
       end
 
       should_set_session(:punter_id) { @punter.id }
+      should_set_the_flash_to /Please now set yourself a password/
       should_redirect_to("User edit page") { user_edit_path }
-      
+    end
+  end
+
+  context "on GET to :reset" do
+    setup { get :reset }
+    should_render_a_form
+  end
+
+  context "on POST to :reset" do
+    context "with absent parameters" do
+      setup { post :reset }
+      should_set_the_flash_to /Incorrect/
+      should_render_a_form
+    end
+
+    context "with incorrect parameters" do
+      setup { post :reset, :punter => { :email => '' } }
+      should_set_the_flash_to /Incorrect/
+      should_render_a_form
+    end
+
+    context "with a Punter that doesn't exist" do
+      setup do
+        Punter.expects(:find_by_email).with('foo@example.com').returns(nil)
+        post :reset, :punter => { :email  => 'foo@example.com' }
+      end
+      should_render_a_form
+      should_set_the_flash_to /don't have anyone/
+    end
+
+    context "with a Punter that does exist" do
+      setup do
+        @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+        Punter.expects(:find_by_email).with('foo@example.com').returns(@punter)
+        @punter.expects(:reset!)
+        post :reset, :punter => { :email  => 'foo@example.com' }
+      end
+      should_redirect_to("Login page") { login_path }
+      should_set_the_flash_to /check your mail/
     end
 
   end

@@ -39,14 +39,14 @@ class PunterController < ApplicationController
     session[:punter_id ] = nil
     unless params.has_key?(:token)
       # FIXME: doubt this can happen, no routing
-      flash[:notice] = 'Incorrect user confirmation details.'
+      flash[:error] = 'Incorrect user confirmation details.'
       redirect_to login_path
     end
 
     begin
       punter = Punter.authenticate_by_token(params[:token])
     rescue
-      flash[:notice] = 'Incorrect user confirmation details.'
+      flash[:error] = 'Incorrect user confirmation details.'
       redirect_to login_path
       return
     end
@@ -54,6 +54,8 @@ class PunterController < ApplicationController
     punter.confirm!
     
     session[:punter_id] = punter.id
+    flash[:notice] = "Please now set yourself a password"
+
     redirect_to user_edit_path
   end
 
@@ -62,6 +64,19 @@ class PunterController < ApplicationController
   end
 
   def reset
+    return if request.get? # reset form
+    unless params[:punter] && params[:punter][:email] && !params[:punter][:email].empty?
+      flash[:error] = 'Incorrect details entered. Please try again.'
+      return
+    end
+    if punter = Punter.find_by_email(params[:punter][:email])
+      punter.reset!
+      flash[:notice] = "We've resent an invite link to this address. Please check your mail."
+      redirect_to login_path
+      return
+    else
+      flash[:error] = "We don't have anyone registered with that address, sorry."
+    end
   end
 
   def reject
