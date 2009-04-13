@@ -76,8 +76,7 @@ class Punter < ActiveRecord::Base
     end
     
    if self.validate_password? && @password != @password_confirmation # could both be nil
-     errors.add :password, "don't match"
-     errors.add :password_confirmation, "don't match"
+     errors.add :password, "doesn't match the confirmation"
    end
   end
 

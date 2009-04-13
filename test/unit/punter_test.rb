@@ -66,8 +66,7 @@ class PunterTest < ActiveSupport::TestCase
     should "validate confirmation of :password" do
       @punter.password = 'hashmeup'
       @punter.valid?
-      assert_contains @punter.errors.on(:password), "don't match"
-      assert_contains @punter.errors.on(:password_confirmation), "don't match"
+      assert_contains @punter.errors.on(:password), "doesn't match the confirmation"
       @punter.password_confirmation = 'hashmeup'
       assert_valid @punter
     end

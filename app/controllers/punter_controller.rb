@@ -1,10 +1,10 @@
 class PunterController < ApplicationController
   include PunterSystem
+  layout 'tld'
 
   before_filter :login_required, :only => [ :show, :edit, :update ]
   before_filter :admin_required, :only => [ :reject ]
   verify :params => :punter, :only => [ :update ], :redirect_to => :user_show_path
-
 
   def login
     session[:punter_id] = nil
@@ -58,6 +58,7 @@ class PunterController < ApplicationController
   end
 
   def edit
+    @must_set_password = @punter.salted_password.empty?
   end
 
   def reset
@@ -72,6 +73,12 @@ class PunterController < ApplicationController
 
   def update
     params[:punter].delete(:admin)
+    params[:punter].delete(:email)
+
+    if @punter.salted_password.empty?
+      @punter.set_new_password = true
+    end
+
     if @punter.update_attributes(params[:punter])
       flash[:notice] = 'Details updated.'
       redirect_to user_show_path
@@ -79,6 +86,7 @@ class PunterController < ApplicationController
       render :edit
     end
   end
+
 
 end
 
