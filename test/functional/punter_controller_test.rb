@@ -70,7 +70,7 @@ class PunterControllerTest < ActionController::TestCase
   context "on GET to :confirm" do
     context "with incorrect parameters" do
       setup do
-        Punter.expects(:authenticate_by_token).with('abc').raises(RuntimeError)
+        Punter.expects(:authenticate_by_token).with('abc').raises(PunterException)
         get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
       end
       should_set_the_flash_to /Incorrect/
