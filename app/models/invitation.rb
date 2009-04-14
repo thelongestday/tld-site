@@ -17,7 +17,7 @@ class Invitation < ActiveRecord::Base
   end
 
   def self.invite_punter(inviter, invitee_email, invitee_name)
-    invitee = Punter.find_by_email(invitee)
+    invitee = Punter.find_by_email(invitee_email)
     if invitee.nil?
       invitee = Punter.create!(:name => invitee_name, :email => invitee_email)
     end

@@ -16,16 +16,27 @@ class InvitationTest < ActiveSupport::TestCase
 
       should "create the invitee Punter and Invitation" do
         @invitee = Punter.find_by_email('unknown@example.com')
-        @inviter.reload
-        @invitee.reload
-
-        assert_equal @invitee.inviters.length, 1
         assert @invitee.inviters.include?(@inviter)
-        assert_equal @inviter.invitees.length, 1
         assert @inviter.invitees.include?(@invitee)
       end
     end
 
+    context "where the invitee is already known" do
+      setup do 
+        @pr1 = Punter.generate(:name => 'foo bar', :email => 'foo@example.com')
+        @pr2 = Punter.generate(:name => 'foo bar', :email => 'woo@example.com')
+        @pe1 = Punter.generate(:name => 'foo bar', :email => 'bar@example.com')
+        @i1  = Invitation.generate(:inviter => @pr1, :invitee => @pe1)
+        Invitation.invite_punter(@pr2, 'bar@example.com', 'foo bar')
+      end
+
+      should "create the new Invitation" do
+        assert @pe1.inviters.include?(@pr1)
+        assert @pe1.inviters.include?(@pr2)
+        assert @pr1.invitees.include?(@pe1)
+        assert @pr1.invitees.include?(@pe1)
+      end
+    end
   end
 
   context "Checking for pre-existing punters" do
