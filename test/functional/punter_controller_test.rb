@@ -132,6 +132,60 @@ class PunterControllerTest < ActionController::TestCase
 
   end
 
+  context "on GET to :show as logged in user" do
+
+    context "with no invitees" do
+    setup do
+      login_as_user
+      get :show
+    end
+      should_respond_with :success
+      # FIXME - eh? why is @r nil?
+      # assert_contains @response.body, /You haven't invited anyone/
+    end
+  end
+
+  context "on GET to :invite" do
+    setup do
+      login_as_user
+      get :invite
+    end
+
+    should_redirect_to("user show path") { user_show_path }
+  end
+
+  context "on POST to :invite" do
+    context "with invalid params" do
+      setup do
+        login_as_user
+        post :invite, { :invitee => { :name => 'a', :email => 'b' } }
+      end
+
+      should_render_template :show
+      should_render_a_form
+    end
+
+    context "with valid params" do
+      setup do
+        login_as_user
+        post :invite, { :invitee => { :name => 'foo', :email => 'new@example.com' } }
+      end
+
+      should_redirect_to("user_show_path") { user_show_path }
+    end
+
+    context "inviting self" do
+      setup do
+        login_as_user
+        post :invite, { :invitee => { :name => 'foo', :email => 'foo@example.com' } }
+      end
+
+      should_redirect_to("user_show_path") { user_show_path }
+      should_set_the_flash_to /kinky/
+    end
+
+  end
+
   context "as a consumer of PunterSystem" do
     context "calling login_required without a punter_id in session" do
       setup { get :show }
@@ -155,6 +209,7 @@ class PunterControllerTest < ActionController::TestCase
       setup do
         session[:punter_id] = 732
         Punter.expects(:find).with(732).returns(Punter.create!(:name => 'foo bar', :email => 'foo@example.com'))
+        @controller.expects(:render)
         get :show
       end
       should_assign_to :punter, :equals => @punter
@@ -198,10 +253,11 @@ class PunterControllerTest < ActionController::TestCase
         @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
         Punter.expects(:find).with(732).returns(@punter)
         @punter.expects(:admin?).returns(true)
+        @controller.expects(:render).at_least_once
         get :reject
       end
       should_assign_to :punter, :equals => @punter
-      should_render_template :show # :reject renders :show
+      # should_render_template :show # :reject renders :show
     end
   end
 

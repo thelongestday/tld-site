@@ -2,9 +2,10 @@ class PunterController < ApplicationController
   include PunterSystem
   layout 'tld'
 
-  before_filter :login_required, :only => [ :show, :edit, :update ]
+  before_filter :login_required, :only => [ :edit, :invite, :show, :update ]
   before_filter :admin_required, :only => [ :reject ]
   verify :params => :punter, :only => [ :update ], :redirect_to => :user_show_path
+  verify :params => :invitee, :only => [ :invite ], :redirect_to => :user_show_path
 
   def login
     session[:punter_id] = nil
@@ -63,6 +64,25 @@ class PunterController < ApplicationController
     @must_set_password = @punter.salted_password.empty?
   end
 
+  def invite
+    redirect_to user_show_path if request.get?
+
+    @invitee = Punter.new(params[:invitee])
+    @invitee.non_unique_email = true # allow people to be re-invited by someone-else
+
+    if @invitee.valid?
+      begin
+        Invitation.invite_punter(@punter, @invitee.email, @invitee.name)
+      rescue PunterException => e
+        flash[:error] = e.message
+      end
+      redirect_to user_show_path
+      return
+    else
+      render :show
+    end
+  end
+
   def reset
     return if request.get? # reset form
     unless params[:punter] && params[:punter][:email] && !params[:punter][:email].empty?
@@ -84,6 +104,7 @@ class PunterController < ApplicationController
   end
 
   def show
+    @invitee = Punter.new
   end
 
   def update
@@ -92,6 +113,19 @@ class PunterController < ApplicationController
 
     if @punter.salted_password.empty?
       @punter.set_new_password = true
+    end
+
+    if params[:punter][:password].empty?
+      params[:punter].delete(:password)
+      params[:punter].delete(:password_confirmation)
+    else
+      @punter.set_new_password = true
+    end
+
+    if params[:punter].keys.empty?
+      # nothing left to do
+      redirect_to user_show_path
+      return
     end
 
     if @punter.update_attributes(params[:punter])

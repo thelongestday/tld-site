@@ -1,9 +1,9 @@
 <p><%=h @punter.name_with_email %></p>
 
-<% form_for :punter, @punter, :url => { :action => :update } do |f| %>
+<% form_for :punter, @punter, :url => { :action => :update }, :html => { :class => 'punter_form' } do |f| %>
   <%= f.error_messages :header_message => 'Computer says no!', :message => 'Please fix the following:' %>
-  <p class="form-field"><%= f.label :password %>: <%= f.password_field :password %> <%= @must_set_password ? 'required' : '' %></p>
-  <p class="form-field"><%= f.label :password_confirmation %>: <%= f.password_field :password_confirmation %> <%= @must_set_password ? 'required' : '' %></p>
+  <div class="form-field"><%= f.label :password %><%= f.password_field :password %> <%= @must_set_password ? 'required' : '' %></div>
+  <div class="form-field"><%= f.label :password_confirmation %><%= f.password_field :password_confirmation %> <%= @must_set_password ? 'required' : '' %></div>
 
   <%= submit_tag "Update" %>
 

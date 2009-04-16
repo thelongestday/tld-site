@@ -7,10 +7,10 @@ class PunterTest < ActiveSupport::TestCase
       @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
     end
 
-    should_validate_presence_of :name, :email
+#   should_validate_presence_of :name, :email
     should_ensure_length_in_range :name, (3 .. 128)
 
-    should_validate_uniqueness_of :email
+    should_validate_uniqueness_of :email, :message => 'already registered'
     should_not_allow_values_for :email, "notreallyandemail address", :message => "doesn't look like a proper email address"
     should_ensure_length_in_range :email, (0.. 128)
     should_allow_values_for :email, "a@b.com"
@@ -52,6 +52,13 @@ class PunterTest < ActiveSupport::TestCase
       assert_equal '', @punter.salted_password
       assert_equal '', @punter.salt
     end
+
+    should "allow non-unique email if :non_unique_email is set" do
+      @p2 = Punter.create(:name => 'bar foo', :email => 'foo@example.com')
+      @p2.non_unique_email = true
+      assert_valid @p2
+    end
+
   end
 
   context "Punter setting new password" do
@@ -81,7 +88,6 @@ class PunterTest < ActiveSupport::TestCase
       assert_raise(PunterException) { Punter.authenticate_by_password('foo@example.com', '') }
     end
   end
-
 
   context "A known punter" do
     setup do
@@ -192,14 +198,47 @@ class PunterTest < ActiveSupport::TestCase
   end
 
   context "A punter from last year's system" do
-    setup do
+    setup  do
       @punter = Punter.create!(:name => 'foo bar', :email => 'foo@zomo.co.uk',
                                :salt => '6eeec920da40d27aa865146aeca2e65ccc74d52e',
                                :salted_password => '2316248c680b3548894eb57633b9feac5c0ffa78')
     end
 
-    should "authenticate with last year's password" do
+    should  "authenticate with last year's password" do
       assert_equal @punter, Punter.authenticate_by_password('foo@zomo.co.uk', 'foofoo')
+    end
+  end
+  
+  context "An invited punter" do
+    context "being reinvited" do
+      setup do
+        @punter = Punter.create!(:name => 'foo bar', :email => 'foo@zomo.co.uk')
+      end
+
+      should "not call invite! if already confirmed" do
+        @punter.invite!
+        @punter.expects(:invite!).never
+        @punter.confirm!
+        @punter.invite_if_necessary
+      end
+
+      should "not call invite! if rejected" do
+        @punter.reject!
+        @punter.expects(:invite!).never
+        @punter.invite_if_necessary
+      end
+
+      should "call invite! if new" do
+        @punter.expects(:invite!).once
+        @punter.invite_if_necessary
+      end
+
+      should "call invite! if invited" do
+        @punter.invite!
+        @punter.expects(:invite!).once
+        @punter.invite_if_necessary
+      end
+
     end
   end
 

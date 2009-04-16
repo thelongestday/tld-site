@@ -37,6 +37,30 @@ class InvitationTest < ActiveSupport::TestCase
         assert @pr1.invitees.include?(@pe1)
       end
     end
+
+    context "where the invitee is already invited by the inviter" do
+      setup do 
+        @pr1 = Punter.generate(:name => 'foo bar', :email => 'foo@example.com')
+        @pe1 = Punter.generate(:name => 'foo bar', :email => 'bar@example.com')
+        @i1  = Invitation.generate(:inviter => @pr1, :invitee => @pe1)
+      end
+
+      should "not be valid" do
+        assert_raise(PunterException) { Invitation.invite_punter(@pr1, 'bar@example.com', 'foo bar') }
+      end
+    end
+
+    context "where the invitee is am inviter of the inviter" do
+      setup do 
+        @p1 = Punter.generate(:name => 'foo bar', :email => 'foo@example.com')
+        @p2 = Punter.generate(:name => 'foo bar', :email => 'bar@example.com')
+        @i1 = Invitation.generate(:inviter => @p1, :invitee => @p2)
+      end
+
+      should "not be valid" do
+        assert_raise(PunterException) { Invitation.invite_punter(@p2, @p1.email, @p1.name) }
+      end
+    end
   end
 
   context "Checking for pre-existing punters" do
@@ -57,4 +81,5 @@ class InvitationTest < ActiveSupport::TestCase
       assert_same_elements Invitation.inviters_for('unknown@example.com'), [ @pr1, @pr2 ]
     end
   end
+
 end

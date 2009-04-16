@@ -1,15 +1,29 @@
 .form-field {
-  margin-bottom:5px;
+  margin-bottom:1em;
 }
 .form-field label {
   float:left;
-  width:120px;
-  text-align:right;
+  width:12em;
+  text-align:left;
 }
 
 .form-submit {
   text-align:right;
-  margin-top:5px;
-  margin-bottom:5px;
-  margin-left:130px;
+  margin-top:1em;
+  margin-bottom:1em;
+  margin-left:12em;
+}
+
+form.invite_form {
+  padding: 1em;
+  border-width: 1px;
+  border-style: solid;
+  border-color: grey;
+}
+
+form.punter_form {
+  padding: 1em;
+  border-width: 1px;
+  border-style: solid;
+  border-color: grey;
 }

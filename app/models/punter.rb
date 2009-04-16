@@ -2,8 +2,8 @@ require 'regex'
 require 'punter_exception'
 
 class Punter < ActiveRecord::Base
-  validates_presence_of :name, :email
-  validates_uniqueness_of :email
+# validates_presence_of :name, :email
+  validates_uniqueness_of :email, :if => :validate_unique_email?, :message => 'already registered'
   validates_length_of :name, :within => 3 .. 128
   validates_length_of :email, :maximum => 128
 
@@ -18,7 +18,7 @@ class Punter < ActiveRecord::Base
   has_many :invitees, :through => :sent_invitations, :source => :invitee
   has_many :inviters, :through => :received_invitations, :source => :inviter
 
-  attr_accessor :password, :password_confirmation, :set_new_password
+  attr_accessor :password, :password_confirmation, :set_new_password, :non_unique_email
 
   include AASM
 
@@ -55,6 +55,12 @@ class Punter < ActiveRecord::Base
 
   def has_ticket?
     false
+  end
+
+  def invite_if_necessary
+    unless self.confirmed? or self.rejected?
+      self.invite!
+    end
   end
 
   def name_with_email
@@ -96,6 +102,10 @@ class Punter < ActiveRecord::Base
 
   def validate_password?
     self.set_new_password 
+  end
+
+  def validate_unique_email?
+    true unless self.non_unique_email
   end
 
   def self.authenticate_by_password(email, password)

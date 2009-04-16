@@ -1,4 +1,25 @@
-<p><%=h @punter.name_with_email %></p>
+<h1><%=h @punter.name_with_email %></h1>
+<h2>You were invited by:</h2>
+<ul>
+  <% @punter.inviters.each do |i| %>
+    <li><%=h i.name_with_email %></li>
+  <% end %>
+</ul>
+
+<h2>Invites</h2>
+<% if @punter.invitees.empty? %>
+  <p>You haven't invited anyone. Norman.</p>
+<% else %>
+  <p>People you have invited:</p>
+  <ul>
+    <% @punter.invitees.each do |i| %>
+      <li><%=h i.name_with_email %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<h2>Invite someone:</h2>
+<%= render :partial => 'invitee' %>
 
 <ul>
   <li><a href="/">Return to site</a></li>
