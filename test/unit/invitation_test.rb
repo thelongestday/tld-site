@@ -50,7 +50,7 @@ class InvitationTest < ActiveSupport::TestCase
       end
     end
 
-    context "where the invitee is am inviter of the inviter" do
+    context "where the invitee is an inviter of the inviter" do
       setup do 
         @p1 = Punter.generate(:name => 'foo bar', :email => 'foo@example.com')
         @p2 = Punter.generate(:name => 'foo bar', :email => 'bar@example.com')
