@@ -20,6 +20,10 @@ ActiveRecord::Schema.define(:version => 0) do
     t.column :name, :string
   end
   
+  create_table :protected_things, :force => true do |t|
+    t.column :secret, :string
+  end
+  
   create_table :blahs, :force => true do |t|
     t.column :bam, :string
   end

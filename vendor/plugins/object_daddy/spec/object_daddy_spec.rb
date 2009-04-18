@@ -499,6 +499,10 @@ if File.exists?("#{File.dirname(__FILE__)}/../../../../config/environment.rb")
   class Thing < ActiveRecord::Base
     has_many :frobnitzes, :class_name => 'Frobnitz'
   end
+  
+  class ProtectedThing < ActiveRecord::Base
+    attr_protected :secret
+  end
 
   class Frobnitz < ActiveRecord::Base
     belongs_to :foo
@@ -738,6 +742,10 @@ if File.exists?("#{File.dirname(__FILE__)}/../../../../config/environment.rb")
     it 'should pass the supplied validator options to the real validator method' do
       Blah.validates_presence_of :bam, :if => lambda { false }
       Blah.new.should be_valid
+    end
+    
+    it "should assign attributes even when they are protected" do
+      ProtectedThing.generate(:secret => '123').secret.should == '123'
     end
     
     it "should ignore optional arguments to presence_of validators" do

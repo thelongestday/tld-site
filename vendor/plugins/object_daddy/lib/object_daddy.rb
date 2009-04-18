@@ -28,7 +28,7 @@ module ObjectDaddy
     def spawn(args = {})
       gather_exemplars
       generate_values(args)
-      instance = new(args)
+      instance = initialize_instance(args)
       yield instance if block_given?
       instance
     end
@@ -114,6 +114,10 @@ module ObjectDaddy
     end
   
   private
+    
+    def initialize_instance(args)
+      new(args)
+    end
     
     def generate_values(args)
       (generators || {}).each_pair do |handle, gen_data|
@@ -211,6 +215,14 @@ module ObjectDaddy
         instance.save!
         yield instance if block_given?
       end
+    end
+    
+    private
+    
+    def initialize_instance(args)
+      instance = new
+      instance.send :attributes=, args, false
+      instance
     end
   end
 end
