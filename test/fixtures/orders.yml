@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  owner_id: 1
+  state: MyString
+  money_received: 1
+
+two:
+  owner_id: 1
+  state: MyString
+  money_received: 1

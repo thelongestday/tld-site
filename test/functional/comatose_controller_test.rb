@@ -45,7 +45,7 @@ class ComatoseControllerTest < ActionController::TestCase
 #  context "on GET to a page on the :attendees mountpoint when logged in with ticket bought" do
 #    setup do
 #      login_as_user
-#      @punter.expects(:has_ticket?).returns(true)
+#      @punter.expects(:has_paid_ticket?).returns(true)
 #      get :show, "use_cache"=>"true", "layout"=>"tld", "cache_path"=>nil, "page"=>["sekrit-page"], "root"=>"/attendees", "index"=>"attendees"
 #    end
 #    should_respond_with :success

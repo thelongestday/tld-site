@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :orders
+
   map.with_options :controller => 'punter' do |m|
     m.login  '/login',      :action => 'login'
     m.logout '/logout',     :action => 'logout'

@@ -15,6 +15,9 @@ class PunterTest < ActiveSupport::TestCase
     should_ensure_length_in_range :email, (0.. 128)
     should_allow_values_for :email, "a@b.com"
 
+    should_have_many :orders
+    should_have_many :tickets
+
     should "create a email address with display name" do
       assert_equal 'foo bar <foo@example.com>', @punter.email_with_name
     end
@@ -242,4 +245,83 @@ class PunterTest < ActiveSupport::TestCase
     end
   end
 
+  context "ordering" do
+    context "punter's ticket candidates" do
+      setup do
+        @pr1 = Punter.generate!
+        @pr2 = Punter.generate!
+        @p   = Punter.generate!
+        @pe1 = Punter.generate!
+        @pe2 = Punter.generate!
+        
+        @i1 = Invitation.create!(:inviter => @pr1, :invitee => @p )
+        @i2 = Invitation.create!(:inviter => @pr2, :invitee => @p )
+        @i3 = Invitation.create!(:inviter => @p,   :invitee => @pe1 )
+      end
+
+      should "return list of all candidates" do
+        all = @p.all_ticket_candidates
+
+        assert_contains @p.inviters, @pr1
+        assert_contains @p.invitees, @pe1
+
+        assert_contains all, @p
+        assert_contains all, @pr1
+        assert_contains all, @pr2
+        assert_contains all, @pe1
+        assert_does_not_contain all, @pe2
+      end
+
+      should "return list of paid candidates" do
+        # TODO : work out why these expectations get applie to wrong? Punter instances
+        # @p.expects(:has_paid_ticket?).returns(true)
+        # @pr1.expects(:has_paid_ticket?).returns(true)
+        # @pr2.expects(:has_paid_ticket?).returns(false)
+        # @pe1.expects(:has_paid_ticket?).returns(true)
+        # @pe2.expects(:has_paid_ticket?).returns(false)
+        
+        @p.all_ticket_candidates.each_with_index { |p, i| p.expects(:has_paid_ticket?).returns(i % 2 == 0) }
+        paid = @p.paid_ticket_candidates
+        assert 2, paid.length
+
+        # assert_contains paid, @p
+        # assert_contains paid, @pr1
+        # assert_contains paid, @pe1
+        # assert_does_not_contain paid, @pr2
+        # assert_does_not_contain paid, @pe2
+      end
+
+      should "retun list of unpaid candidates" do
+        # TODO fixme, too
+        @p.all_ticket_candidates.each_with_index { |p, i| p.expects(:has_paid_ticket?).returns(i % 2 == 0) }
+        unpaid = @p.unpaid_ticket_candidates
+        assert 2, unpaid.length
+      end
+    end
+
+    context "tickets" do
+      setup do 
+        @p = Punter.generate!
+        @p.orders << Order.create
+        @p.orders.first.tickets << Ticket.create(:punter => @p)
+        @p.reload
+        @t = @p.tickets.first
+        @o = @p.orders.first
+      end
+      
+      should "connect orders, tickets, punters correctly" do
+        assert_equal @t, @o.tickets.first
+      end
+
+      should "respond to :has_paid_ticket with false when there is no paid ticket" do
+        assert @p.has_paid_ticket? == false
+      end
+
+      should "respond to :has_paid_ticket with true when there is a paid ticket" do
+        @o.mark_ordered!
+        @o.mark_paid!
+        assert @p.has_paid_ticket? == true
+      end
+    end
+  end
 end

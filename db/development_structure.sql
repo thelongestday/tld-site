@@ -14,7 +14,7 @@ CREATE TABLE `comatose_page_versions` (
   `updated_on` datetime default NULL,
   `created_on` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comatose_pages` (
   `id` int(11) NOT NULL auto_increment,
@@ -31,12 +31,22 @@ CREATE TABLE `comatose_pages` (
   `updated_on` datetime default NULL,
   `created_on` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `invitations` (
   `id` int(11) NOT NULL auto_increment,
   `inviter_id` int(11) default NULL,
   `invitee_id` int(11) default NULL,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL auto_increment,
+  `owner_id` int(11) default NULL,
+  `state` varchar(255) default NULL,
+  `money_received` int(11) default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
@@ -55,11 +65,21 @@ CREATE TABLE `punters` (
   `last_login` datetime default NULL,
   `admin` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
   UNIQUE KEY `unique_schema_migrations` (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tickets` (
+  `id` int(11) NOT NULL auto_increment,
+  `punter_id` int(11) default NULL,
+  `order_id` int(11) default NULL,
+  `cost` int(11) default NULL,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO schema_migrations (version) VALUES ('20090331195807');
@@ -71,3 +91,9 @@ INSERT INTO schema_migrations (version) VALUES ('20090405113812');
 INSERT INTO schema_migrations (version) VALUES ('20090407192913');
 
 INSERT INTO schema_migrations (version) VALUES ('20090413150112');
+
+INSERT INTO schema_migrations (version) VALUES ('20090414072528');
+
+INSERT INTO schema_migrations (version) VALUES ('20090418090235');
+
+INSERT INTO schema_migrations (version) VALUES ('20090418090527');

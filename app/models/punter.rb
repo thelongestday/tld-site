@@ -1,8 +1,7 @@
 require 'regex'
-require 'punter_exception'
 
 class Punter < ActiveRecord::Base
-# validates_presence_of :name, :email
+  validates_presence_of :name, :email
   validates_uniqueness_of :email, :if => :validate_unique_email?, :message => 'already registered'
   validates_length_of :name, :within => 3 .. 128
   validates_length_of :email, :maximum => 128
@@ -17,6 +16,9 @@ class Punter < ActiveRecord::Base
   has_many :received_invitations, :foreign_key => 'invitee_id', :class_name => 'Invitation'
   has_many :invitees, :through => :sent_invitations, :source => :invitee
   has_many :inviters, :through => :received_invitations, :source => :inviter
+
+  has_many :orders, :foreign_key => 'owner_id'
+  has_many :tickets
 
   attr_accessor :password, :password_confirmation, :set_new_password, :non_unique_email
 
@@ -43,6 +45,10 @@ class Punter < ActiveRecord::Base
     transitions :from => [ :new, :invited, :confirmed ], :to => :rejected
   end
 
+  def all_ticket_candidates
+    self.inviters + self.invitees +  [ self ]
+  end
+
   def clear_tmp_password
     self.password = nil
     self.password_confirmation = nil
@@ -53,8 +59,8 @@ class Punter < ActiveRecord::Base
     "#{self.name} <#{self.email}>"
   end
 
-  def has_ticket?
-    false
+  def has_paid_ticket?
+    self.tickets.detect { |t| t.paid? }.nil? ? false : true
   end
 
   def invite_if_necessary
@@ -65,6 +71,10 @@ class Punter < ActiveRecord::Base
 
   def name_with_email
     self.email_with_name
+  end
+
+  def paid_ticket_candidates
+    self.all_ticket_candidates.find_all { |p| p.has_paid_ticket? }
   end
 
   def set_password
@@ -88,6 +98,10 @@ class Punter < ActiveRecord::Base
     update_attribute(:authentication_token, Punter.to_hash(Punter.random_salt + self.email, 15))
     update_attribute(:salt, '')
     update_attribute(:salted_password, '')
+  end
+
+  def unpaid_ticket_candidates
+    self.all_ticket_candidates.find_all { |p| !p.has_paid_ticket? }
   end
 
   def validate
