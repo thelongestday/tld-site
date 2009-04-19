@@ -1,8 +1,9 @@
 <h2>[ #<%= @order.id %> ] <%= "#{pluralize(@order.tickets.length, 'ticket')} (#{@order.state})" %></h2>
 <ul>
   <% @order.tickets.each do |t| %>
-    <li><%=h t.punter.name_with_email %></li>
+    <li><%=h t.punter.name_with_email %> - <%=h t.event.name %> @ &pound;<%= t.cost / 100 %></li>
   <% end %>
 </ul>
+<p>The total cost of this order is &pound;<%= @order.total_cost / 100 %></p>
 <%= link_to 'Edit', edit_order_path(@order) %> |
 <%= link_to 'Back', orders_path %>

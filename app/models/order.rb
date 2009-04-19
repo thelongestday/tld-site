@@ -41,4 +41,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def total_cost
+    # XXX - why does this not work?
+    # self.tickets.inject { |total, ticket| total + ticket.cost }
+    total = 0
+    self.tickets.each { |t| total += t.cost }
+    total
+  end
+
 end

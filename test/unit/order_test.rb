@@ -18,6 +18,19 @@ class OrderTest < ActiveSupport::TestCase
       assert_equal @o.tickets.first.punter, @p
       assert_equal @o.tickets.first.cost, Site::Config.event.cost
     end
+
+    should "work out the total of its tickets" do
+      @p1 = Punter.generate!
+      @p2 = Punter.generate!
+
+      @o.add_ticket_by_punter_id(@p1.id)
+      @o.add_ticket_by_punter_id(@p2.id)
+
+      @o.tickets.first.update_attribute(:cost, 732)
+      @o.tickets.last.update_attribute(:cost,  65536)
+
+      assert_equal 732 + 65536, @o.total_cost
+    end
   end
 
 end
