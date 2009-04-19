@@ -1,3 +1,8 @@
-
+<h2>[ #<%= @order.id %> ] <%= "#{pluralize(@order.tickets.length, 'ticket')} (#{@order.state})" %></h2>
+<ul>
+  <% @order.tickets.each do |t| %>
+    <li><%=h t.punter.name_with_email %></li>
+  <% end %>
+</ul>
 <%= link_to 'Edit', edit_order_path(@order) %> |
 <%= link_to 'Back', orders_path %>

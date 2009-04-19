@@ -33,6 +33,15 @@ CREATE TABLE `comatose_pages` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `cost` int(11) default NULL,
+  `created_at` datetime default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `invitations` (
   `id` int(11) NOT NULL auto_increment,
   `inviter_id` int(11) default NULL,
@@ -40,7 +49,7 @@ CREATE TABLE `invitations` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL auto_increment,
@@ -65,7 +74,7 @@ CREATE TABLE `punters` (
   `last_login` datetime default NULL,
   `admin` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
@@ -77,6 +86,7 @@ CREATE TABLE `tickets` (
   `punter_id` int(11) default NULL,
   `order_id` int(11) default NULL,
   `cost` int(11) default NULL,
+  `event_id` int(11) default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
@@ -97,3 +107,5 @@ INSERT INTO schema_migrations (version) VALUES ('20090414072528');
 INSERT INTO schema_migrations (version) VALUES ('20090418090235');
 
 INSERT INTO schema_migrations (version) VALUES ('20090418090527');
+
+INSERT INTO schema_migrations (version) VALUES ('20090419095044');

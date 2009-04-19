@@ -14,6 +14,7 @@ class PunterTest < ActiveSupport::TestCase
     should_not_allow_values_for :email, "notreallyandemail address", :message => "doesn't look like a proper email address"
     should_ensure_length_in_range :email, (0.. 128)
     should_allow_values_for :email, "a@b.com"
+    should_not_allow_mass_assignment_of :state
 
     should_have_many :orders
     should_have_many :tickets

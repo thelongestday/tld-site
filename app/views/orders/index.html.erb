@@ -1,18 +1,42 @@
-<h1>Listing orders</h1>
+<h1>Ordering of the tickets. Yes!</h1>
 
-<table>
-  <tr>
-  </tr>
-
-<% @orders.each do |order| %>
-  <tr>
-    <td><%= link_to 'Show', order %></td>
-    <td><%= link_to 'Edit', edit_order_path(order) %></td>
-    <td><%= link_to 'Destroy', order, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<% unless @unpaid_punters.empty? %>
+  <h2>People you might want to buy tickets for</h2>
+  <ul>
+    <% @unpaid_punters.each do |p| %>
+      <li><%=h p.name_with_email %> <%= p.has_ordered_ticket? ? '<i>(ticket on order, not paid yet)</i>' : '' %></li>
+    <% end %>
+  </ul>
 <% end %>
-</table>
 
-<br />
+<% unless @paid_punters.empty? %>
+  <h2>These people you know already have tickets</h2>
+  <ul>
+    <% @paid_punters.each do |p| %>
+      <li><%=h p.name_with_email %></li>
+    <% end %>
+  </ul>
+<% end %>
 
-<%= link_to 'New order', new_order_path %>
+<p>If there's people not on this list that you want to come along, <%= link_to 'invite', user_show_path %> them!<p>
+
+<% if @punter.orders.empty? %>
+  <p>You haven't ordered any tickets this year.</p>
+<% else %>
+  <h2>Your orders<h2>
+  <ul>
+    <% @punter.orders.each do |o| %>
+      <% if o.new? %>
+        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", edit_order_path(o) %></li>
+      <% else %>
+        <li>[ #<%= o.id %> ] <%= "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})" %></li>
+      <% end %>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @punter.unpaid_ticket_candidates.length > 0 %>
+  <p>There are <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. <%= link_to 'Order some more tickets!', new_order_path %></p>
+<% else %>
+  <p>If you're still desperate to give us your money, you best <%= link_to 'invite', user_show_path %> some more people!</p>
+<% end %>

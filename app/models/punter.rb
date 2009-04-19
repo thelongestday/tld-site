@@ -21,6 +21,7 @@ class Punter < ActiveRecord::Base
   has_many :tickets
 
   attr_accessor :password, :password_confirmation, :set_new_password, :non_unique_email
+  attr_protected :state
 
   include AASM
 
@@ -46,7 +47,9 @@ class Punter < ActiveRecord::Base
   end
 
   def all_ticket_candidates
-    self.inviters + self.invitees +  [ self ]
+    all = self.inviters + self.invitees
+    all << self
+    all.reject { |p| p.id == Site::Config.root_user.id }
   end
 
   def clear_tmp_password
@@ -57,6 +60,10 @@ class Punter < ActiveRecord::Base
 
   def email_with_name 
     "#{self.name} <#{self.email}>"
+  end
+
+  def has_ordered_ticket?
+    self.tickets.detect { |t| t.on_order? }.nil? ? false : true
   end
 
   def has_paid_ticket?

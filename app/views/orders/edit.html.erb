@@ -1,12 +1,6 @@
-<h1>Editing order</h1>
+<h2>[ #<%= @order.id %> ] <%= "#{pluralize(@order.tickets.length, 'ticket')} (#{@order.state})" %></h2>
 
-<% form_for(@order) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
-<% end %>
+<%= render :partial => 'form' %>
 
 <%= link_to 'Show', @order %> |
 <%= link_to 'Back', orders_path %>

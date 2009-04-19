@@ -1,0 +1,13 @@
+<% form_for(@order, :html => { :class => "punter_form" }) do |f| %>
+  <%= f.error_messages %>
+
+  <% @unpaid_punters.each do |p| %>
+    <div class="ticket-form-field">
+      <input id="order_punter_<%= p.id %>" name="order_punter[<%= p.id %>]" type="checkbox" value="1" <%= @order_punters.include?(p.id) ? 'checked="yes"' : '' %></input>
+      <label for="order_punter_<%= p.id %>"><%=h p.name_with_email %> <%= p.has_ordered_ticket? ? '<i>(ticket on order, not paid yet)</i>' : '' %></label>
+    </div>
+  <% end %>
+  <p>
+    <%= f.submit 'Do it!' %>
+  </p>
+<% end %>

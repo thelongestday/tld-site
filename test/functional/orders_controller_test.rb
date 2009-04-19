@@ -17,7 +17,7 @@ class OrdersControllerTest < ActionController::TestCase
       setup do
         @p1 = Punter.generate!
         @p2 = Punter.generate!
-        @o1 = Order.generate! { |o| o.owner = @p1 }
+        @o = Order.generate! { |o| o.owner = @p1 }
         @o2 = Order.generate! { |o| o.owner = @p2 }
         login_as(@p1)
         get :show, :id => @o2
@@ -30,7 +30,7 @@ class OrdersControllerTest < ActionController::TestCase
     context "looking at a non-existent order" do
       setup do
         @p1 = Punter.generate!
-        @o1 = Order.generate! { |o| o.owner = @p1 }
+        @o = Order.generate! { |o| o.owner = @p1 }
         login_as(@p1)
         get :show, :id => 732
       end
@@ -41,50 +41,61 @@ class OrdersControllerTest < ActionController::TestCase
   end
 
   def setup
-    @o1 = Order.generate!
-    login_as(@o1.owner)
+    @o = Order.generate!
+    login_as(@o.owner)
   end
 
   test "should get index with that punter's orders" do
-    Order.expects(:find_all_by_owner_id).with(@o1.owner).returns([ @o1 ] )
+    Order.expects(:find_all_by_owner_id).with(@o.owner).returns([ @o ] )
     get :index
     assert_response :success
     assert_not_nil assigns(:orders)
+    assert_not_nil assigns(:unpaid_punters)
+    assert_not_nil assigns(:paid_punters)
   end
 
   test "should get new" do
     get :new
     assert_response :success
+    assert_not_nil assigns(:unpaid_punters)
   end
 
   test "should create order" do
     assert_difference('Order.count') do
-      post :create, :order => { }
+      post :create, :order_punter => { }
+    end
+
+    assert_difference('Ticket.count') do
+      post :create, :order_punter => { @o.owner.id => "1" }
     end
 
     assert_redirected_to order_path(assigns(:order))
   end
 
   test "should show order" do
-    get :show, :id => @o1.to_param
+    get :show, :id => @o.to_param
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @o1.to_param
+    get :edit, :id => @o.to_param
     assert_response :success
   end
 
-  test "should update order" do
-    put :update, :id => @o1.to_param, :order => { }
+  test "should update order, deleting and replacing tickets" do
+    p = Punter.generate!
+    t = Ticket.create!(:order => @o, :punter => @o.owner)
+    @o.tickets << t
+    put :update, :id => @o.to_param, :order_punter => { p.id => "1" }
+    assert_does_not_contain @o.tickets, t
+    assert_equal @o.tickets.first.punter, p
     assert_redirected_to order_path(assigns(:order))
   end
 
-  test "should destroy order" do
-    assert_difference('Order.count', -1) do
-      delete :destroy, :id => @o1.to_param
-    end
-
+  test "should delete order if submitted with no order_punters" do
+    put :update, :id => @o.to_param
     assert_redirected_to orders_path
+    assert_raise(ActiveRecord::RecordNotFound) { Order.find(@o.id) }
   end
+
 end

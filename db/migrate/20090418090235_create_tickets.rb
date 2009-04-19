@@ -4,6 +4,7 @@ class CreateTickets < ActiveRecord::Migration
       t.integer :punter_id
       t.integer :order_id
       t.integer :cost
+      t.integer :event_id
 
       t.timestamps
     end

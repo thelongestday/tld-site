@@ -1,16 +1,15 @@
 <h1><%=h @punter.name_with_email %></h1>
-<h2>You were invited by:</h2>
+<h2>You were invited by</h2>
 <ul>
   <% @punter.inviters.each do |i| %>
     <li><%=h i.name_with_email %></li>
   <% end %>
 </ul>
 
-<h2>Invites</h2>
 <% if @punter.invitees.empty? %>
-  <p>You haven't invited anyone. Norman.</p>
+  <p>You haven't invited anyone. Norman. Use the form below if you want to your friends along.</p>
 <% else %>
-  <p>People you have invited:</p>
+  <h2>People you have invited</h2>
   <ul>
     <% @punter.invitees.each do |i| %>
       <li><%=h i.name_with_email %></li>
@@ -18,7 +17,21 @@
   </ul>
 <% end %>
 
-<h2>Invite someone:</h2>
+<% if @punter.unpaid_ticket_candidates.length > 0 %>
+  <% if @punter.has_paid_ticket? %>
+    <p>You have a ticket! Great. You can still buy your friends some though, <%= link_to 'click here', orders_path %>!</p>
+  <% else %>
+    <% if @punter.orders.empty? %> 
+      <p>You don't have a ticket yet, <%= link_to 'click here', orders_path %> to sort it out!</p> 
+    <% else %>
+      <p>You have ordered some tickets, but not committed! <%= link_to 'Click here', orders_path %> to stay pure.</p>
+    <% end %>
+  <% end %>
+<% else %>
+  <p>You're ticketed up, yay! You're welcome to invite more people of course!</p>
+<% end %>
+
+<h2>Invite someone</h2>
 <%= render :partial => 'invitee' %>
 
 <ul>

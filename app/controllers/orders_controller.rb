@@ -5,100 +5,79 @@ class OrdersController < ApplicationController
   before_filter :login_required
   before_filter :retrieve_order,    :only => [ :edit , :show, :update ]
   before_filter :check_order_owner, :only => [ :edit , :show, :update ]
+  verify :params => :order_punter, :only => [ :create ], :redirect_to => :user_show_path
 
   # GET /orders
-  # GET /orders.xml
   def index
     @orders = Order.find_all_by_owner_id(@punter)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @orders }
-    end
+    @paid_punters = @punter.paid_ticket_candidates
+    @unpaid_punters = @punter.unpaid_ticket_candidates
   end
 
   # GET /orders/1
-  # GET /orders/1.xml
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @order }
-    end
   end
 
   # GET /orders/new
-  # GET /orders/new.xml
   def new
     @order = Order.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @order }
-    end
+    @unpaid_punters = @punter.unpaid_ticket_candidates
+    @order_punters = {}
   end
 
   # GET /orders/1/edit
   def edit
+    @unpaid_punters = @punter.unpaid_ticket_candidates
+    @order_punters = Hash.new { |h,k| h[k] = "0" }
+    @order.tickets.each { |t| @order_punters[t.punter.id] = "1" }
   end
 
   # POST /orders
-  # POST /orders.xml
   def create
-    @order = Order.new(params[:create])
+    @order = Order.create
     @order.update_attribute(:owner, @punter) # protected
-    respond_to do |format|
-      if @order.save
-        flash[:notice] = 'Order was successfully created.'
-        format.html { redirect_to(@order) }
-        format.xml  { render :xml => @order, :status => :created, :location => @order }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
-      end
+    params[:order_punter].keys.each { |p| @order.add_ticket_by_punter_id(p) }
+    if @order.save
+      flash[:notice] = 'Order was successfully created.'
+      redirect_to order_path(@order)
+    else
+      render :action => "new" 
     end
   end
 
   # PUT /orders/1
-  # PUT /orders/1.xml
   def update
-    respond_to do |format|
-      if @order.update_attributes(params[:order])
-        flash[:notice] = 'Order was successfully updated.'
-        format.html { redirect_to(@order) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+    # first remove all the previous tickets
+    @order.tickets.each { |t| t.delete }
 
-  # DELETE /orders/1
-  # DELETE /orders/1.xml
-  def destroy
-    @order = Order.find(params[:id])
-    @order.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(orders_url) }
-      format.xml  { head :ok }
+    # if we've not order_punters, we've had all tickets removed - kill the order
+    unless params.has_key?(:order_punter)
+      @order.delete
+      flash[:notice] = 'Order cancelled - no tickets!'
+      redirect_to orders_path
+      return
     end
+
+    # add new tickets
+    params[:order_punter].keys.each { |p| @order.add_ticket_by_punter_id(p) }
+    flash[:notice] = 'Order was successfully updated.'
+    redirect_to order_path(@order)
   end
 
   protected
 
-  def retrieve_order
-    begin
-      @order = Order.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
+  def check_order_owner
+    unless @order.owner == @punter
       flash[:error] = 'Order not found.'
       redirect_to orders_path
       return
     end
   end
 
-  def check_order_owner
-    unless @order.owner == @punter
+  def retrieve_order
+    begin
+      @order = Order.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
       flash[:error] = 'Order not found.'
       redirect_to orders_path
       return
