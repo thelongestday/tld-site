@@ -1,3 +1,4 @@
+<p>You are buying tickets for <%=h @event.name %>, priced at &pound;<%= @event.cost / 100 %> each.</p>
 <% form_for(@order, :html => { :class => "punter_form" }) do |f| %>
   <%= f.error_messages %>
 

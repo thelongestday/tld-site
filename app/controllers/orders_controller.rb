@@ -23,6 +23,7 @@ class OrdersController < ApplicationController
     @order = Order.new
     @unpaid_punters = @punter.unpaid_ticket_candidates
     @order_punters = {}
+    @event = Site::Config.event
   end
 
   # GET /orders/1/edit
@@ -30,6 +31,7 @@ class OrdersController < ApplicationController
     @unpaid_punters = @punter.unpaid_ticket_candidates
     @order_punters = Hash.new { |h,k| h[k] = "0" }
     @order.tickets.each { |t| @order_punters[t.punter.id] = "1" }
+    @event = Site::Config.event
   end
 
   # POST /orders
