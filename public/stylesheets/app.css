@@ -27,3 +27,17 @@ form.punter_form {
   border-style: solid;
   border-color: grey;
 }
+
+.note {
+  font-weight: normal;
+  font-size: 12px;
+  padding-left: 2em;
+}
+
+div#flash {
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+        font-style: italic;
+        font-weight: bold;
+        padding: 5px;
+}   
+

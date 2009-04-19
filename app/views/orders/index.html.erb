@@ -4,7 +4,16 @@
   <h2>People you might want to buy tickets for</h2>
   <ul>
     <% @unpaid_punters.each do |p| %>
-      <li><%=h p.name_with_email %> <%= p.has_ordered_ticket? ? '<i>(ticket on order, not paid yet)</i>' : '' %></li>
+      <li>
+        <%=h p.name_with_email %>
+        <% if p.has_ordered_ticket? %>
+          <% if p.has_ordered_ticket_by_punter?(@punter) %>
+            <span class="note">(You've ordered this ticket, but not paid for it yet.)</span>
+          <% else %>
+            <span class="note">(Someone else has ordered this ticket, but not paid for it yet)</span>
+          <% end %>
+        <% end %>
+      </li>
     <% end %>
   </ul>
 <% end %>
@@ -18,7 +27,7 @@
   </ul>
 <% end %>
 
-<p>If there's people not on this list that you want to come along, <%= link_to 'invite', user_show_path %> them!<p>
+<p>If there are people not on this list that you want to come along, <%= link_to 'invite', user_show_path %> them!<p>
 
 <% if @punter.orders.empty? %>
   <p>You haven't ordered any tickets this year.</p>
@@ -28,7 +37,7 @@
     <% @punter.orders.each do |o| %>
       <% if o.new? %>
         <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", edit_order_path(o) %></li>
-      <% elsif o.ordered? || o.paid? %>
+      <% elsif o.confirmed? || o.paid? %>
         <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", order_path(o) %></li>
       <% else %>
         <li>[ #<%= o.id %> ] <%= "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})" %></li>
@@ -38,7 +47,12 @@
 <% end %>
 
 <% if @punter.unpaid_ticket_candidates.length > 0 %>
-  <p>There are <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. <%= link_to 'Order some more tickets!', new_order_path %></p>
+  <p>There are <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. Why not <%= link_to 'order some more tickets!', new_order_path %></p>
 <% else %>
   <p>If you're still desperate to give us your money, you best <%= link_to 'invite', user_show_path %> some more people!</p>
 <% end %>
+
+<ul class="nav">
+  <li><%= link_to 'Back', user_show_path %> to your user page.</li>
+  <li><a href="/">Return to site</a></li>
+</ul>

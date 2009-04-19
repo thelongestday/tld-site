@@ -6,17 +6,21 @@
 </ul>
 <p>The total cost of this order is &pound;<%= @order.total_cost / 100 %></p>
 
-<% if @order.new? %>
-  <p>This order is still funky fresh, and can be <%= link_to 'changed', edit_order_path(@order) %></p>
-  <p>Even better, you could <%= link_to 'confirm and pay', confirm_order_path(@order) %> it!</p>
-  <p>If you no longer like us you might <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it.</p>
-<% elsif @order.confirmed? %>
-  <p>You've confirmed this order. Great. Now fess up the cash, bitch!</p>
-<% elsif @order.paid? %>
-  <p>This order is paid for. Wonderful.</p>
-<% elsif @order.cancelled? %>
-  <p>This order has been cancelled. Nothing to see here.</p>
-<% end %>
+<ul class="nav">
+  <% if @order.new? %>
+    <li>This order is still funky fresh, and can be <%= link_to 'changed', edit_order_path(@order) %></li>
+    <li>Even better, you could <%= link_to 'confirm and pay', confirm_order_path(@order), :method => :post %> it!</li>
+    <li>If you no longer like us you might <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it.</li>
+  <% elsif @order.confirmed? %>
+    <li>You've confirmed this order. Great. Now fess up the cash, bitch!</li>
+    <li>If you want to change something on this order you'll have to  <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it and start again (classy eh?)</li>
+  <% elsif @order.paid? %>
+    <li>This order is paid for. Wonderful.</li>
+  <% elsif @order.cancelled? %>
+    <li>This order has been cancelled. Nothing to see here.</li>
+  <% end %>
 
-<p><%= link_to 'Back', orders_path %> to your orders.</p>
-<p><%= link_to 'Back', user_show_path %> to your user page.</p>
+  <li><a href="/">Return to site</a></li>
+  <li>Or maybe <%= link_to 'back', orders_path %> to your orders.</li>
+  <li>Final offer: <%= link_to 'back', user_show_path %> to your user page.</li>
+</ul>

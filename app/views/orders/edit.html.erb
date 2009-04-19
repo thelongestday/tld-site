@@ -2,5 +2,7 @@
 
 <%= render :partial => 'form' %>
 
-<%= link_to 'Show', @order %> |
-<%= link_to 'Back', orders_path %>
+<ul class="nav">
+  <li><%= link_to 'Show', @order %></li>
+  <li><%= link_to 'Back', orders_path %></li>
+</ul>

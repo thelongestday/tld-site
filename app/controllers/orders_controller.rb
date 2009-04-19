@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
   before_filter :login_required
   before_filter :retrieve_order,    :only => [ :confirm, :destroy, :edit, :show, :update ]
   before_filter :check_order_owner, :only => [ :confirm, :destroy, :edit, :show, :update ]
-  verify :params => :order_punter, :only => [ :create ], :redirect_to => :user_show_path
+  verify :params => :order_punter, :only => [ :create ], :redirect_to => :orders_path
 
   # GET /orders
   def index
@@ -53,7 +53,7 @@ class OrdersController < ApplicationController
     @order.update_attribute(:owner, @punter) # protected
     params[:order_punter].keys.each { |p| @order.add_ticket_by_punter_id(p) }
     if @order.save
-      flash[:notice] = 'Order was successfully created.'
+      flash[:notice] = 'Order created.'
       redirect_to order_path(@order)
     else
       render :action => "new" 

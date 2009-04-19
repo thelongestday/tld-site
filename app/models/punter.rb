@@ -66,6 +66,10 @@ class Punter < ActiveRecord::Base
     self.tickets.detect { |t| t.on_order? }.nil? ? false : true
   end
 
+  def has_ordered_ticket_by_punter?(punter)
+    self.tickets.detect { |t| t.order.owner == punter }.nil? ? false : true
+  end
+
   def has_paid_ticket?
     self.tickets.detect { |t| t.paid? }.nil? ? false : true
   end
