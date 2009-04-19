@@ -47,7 +47,14 @@ class OrdersController < ApplicationController
 
   # PUT /orders/1
   def update
-    # first remove all the previous tickets
+    # check order can be updated
+    unless @order.new?
+      flash[:error] = 'Order is locked.'
+      redirect_to order_path(@order)
+      return
+    end
+
+    # remove all the previous tickets
     @order.tickets.each { |t| t.delete }
 
     # if we've not order_punters, we've had all tickets removed - kill the order

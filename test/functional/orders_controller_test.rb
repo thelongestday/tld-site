@@ -38,6 +38,18 @@ class OrdersControllerTest < ActionController::TestCase
       should_redirect_to("orders index") { orders_path }
       should_set_the_flash_to /Order not found/
     end
+
+    context "trying to update a non-new order" do
+      setup do
+        @o = Order.generate!
+        @o.mark_ordered!
+        login_as(@o.owner)
+        put :update, :id => @o.to_param, :order_punter => { }
+      end
+
+      should_redirect_to("order show") { order_path(@o) }
+      should_set_the_flash_to /locked/
+    end
   end
 
   def setup
