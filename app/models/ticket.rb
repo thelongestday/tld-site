@@ -3,8 +3,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :punter
   belongs_to :event
 
-  validates_presence_of :order, :punter
-  attr_protected :cost
+  validates_presence_of :order, :punter, :event
+  attr_protected :cost, :event, :punter
 
   def paid?
     self.order.paid?

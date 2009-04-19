@@ -96,7 +96,11 @@ class OrdersControllerTest < ActionController::TestCase
 
   test "should update order, deleting and replacing tickets" do
     p = Punter.generate!
-    t = Ticket.create!(:order => @o, :punter => @o.owner)
+    t = Ticket.create
+    t.update_attribute(:cost,   Site::Config.event.cost)
+    t.update_attribute(:event,  Site::Config.event)
+    t.update_attribute(:order,  @o)
+    t.update_attribute(:punter, p)
     @o.tickets << t
     put :update, :id => @o.to_param, :order_punter => { p.id => "1" }
     assert_does_not_contain @o.tickets, t

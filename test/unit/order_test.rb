@@ -16,7 +16,7 @@ class OrderTest < ActiveSupport::TestCase
       @o.add_ticket_by_punter_id(@p.id)
       
       assert_equal @o.tickets.first.punter, @p
-      assert_equal @o.tickets.first.cost, Site::Config::event.cost
+      assert_equal @o.tickets.first.cost, Site::Config.event.cost
     end
   end
 

@@ -304,7 +304,11 @@ class PunterTest < ActiveSupport::TestCase
       setup do 
         @p = Punter.generate!
         @p.orders << Order.create
-        @p.orders.first.tickets << Ticket.create(:punter => @p)
+        ticket = Ticket.create
+        ticket.update_attribute(:punter, @p)
+        ticket.update_attribute(:event, Site::Config.event)
+        ticket.update_attribute(:cost, Site::Config.event.cost)
+        @p.orders.first.tickets << ticket
         @p.reload
         @t = @p.tickets.first
         @o = @p.orders.first

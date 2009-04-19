@@ -30,8 +30,11 @@ class Order < ActiveRecord::Base
   def add_ticket_by_punter_id(punter_id)
     begin
       punter = Punter.find(punter_id)
-      ticket = Ticket.create!(:punter => punter, :event => Site::Config::event, :order => self)
-      ticket.update_attribute(:cost, ticket.event.cost)
+      ticket = Ticket.create
+      ticket.update_attribute(:cost,   Site::Config.event.cost)
+      ticket.update_attribute(:event,  Site::Config.event)
+      ticket.update_attribute(:order,  self)
+      ticket.update_attribute(:punter, punter)
       self.tickets << ticket
     rescue ActiveRecord::RecordNotFound
       logger.error("Tried to add #{p.to_i} to new Order, but Punter doesn't exist")
