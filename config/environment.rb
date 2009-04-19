@@ -28,6 +28,8 @@ Rails::Initializer.run do |config|
 
   config.gem 'rubyist-aasm', :version => '~> 2.0.5', :lib => 'aasm', :source => "http://gems.github.com"
   
+  config.gem 'paypal', :version => '~> 2.0.0', :source => 'http://dist.leetsoft.com/'
+
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
   # :all can be used as a placeholder for all plugins not explicitly named

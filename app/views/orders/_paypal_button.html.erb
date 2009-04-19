@@ -1,0 +1,16 @@
+<%= paypal_form_tag %>
+  <%= paypal_setup @order.id, @order.total_cost / 100, Site::Config.paypal[:account],
+    :item_name => "#{pluralize(@order.tickets.length, 'Ticket')} for #{Site::Config.event.name}",
+    :currency => 'GBP',
+    :invoice => @order.uid,
+    :business_key => Site::Config.paypal[:key],
+    :business_cert => Site::Config.paypal[:cert],
+    :business_certid => Site::Config.paypal[:certid],
+    :notify_url => paypal_ipn_url,
+    :return => order_url(@order),
+    :cancel_return => order_url(@order) %>
+
+    Buy ticket @ <%= number_to_currency @order.total_cost / 100, :unit => '&pound;' %>
+  <%= submit_tag "Fess up the cash at paypal >>" %>
+
+</form>

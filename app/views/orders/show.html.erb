@@ -12,7 +12,7 @@
     <li>Even better, you could <%= link_to 'confirm and pay', confirm_order_path(@order), :method => :post %> it!</li>
     <li>If you no longer like us you might <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it.</li>
   <% elsif @order.confirmed? %>
-    <li>You've confirmed this order. Great. Now fess up the cash, bitch!</li>
+    <li>You've confirmed this order. Great. <%= render :partial => 'paypal_button' %></li>
     <li>If you want to change something on this order you'll have to  <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it and start again (classy eh?)</li>
   <% elsif @order.paid? %>
     <li>This order is paid for. Wonderful.</li>

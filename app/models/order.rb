@@ -49,4 +49,8 @@ class Order < ActiveRecord::Base
     total
   end
 
+  def uid
+    return Digest::SHA1.hexdigest("#{self.id}-#{self.owner_id}-#{self.created_at}")[0..7]
+  end    
+
 end

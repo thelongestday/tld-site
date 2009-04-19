@@ -20,3 +20,4 @@ config.action_mailer.default_url_options = { :host => 'site.thelongestday.net' }
 
 SALT_FILE = File.join(RAILS_ROOT, '..', '..', 'shared', 'config', 'salt')  
 SITE_SALT = File.exists?(SALT_FILE) ? File.read(SALT_FILE) : 'nosalt'
+CERT_DIR = File.join(RAILS_ROOT, '..', '..', 'shared', 'config', 'x509')

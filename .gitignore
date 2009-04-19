@@ -1,4 +1,5 @@
 config/salt
+config/x509/*
 log/*
 tmp/**/*
 db/schema.rb

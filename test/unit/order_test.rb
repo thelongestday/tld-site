@@ -33,4 +33,15 @@ class OrderTest < ActiveSupport::TestCase
     end
   end
 
+  context "paypal" do
+    should "possess a uid" do
+      o = Order.create
+      o.id = 732
+      o.owner_id = 1024
+      o.created_at = Time.at(1)
+
+      assert_equal o.uid, "a2fda26d"
+    end
+  end
+
 end
