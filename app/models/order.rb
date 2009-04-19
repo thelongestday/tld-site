@@ -10,21 +10,21 @@ class Order < ActiveRecord::Base
   aasm_column :state
   aasm_initial_state :new
   aasm_state :new
-  aasm_state :ordered
+  aasm_state :confirmed
   aasm_state :paid
   aasm_state :cancelled
 
-  aasm_event :mark_ordered do
-    transitions :from => :new, :to => :ordered
+  aasm_event :confirm do
+    transitions :from => :new, :to => :confirmed
   end
 
-  aasm_event :mark_paid do
-    transitions :from => :ordered, :to => :paid
+  aasm_event :pay do
+    transitions :from => :confirmed, :to => :paid
   end
 
   aasm_event :cancel do
     transitions :from => :new,     :to => :cancelled
-    transitions :from => :ordered, :to => :cancelled
+    transitions :from => :confirmed, :to => :cancelled
   end
 
   def add_ticket_by_punter_id(punter_id)

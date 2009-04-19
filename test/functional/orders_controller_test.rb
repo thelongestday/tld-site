@@ -42,13 +42,119 @@ class OrdersControllerTest < ActionController::TestCase
     context "trying to update a non-new order" do
       setup do
         @o = Order.generate!
-        @o.mark_ordered!
+        @o.confirm!
         login_as(@o.owner)
         put :update, :id => @o.to_param, :order_punter => { }
       end
 
       should_redirect_to("order show") { order_path(@o) }
       should_set_the_flash_to /locked/
+    end
+
+    context "cancelling an order" do
+      context "that's new" do
+        setup do
+          @o = Order.generate!
+          login_as(@o.owner)
+          delete :destroy, :id => @o.to_param
+        end
+
+        should "cancel the order" do
+          @o.reload
+          assert @o.cancelled?
+        end
+
+        should_redirect_to("orders path") { orders_path }
+        should_set_the_flash_to /Order cancelled/
+      end
+
+      context "that's confirmed" do
+        setup do
+          @o = Order.generate!
+          @o.confirm!
+          login_as(@o.owner)
+          delete :destroy, :id => @o.to_param
+        end
+
+        should "cancel the order" do
+          @o.reload
+          assert @o.cancelled?
+        end
+
+        should_redirect_to("orders path") { orders_path }
+        should_set_the_flash_to /Order cancelled/
+      end
+
+      context "that's paid" do
+        setup do
+          @o = Order.generate!
+          @o.confirm!
+          @o.pay!
+          login_as(@o.owner)
+          delete :destroy, :id => @o.to_param
+        end
+
+        should "not cancel the order" do
+          @o.reload
+          assert @o.paid?
+        end
+
+        should_redirect_to("orders path") { orders_path }
+        should_set_the_flash_to /You can't/
+      end
+    end
+
+    context "confirming an order" do
+      context "that's new" do
+        setup do
+          @o = Order.generate!
+          login_as(@o.owner)
+          post :confirm, :id => @o.to_param
+        end
+
+        should "confirm the order" do
+          @o.reload
+          assert @o.confirmed?
+        end
+
+        should_redirect_to("order path") { order_path(@o) }
+        should_set_the_flash_to /Order confirmed/
+      end
+
+      context "that's confirmed" do
+        setup do
+          @o = Order.generate!
+          @o.confirm!
+          login_as(@o.owner)
+          post :confirm, :id => @o.to_param
+        end
+
+        should "do nothing" do
+          @o.reload
+          assert @o.confirmed?
+        end
+
+        should_redirect_to("order path") { order_path(@o) }
+        should_set_the_flash_to /You can't/
+      end
+
+      context "that's paid" do
+        setup do
+          @o = Order.generate!
+          @o.confirm!
+          @o.pay!
+          login_as(@o.owner)
+          post :confirm, :id => @o.to_param
+        end
+
+        should "not confirm the order" do
+          @o.reload
+          assert @o.paid?
+        end
+
+        should_redirect_to("order path") { order_path(@o) }
+        should_set_the_flash_to /You can't/
+      end
     end
   end
 

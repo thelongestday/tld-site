@@ -5,5 +5,18 @@
   <% end %>
 </ul>
 <p>The total cost of this order is &pound;<%= @order.total_cost / 100 %></p>
-<%= link_to 'Edit', edit_order_path(@order) %> |
-<%= link_to 'Back', orders_path %>
+
+<% if @order.new? %>
+  <p>This order is still funky fresh, and can be <%= link_to 'changed', edit_order_path(@order) %></p>
+  <p>Even better, you could <%= link_to 'confirm and pay', confirm_order_path(@order) %> it!</p>
+  <p>If you no longer like us you might <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it.</p>
+<% elsif @order.confirmed? %>
+  <p>You've confirmed this order. Great. Now fess up the cash, bitch!</p>
+<% elsif @order.paid? %>
+  <p>This order is paid for. Wonderful.</p>
+<% elsif @order.cancelled? %>
+  <p>This order has been cancelled. Nothing to see here.</p>
+<% end %>
+
+<p><%= link_to 'Back', orders_path %> to your orders.</p>
+<p><%= link_to 'Back', user_show_path %> to your user page.</p>

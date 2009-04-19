@@ -3,8 +3,8 @@ class OrdersController < ApplicationController
   layout 'tld'
 
   before_filter :login_required
-  before_filter :retrieve_order,    :only => [ :edit , :show, :update ]
-  before_filter :check_order_owner, :only => [ :edit , :show, :update ]
+  before_filter :retrieve_order,    :only => [ :confirm, :destroy, :edit, :show, :update ]
+  before_filter :check_order_owner, :only => [ :confirm, :destroy, :edit, :show, :update ]
   verify :params => :order_punter, :only => [ :create ], :redirect_to => :user_show_path
 
   # GET /orders
@@ -32,6 +32,19 @@ class OrdersController < ApplicationController
     @order_punters = Hash.new { |h,k| h[k] = "0" }
     @order.tickets.each { |t| @order_punters[t.punter.id] = "1" }
     @event = Site::Config.event
+  end
+
+  def confirm
+    begin
+      @order.confirm!
+    rescue AASM::InvalidTransition
+      flash[:error] = "You can't confirm this order."
+      redirect_to(order_path(@order))
+      return
+    end
+
+    flash[:notice] = 'Order confirmed.'
+    redirect_to(order_path(@order))
   end
 
   # POST /orders
@@ -72,6 +85,21 @@ class OrdersController < ApplicationController
     flash[:notice] = 'Order was successfully updated.'
     redirect_to order_path(@order)
   end
+  
+  # DELETE /posts/1
+  def destroy
+    begin
+      @order.cancel!
+    rescue AASM::InvalidTransition
+      flash[:error] = "You can't cancel this order."
+      redirect_to(orders_path)
+      return
+    end
+
+    flash[:notice] = 'Order cancelled.'
+    redirect_to(orders_path)
+  end
+  
 
   protected
 

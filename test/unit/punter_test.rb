@@ -323,8 +323,8 @@ class PunterTest < ActiveSupport::TestCase
       end
 
       should "respond to :has_paid_ticket with true when there is a paid ticket" do
-        @o.mark_ordered!
-        @o.mark_paid!
+        @o.confirm!
+        @o.pay!
         assert @p.has_paid_ticket? == true
       end
     end

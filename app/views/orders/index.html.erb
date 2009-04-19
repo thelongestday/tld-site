@@ -28,6 +28,8 @@
     <% @punter.orders.each do |o| %>
       <% if o.new? %>
         <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", edit_order_path(o) %></li>
+      <% elsif o.ordered? || o.paid? %>
+        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", order_path(o) %></li>
       <% else %>
         <li>[ #<%= o.id %> ] <%= "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})" %></li>
       <% end %>
