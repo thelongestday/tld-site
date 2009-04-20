@@ -2,6 +2,7 @@ require 'test_helper'
 
 class OrderTest < ActiveSupport::TestCase
   should_have_many :tickets
+  should_have_many :paypal_logs
   should_belong_to :owner
   should_not_allow_mass_assignment_of :owner
   should_not_allow_mass_assignment_of :state

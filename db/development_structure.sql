@@ -59,6 +59,23 @@ CREATE TABLE `orders` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `paypal_logs` (
+  `id` int(11) NOT NULL auto_increment,
+  `created_at` datetime default NULL,
+  `item_number` int(11) default NULL,
+  `quantity` int(11) default NULL,
+  `txn_id` varchar(128) default NULL,
+  `receiver_id` varchar(128) default NULL,
+  `payer_id` varchar(128) default NULL,
+  `payment_status` varchar(128) default NULL,
+  `mc_gross` float default NULL,
+  `mc_fee` float default NULL,
+  `invoice` varchar(128) default NULL,
+  `mc_currency` varchar(128) default NULL,
+  `updated_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `punters` (
@@ -90,7 +107,7 @@ CREATE TABLE `tickets` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 INSERT INTO schema_migrations (version) VALUES ('20090331195807');
 
@@ -109,3 +126,5 @@ INSERT INTO schema_migrations (version) VALUES ('20090418090235');
 INSERT INTO schema_migrations (version) VALUES ('20090418090527');
 
 INSERT INTO schema_migrations (version) VALUES ('20090419095044');
+
+INSERT INTO schema_migrations (version) VALUES ('20090420064509');

@@ -1,9 +1,10 @@
 class Order < ActiveRecord::Base
   belongs_to :owner, :class_name => 'Punter'
+  has_many :tickets
+  has_many :paypal_logs, :foreign_key => 'item_number'
+
   validates_presence_of :owner
   attr_protected :owner, :state
-
-  has_many :tickets
 
   include AASM
 
