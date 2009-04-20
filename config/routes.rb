@@ -13,13 +13,14 @@ ActionController::Routing::Routes.draw do |map|
     m.user_invite '/user/invite', :action => 'invite'
   end
 
+  map.with_options :controller => 'paypal' do |m|
+    m.paypal_ipn '/paypal/ipn', :action => 'ipn'
+  end
+
   map.comatose_admin
   map.comatose_root 'invitees',  :index => 'invitees',             :layout => 'tld'
   map.comatose_root 'attendees', :index => 'attendees',            :layout => 'tld'
   map.comatose_root '',          :index => 'the-longest-day-2009', :layout => 'tld'
 
-  map.with_options :controller => 'paypal' do |m|
-    m.paypal_ipn '/paypal/ipn', :action => 'ipn'
-  end
 
 end
