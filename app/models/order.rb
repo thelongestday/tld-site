@@ -54,10 +54,7 @@ class Order < ActiveRecord::Base
     return Digest::SHA1.hexdigest("#{self.id}-#{self.owner_id}-#{self.created_at}")[0..7]
   end    
 
-  # protected - XXX
-  
   def send_receipt
-    return unless self.paid?
     Notifier.deliver_ticket_sale_receipt(self)
     tickets.each do |t|
       Notifier.deliver_ticket_sale_message(self, t)

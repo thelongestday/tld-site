@@ -156,6 +156,50 @@ class OrdersControllerTest < ActionController::TestCase
         should_set_the_flash_to /You can't/
       end
     end
+
+    context "when an ticket has subsequently been bought by someone else" do
+      setup do
+        @p1 = Punter.generate!
+        @p2 = Punter.generate!
+        @p3 = Punter.generate!
+        @o1 = Order.generate!
+        @o2 = Order.generate!
+
+        # three tickets on this order
+        @t1o1 = create_ticket(:punter => @p1, :order => @o1)
+        @t2o1 = create_ticket(:punter => @p2, :order => @o1)
+        @t3o1 = create_ticket(:punter => @p3, :order => @o1)
+
+        # two tickets also on another order
+        @t1o2 = create_ticket(:punter => @p1, :order => @o2)
+        @t2o2 = create_ticket(:punter => @p2, :order => @o2)
+
+        # that are paid
+        @o2.confirm!
+        @o2.pay!
+
+        login_as(@o1.owner)
+        get :show, :id => @o1
+
+      end
+
+      should "should zap the tickets on this order" do
+        assert_does_not_contain @o1.tickets, @t1o1
+        assert_does_not_contain @o1.tickets, @t2o1
+      end
+
+      should "leave the surviving tickets alone" do
+        assert_contains @o1.tickets, @t3o1
+      end
+
+      should_set_the_flash_to /dithering/
+      
+      should "leave the other order untouched" do
+        assert_contains @o2.tickets, @t1o2
+        assert_contains @o2.tickets, @t2o2
+      end
+    end
+
   end
 
   def setup

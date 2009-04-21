@@ -26,7 +26,7 @@ class PaypalController < ApplicationController
         order.pay!
 
       else
-        logger.info("[Paypal] (PaypalLog #{pplog.id}) IPN acknowledge but order isn't complete: order #{notify.item_id} payment_status #{notify.payment_status}")
+        logger.info("[Paypal] (PaypalLog #{pplog.id}) IPN acknowledge but order isn't complete: order #{notify.item_id} payment_status #{pplog.payment_status}")
       end
 
     else

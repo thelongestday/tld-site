@@ -24,3 +24,14 @@ class ActionView::TestCase
     end
   end
 end
+
+
+# get around Ticket's paranoic protected attributes
+def create_ticket(opts)
+  t = Ticket.create
+  t.update_attribute(:event, Site::Config.event)
+  t.update_attribute(:cost,  Site::Config.event.cost)
+  t.update_attribute(:punter, opts[:punter] || Punter.generate!)
+  t.update_attribute(:order,  opts[:order]  || Order.generate!)
+  t
+end
