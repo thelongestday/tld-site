@@ -9,16 +9,23 @@
 <ul class="nav">
   <% if @order.new? %>
     <li>This order is still funky fresh, and can be <%= link_to 'changed', edit_order_path(@order) %></li>
-    <li>Even better, you could <%= link_to 'confirm and pay', confirm_order_path(@order), :method => :post %> it!</li>
+    <li>Even better, you could <strong><%= link_to 'confirm and pay', confirm_order_path(@order), :method => :post %> it!</strong></li>
     <li>If you no longer like us you might <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it.</li>
   <% elsif @order.confirmed? %>
-    <li>You've confirmed this order. Great. <%= render :partial => 'paypal_button' %></li>
+    <li>You've confirmed this order. Now you need to <%= render :partial => 'paypal_button' %></li>
     <li>If you want to change something on this order you'll have to  <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it and start again (classy eh?)</li>
   <% elsif @order.paid? %>
     <li>This order is paid for. Wonderful.</li>
   <% elsif @order.cancelled? %>
     <li>This order has been cancelled. Nothing to see here.</li>
   <% end %>
+
+  <div class="lame-excuse">
+    <p>Attento! To avoid the glare of the world's media and law enforcement we've cunningly not named our Paypal account "The Longest Day".<br />
+    Instead we've called it "Andreas Stoker". They'll never guess. You know Andreas, he's this chap here:<p>
+    <img src="http://site.thelongestday.net/images/whoareyou/small-andreas.png" alt="Andreas" />
+    <p>Don't let this curveball give you the fear when it comes to paying up the moolah!</p>
+  </div>
 
   <li><a href="/">Return to site</a></li>
   <li>Or maybe <%= link_to 'back', orders_path %> to your orders.</li>
