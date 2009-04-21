@@ -1,0 +1,18 @@
+Hi <%=h @ticket.punter.name %>,
+
+<% if @ticket.punter == @order.owner %>
+Thanks for buying a ticket for <%= Site::Config.event.name %>. You will have received
+a separate mail with your receipt.
+<% else %>
+Lucky you! <%=h @order.owner.name %> bought you a ticket for <%= Site::Config.event.name %>.
+<% end %>
+
+For reference, the details of your ticket are:
+
+Ticket: <%= @ticket.id %>
+Order:  <%= @order.id %> (<%= @order.uid %>)
+
+We'll be issuing the tickets closer to the event from the website, and will send
+you a mail when they're ready for collection.
+
+Thanks, Hetty.

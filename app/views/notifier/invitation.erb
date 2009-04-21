@@ -1,6 +1,8 @@
 Hi <%=h @invitee.name %>,
 
-You've been invited to The Longest Day 2009!
+You've been invited to <%= Site::Config.event.name %>!
 
 Click this link to sign up to the site and find out more!
 <%= url_for :only_path => false, :controller => :punter, :action => :confirm, :token => @invitee.authentication_token %>
+
+Thanks, Hetty.

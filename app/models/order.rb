@@ -12,7 +12,7 @@ class Order < ActiveRecord::Base
   aasm_initial_state :new
   aasm_state :new
   aasm_state :confirmed
-  aasm_state :paid
+  aasm_state :paid, :enter => :send_receipt
   aasm_state :cancelled
 
   aasm_event :confirm do
@@ -54,4 +54,13 @@ class Order < ActiveRecord::Base
     return Digest::SHA1.hexdigest("#{self.id}-#{self.owner_id}-#{self.created_at}")[0..7]
   end    
 
+  # protected - XXX
+  
+  def send_receipt
+    return unless self.paid?
+    Notifier.deliver_ticket_sale_receipt(self)
+    tickets.each do |t|
+      Notifier.deliver_ticket_sale_message(self, t)
+    end
+  end
 end
