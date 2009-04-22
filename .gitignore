@@ -1,3 +1,4 @@
+tmp/*
 config/salt
 config/x509/*
 log/*
