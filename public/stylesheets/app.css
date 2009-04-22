@@ -40,3 +40,8 @@ div#flash {
         padding: 5px;
 }   
 
+div.nav {
+  text-align: right;
+  font-size: 0.7em;
+}
+
