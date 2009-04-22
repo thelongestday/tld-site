@@ -11,6 +11,6 @@
   <p>That leaves no-one on your order - <%= link_to 'click here', order_path(@order), :method => :delete %> to cancel it.</p>
 <% else %>
   <p>That leaves <%= pluralize(@order.tickets.length, 'person') %> on your order.
-     <%= link_to 'Click here', order_path(@order) %> to carry on.
+     <%= link_to 'Click here', order_path(@order) %> to check and confirm it's all good.
   </p>
 <% end %>

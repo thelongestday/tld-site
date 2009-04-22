@@ -19,12 +19,16 @@ class Order < ActiveRecord::Base
     transitions :from => :new, :to => :confirmed
   end
 
+  aasm_event :unconfirm do
+    transitions :from => :confirmed, :to => :new
+  end
+
   aasm_event :pay do
     transitions :from => :confirmed, :to => :paid
   end
 
   aasm_event :cancel do
-    transitions :from => :new,     :to => :cancelled
+    transitions :from => :new,       :to => :cancelled
     transitions :from => :confirmed, :to => :cancelled
   end
 

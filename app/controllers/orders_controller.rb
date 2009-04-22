@@ -117,8 +117,12 @@ class OrdersController < ApplicationController
       @already = @order.tickets.find_all { |t| t.punter.has_paid_ticket? }
       unless @already.empty?
         @already.each { |t| t.delete }
+        if @order.confirmed?
+          @order.unconfirm!
+        end
         @order.reload
         render :collision
+        return
       end
     end
   end

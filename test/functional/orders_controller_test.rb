@@ -162,7 +162,7 @@ class OrdersControllerTest < ActionController::TestCase
       end
     end
 
-    context "when an ticket has subsequently been bought by someone else" do
+    context "order collisions" do
       setup do
         @p1 = Punter.generate!
         @p2 = Punter.generate!
@@ -175,119 +175,93 @@ class OrdersControllerTest < ActionController::TestCase
         @t2o1 = create_ticket(:punter => @p2, :order => @o1)
         @t3o1 = create_ticket(:punter => @p3, :order => @o1)
 
-        # one tickets also on another order
+        # one ticket also on another order
         @t1o2 = create_ticket(:punter => @p1, :order => @o2)
 
         # that are paid
         @o2.confirm!
         @o2.pay!
-
-        login_as(@o1.owner)
-        get :show, :id => @o1
-
       end
 
-      should "should zap the tickets on this order" do
-        assert_does_not_contain @o1.tickets, @t1o1
+      context "when an ticket has subsequently been bought by someone else" do
+        setup do
+          login_as(@o1.owner)
+          get :show, :id => @o1
+        end
+
+        should "should zap the tickets on this order" do
+          assert_does_not_contain @o1.tickets, @t1o1
+        end
+
+        should "leave the surviving tickets alone" do
+          assert_contains @o1.tickets, @t2o1
+          assert_contains @o1.tickets, @t3o1
+        end
+
+        should_assign_to :already
+        should_render_template :collision
+        
+        should "leave the other order untouched" do
+          assert_contains @o2.tickets, @t1o2
+        end
       end
 
-      should "leave the surviving tickets alone" do
-        assert_contains @o1.tickets, @t2o1
-        assert_contains @o1.tickets, @t3o1
+      context "when an ticket has been bought by this punter, but someone else has ordered it, via show" do
+        setup do
+          login_as(@o2.owner)
+          get :show, :id => @o2
+        end
+
+        should "should not zap the tickets on this order" do
+          assert_contains @o2.tickets, @t1o2
+        end
+
+        should_render_template :show
       end
 
-      should_assign_to :already
-      should_render_template :collision
-      
-      should "leave the other order untouched" do
-        assert_contains @o2.tickets, @t1o2
+      context "when multiple tickets have subsequently been bought by someone else, via confirm" do
+        setup do
+          @t2o2 = create_ticket(:punter => @p2, :order => @o2)
+          login_as(@o1.owner)
+          post :confirm, :id => @o1
+        end
+
+        should "should zap the tickets on this order" do
+          assert_does_not_contain @o1.tickets, @t1o1
+          assert_does_not_contain @o1.tickets, @t2o1
+        end
+
+        should "leave the surviving tickets alone" do
+          assert_contains @o1.tickets, @t3o1
+        end
+
+        should_assign_to :already
+        should_render_template :collision
+        
+        should "leave the other order untouched" do
+          @o2.reload
+          assert_contains @o2.tickets, @t1o2
+          assert_contains @o2.tickets, @t2o2
+          assert @o2.paid?
+        end
+
+        should "not confirm the order" do
+          assert @o1.new?
+        end
+      end
+
+      context "when tickets have subsequently been bought by someone else and this order is confirmed" do
+        setup do
+          login_as(@o1.owner)
+          @o1.confirm!
+          post :confirm, :id => @o1
+        end
+
+        should "unconfirm the order" do
+          assert @o1.new?
+        end
       end
     end
-
-    # reverse of the above situation
-    context "when an ticket has been bought by this punter, but someone else has ordered it, via show" do
-      setup do
-        @p1 = Punter.generate!
-        @p2 = Punter.generate!
-        @p3 = Punter.generate!
-        @o1 = Order.generate!
-        @o2 = Order.generate!
-
-        # three tickets on this order
-        @t1o1 = create_ticket(:punter => @p1, :order => @o1)
-        @t2o1 = create_ticket(:punter => @p2, :order => @o1)
-        @t3o1 = create_ticket(:punter => @p3, :order => @o1)
-
-        # one tickets also on another order
-        @t1o2 = create_ticket(:punter => @p1, :order => @o2)
-
-        # that are paid
-        @o1.confirm!
-        @o1.pay!
-
-        login_as(@o1.owner)
-        get :show, :id => @o1
-
-      end
-
-      should "should not zap the tickets on this order" do
-        assert_contains @o1.tickets, @t1o1
-      end
-
-      should_render_template :show
-      
-    end
-
-    context "when multiple tickets have subsequently been bought by someone else, via confirm" do
-      setup do
-        @p1 = Punter.generate!
-        @p2 = Punter.generate!
-        @p3 = Punter.generate!
-        @o1 = Order.generate!
-        @o2 = Order.generate!
-
-        # three tickets on this order
-        @t1o1 = create_ticket(:punter => @p1, :order => @o1)
-        @t2o1 = create_ticket(:punter => @p2, :order => @o1)
-        @t3o1 = create_ticket(:punter => @p3, :order => @o1)
-
-        # two tickets also on another order
-        @t1o2 = create_ticket(:punter => @p1, :order => @o2)
-        @t2o2 = create_ticket(:punter => @p2, :order => @o2)
-
-        # that are paid
-        @o2.confirm!
-        @o2.pay!
-
-        login_as(@o1.owner)
-        post :confirm, :id => @o1
-
-      end
-
-      should "should zap the tickets on this order" do
-        assert_does_not_contain @o1.tickets, @t1o1
-        assert_does_not_contain @o1.tickets, @t2o1
-      end
-
-      should "leave the surviving tickets alone" do
-        assert_contains @o1.tickets, @t3o1
-      end
-
-      should_assign_to :already
-      should_render_template :collision
-      
-      should "leave the other order untouched" do
-        assert_contains @o2.tickets, @t1o2
-        assert_contains @o2.tickets, @t2o2
-        assert @o2.paid?
-      end
-
-      should "not confirm the order" do
-        assert @o1.new?
-      end
-
-    end
-
   end
 
   def setup
