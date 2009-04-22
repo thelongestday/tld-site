@@ -258,6 +258,7 @@ class OrdersControllerTest < ActionController::TestCase
         end
 
         should "unconfirm the order" do
+          @o1.reload
           assert @o1.new?
         end
       end
