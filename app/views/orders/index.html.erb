@@ -6,6 +6,7 @@
     <% @unpaid_punters.each do |p| %>
       <li>
         <%=h p.name_with_email %>
+        <%= p == @punter ? "- that's you" : '' %>
         <% if p.has_ordered_ticket? %>
           <% if p.has_ordered_ticket_by_punter?(@punter) %>
             <span class="note">(You've ordered this ticket, but not paid for it yet.)</span>
@@ -36,9 +37,11 @@
   <ul>
     <% @punter.orders.each do |o| %>
       <% if o.new? %>
-        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", edit_order_path(o) %></li>
-      <% elsif o.confirmed? || o.paid? %>
-        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})", order_path(o) %></li>
+        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (new)", edit_order_path(o) %></li>
+      <% elsif o.confirmed? %>
+        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (confirmed, not paid)", order_path(o) %></li>
+      <% elsif o.paid? %>
+        <li>[ #<%= o.id %> ] <%= link_to "#{pluralize(o.tickets.length, 'ticket')} (paid)", order_path(o) %></li>
       <% else %>
         <li>[ #<%= o.id %> ] <%= "#{pluralize(o.tickets.length, 'ticket')} (#{o.state})" %></li>
       <% end %>
