@@ -55,6 +55,7 @@ class OrdersControllerTest < ActionController::TestCase
       context "that's new" do
         setup do
           @o = Order.generate!
+          @t = create_ticket(:punter => @o.owner, :order => @o)
           login_as(@o.owner)
           delete :destroy, :id => @o.to_param
         end
@@ -62,6 +63,10 @@ class OrdersControllerTest < ActionController::TestCase
         should "cancel the order" do
           @o.reload
           assert @o.cancelled?
+        end
+
+        should "delete the tickets" do
+          assert @o.tickets.empty?
         end
 
         should_redirect_to("orders path") { orders_path }

@@ -107,6 +107,8 @@ class OrdersController < ApplicationController
       return
     end
 
+    @order.tickets.each { |t| t.delete }
+
     flash[:notice] = 'Order cancelled.'
     redirect_to(orders_path)
   end
