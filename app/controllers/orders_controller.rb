@@ -5,9 +5,10 @@ class OrdersController < ApplicationController
   layout 'tld'
 
   before_filter :login_required
-  before_filter :retrieve_order,    :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
-  before_filter :check_order_owner, :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
-  verify :params => :order_punter, :only => [ :create ], :redirect_to => :orders_path
+  before_filter :retrieve_order,        :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
+  before_filter :check_order_owner,     :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
+  before_filter :check_order_collision, :only => [ :confirm, :show ]
+  verify :params => :order_punter,      :only => [ :create ], :redirect_to => :orders_path
 
   # GET /orders
   def index
@@ -21,12 +22,6 @@ class OrdersController < ApplicationController
 
   # GET /orders/1
   def show
-    # check no-one on the order has since had a ticket bought for them
-    already = @order.tickets.find_all { |t| t.punter.has_paid_ticket? }
-    unless already.empty?
-      already.each { |t| t.delete }
-      flash[:notice] = "Whilst you were dithering with this order, #{already.map { |t| t.punter.name }.join(', ')} got their tickets elsewhere! They have been removed from your order."
-    end
   end
 
   # GET /orders/new
@@ -115,6 +110,18 @@ class OrdersController < ApplicationController
   
 
   protected
+
+  def check_order_collision
+    # check no-one on the order has since had a ticket bought for them
+    unless @order.paid? || @order.cancelled?
+      @already = @order.tickets.find_all { |t| t.punter.has_paid_ticket? }
+      unless @already.empty?
+        @already.each { |t| t.delete }
+        @order.reload
+        render :collision
+      end
+    end
+  end
 
   def check_order_owner
     unless @order.owner == @punter

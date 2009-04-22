@@ -1,0 +1,16 @@
+
+<h2>Woah - whilst you were dithering with your order, the following tickets were bought by someone else</h2>
+<ul>
+  <% @already.each do |t| %>
+    <li><%=h t.punter.name_with_email %></li>
+  <% end %>
+</ul>
+
+
+<% if @order.tickets.empty? %>
+  <p>That leaves no-one on your order - <%= link_to 'click here', order_path(@order), :method => :delete %> to cancel it.</p>
+<% else %>
+  <p>That leaves <%= pluralize(@order.tickets.length, 'person') %> on your order.
+     <%= link_to 'Click here', order_path(@order) %> to carry on.
+  </p>
+<% end %>
