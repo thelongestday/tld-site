@@ -87,7 +87,7 @@ class PunterControllerTest < ActionController::TestCase
       end
 
       should_set_session(:punter_id) { @punter.id }
-      should_set_the_flash_to /Please now set yourself a password/
+      should_set_the_flash_to /Thanks for signing/
       should_redirect_to("User edit page") { user_edit_path }
     end
   end

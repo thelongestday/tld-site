@@ -157,6 +157,7 @@ class Punter < ActiveRecord::Base
   # their state remains 'new', and they are forced to set a name when they confirm
   def self.invite_without_name(email)
     punter = Punter.create(:email => email, :name => 'foobar')
+    punter.inviters << Site::Config.root_user
     punter.save! # will validate email uniqueness etc
     punter.update_attribute(:name, nil)
     punter.invite! # will return false owing to :name validation failure

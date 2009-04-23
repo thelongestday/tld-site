@@ -2,6 +2,17 @@ Hi <%=h @invitee.name %>,
 
 You've been invited to <%= Site::Config.event.name %>!
 
+<% if @invitee.inviters.length == 1 -%>
+You were invited by <%= @invitee.inviters.first.name_with_email %>
+<% else -%>
+We've sent you an invite before, but this is to let you know that <%= @invitee.inviters.last.name_with_email %> has invited you too.
+
+The full list of people who've invited you is:
+<% @invitee.inviters.each do |i| -%>
+  <%= i.name_with_email %>
+<% end -%>
+<% end -%>
+
 Click this link to sign up to the site and find out more!
 <%= url_for :only_path => false, :controller => :punter, :action => :confirm, :token => @invitee.authentication_token %>
 

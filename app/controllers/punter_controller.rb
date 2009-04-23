@@ -55,7 +55,7 @@ class PunterController < ApplicationController
     punter.confirm!
     
     session[:punter_id] = punter.id
-    flash[:notice] = "Please now set yourself a password"
+    flash[:notice] = "Thanks for signing up! Please now check your details and chose a password."
 
     redirect_to user_edit_path
   end
@@ -76,6 +76,7 @@ class PunterController < ApplicationController
       rescue PunterException => e
         flash[:error] = e.message
       end
+      flash[:notice] = "OK, #{@invitee.name_with_email} invited!"
       redirect_to user_show_path
       return
     else

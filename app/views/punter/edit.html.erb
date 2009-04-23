@@ -1,4 +1,4 @@
-<p><%=h @punter.name_with_email %></p>
+<h2><%=h @punter.name_with_email %></h2>
 
 <% form_for :punter, @punter, :url => { :action => :update }, :html => { :class => 'punter_form' } do |f| %>
   <%= f.error_messages :header_message => 'Computer says no!', :message => 'Please fix the following:' %>
