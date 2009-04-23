@@ -12,7 +12,7 @@ module Components
       alias_method_chain :process_cleanup, :render_component
       alias_method_chain :session=, :render_component
       alias_method_chain :flash, :render_component
-      alias_method_chain :assign_shortcuts, :render_component
+ #    alias_method_chain :assign_shortcuts, :render_component
       alias_method_chain :send_response, :render_component
 
       alias_method :component_request?, :parent_controller
