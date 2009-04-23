@@ -24,7 +24,7 @@
     <% if @punter.orders.empty? %> 
       <p>You don't have a ticket yet, <%= link_to 'click here', orders_path %> to sort it out!</p> 
     <% else %>
-      <p>You have ordered some tickets, but not committed! <%= link_to 'Click here', orders_path %> to stay pure.</p>
+      <p>You have ordered some tickets, but don't have one yourself! <%= link_to 'Click here', orders_path %> to stay pure.</p>
     <% end %>
   <% end %>
 <% else %>
