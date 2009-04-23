@@ -5,7 +5,8 @@ module PunterTestHelper
   end
 
   def login_as_admin
-    @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com', :admin => true)
+    @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+    @punter.update_attribute(:admin, true)
     session[:punter_id] = @punter.id
   end
 

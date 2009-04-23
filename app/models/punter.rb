@@ -21,7 +21,7 @@ class Punter < ActiveRecord::Base
   has_many :tickets
 
   attr_accessor :password, :password_confirmation, :set_new_password, :non_unique_email
-  attr_protected :state
+  attr_protected :state, :admin
 
   include AASM
 
@@ -38,6 +38,7 @@ class Punter < ActiveRecord::Base
   end
 
   aasm_event :confirm do
+    transitions :from => :new,       :to => :confirmed
     transitions :from => :invited,   :to => :confirmed
     transitions :from => :confirmed, :to => :confirmed
   end
@@ -152,6 +153,16 @@ class Punter < ActiveRecord::Base
     punter
   end
 
+  # used to for script-based inviting of people when you don't know their name
+  # their state remains 'new', and they are forced to set a name when they confirm
+  def self.invite_without_name(email)
+    punter = Punter.create(:email => email, :name => 'foobar')
+    punter.save! # will validate email uniqueness etc
+    punter.update_attribute(:name, nil)
+    punter.invite! # will return false owing to :name validation failure
+    punter
+  end
+
   protected
 
   def send_invitation
@@ -166,6 +177,5 @@ class Punter < ActiveRecord::Base
   def self.random_salt
     [Array.new(6){rand(256).chr}.join].pack("m").chomp
   end
-
 end
 

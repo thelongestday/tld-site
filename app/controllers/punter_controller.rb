@@ -108,18 +108,22 @@ class PunterController < ApplicationController
   end
 
   def update
-    params[:punter].delete(:admin)
+    redirect_to user_show_path if request.get?
+
     params[:punter].delete(:email)
 
     if @punter.salted_password.empty?
       @punter.set_new_password = true
     end
 
-    if params[:punter][:password].empty?
-      params[:punter].delete(:password)
-      params[:punter].delete(:password_confirmation)
-    else
-      @punter.set_new_password = true
+    if params[:punter].has_key?(:password) &&
+       params[:punter].has_key?(:password_confirmation) 
+      if params[:punter][:password].empty?
+        params[:punter].delete(:password)
+        params[:punter].delete(:password_confirmation)
+      else
+        @punter.set_new_password = true
+      end
     end
 
     if params[:punter].keys.empty?

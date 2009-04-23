@@ -15,6 +15,7 @@ class PunterTest < ActiveSupport::TestCase
     should_ensure_length_in_range :email, (0.. 128)
     should_allow_values_for :email, "a@b.com"
     should_not_allow_mass_assignment_of :state
+    should_not_allow_mass_assignment_of :admin
 
     should_have_many :orders
     should_have_many :tickets
@@ -160,11 +161,6 @@ class PunterTest < ActiveSupport::TestCase
       Notifier.expects(:deliver_invitation).with(@punter)
       @punter.invite!
     end
-
-    should "not become confirmed" do
-      assert_raise(AASM::InvalidTransition) { @punter.confirm! }
-    end
-
   end
 
   context "An invited punter" do

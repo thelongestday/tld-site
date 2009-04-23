@@ -183,7 +183,63 @@ class PunterControllerTest < ActionController::TestCase
       should_redirect_to("user_show_path") { user_show_path }
       should_set_the_flash_to /kinky/
     end
+  end
 
+  context "on GET to :update" do
+    setup do
+      login_as_user
+      get :update
+    end
+    should_redirect_to("user page") { user_show_path }
+  end
+
+  context "on POST to udpate" do
+    setup do
+      login_as_user
+    end
+
+    context "with absent params" do
+      context "redirect to user page" do
+        setup do 
+          post :update
+        end
+        should_redirect_to("user page") { user_show_path }
+      end
+    end
+
+    context "with wrong params" do
+      context "redirect to user page" do
+        setup do
+          post :update, { :foo => 'bar' }
+        end
+        should_redirect_to("user page") { user_show_path }
+      end
+    end
+
+    # these aren't actually testing the expectations :/
+    context "when no password is needed" do
+      context "and none is supplied" do
+        context "set the remaining attributes" do
+          setup do
+            @punter.expects(:update_attributes).with({:name =>'bar'}).returns(true)
+            post :update, { :punter => { :name => 'bar' } }
+          end
+#          should_set_the_flash_to /updated/
+#          should_redirect_to("user page") { user_show_path }
+        end
+      end
+      context "and one is supplied" do
+        context "set the password" do
+          setup do
+            @punter.expects(:set_new_password).with(true)
+            @punter.expects(:update_attributes).with({ :password => 'foofoo', :password_confirmation => 'bXarbar' }).returns(true) 
+            post :update, { :punter => { :password => 'foofoo', :password_confirmation => 'barbar' } }
+          end
+#          should_set_the_flash_to /updated/
+#          should_redirect_to("user page") { user_show_path }
+        end
+      end
+    end
   end
 
   context "as a consumer of PunterSystem" do

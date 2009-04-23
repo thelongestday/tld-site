@@ -10,7 +10,7 @@ class OrderTest < ActiveSupport::TestCase
   context "tickets" do
     setup do 
       @o = Order.generate!
-    end
+    end 
 
     should "add a well formed ticket" do
       @p = Punter.generate!
@@ -18,6 +18,10 @@ class OrderTest < ActiveSupport::TestCase
       
       assert_equal @o.tickets.first.punter, @p
       assert_equal @o.tickets.first.cost, Site::Config.event.cost
+    end
+
+    should "handle invalid punter id" do
+      @o.add_ticket_by_punter_id(732)
     end
 
     should "work out the total of its tickets" do
