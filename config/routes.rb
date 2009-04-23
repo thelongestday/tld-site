@@ -17,6 +17,12 @@ ActionController::Routing::Routes.draw do |map|
     m.paypal_ipn '/paypal/ipn', :action => 'ipn'
   end
 
+  map.connect '/tld_admin', :controller => 'admin/admin', :action => 'index'
+  map.connect '/tld_admin/punter/:action', :controller => "admin/punter"
+  map.connect '/tld_admin/order/:action', :controller => "admin/order"
+  map.connect '/tld_admin/ticket/:action', :controller => "admin/ticket"
+  map.connect '/tld_admin/paypal_log/:action', :controller => "admin/paypal_log"
+
   map.comatose_admin
   map.comatose_root 'invitees',  :index => 'invitees',             :layout => 'tld'
   map.comatose_root 'attendees', :index => 'attendees',            :layout => 'tld'

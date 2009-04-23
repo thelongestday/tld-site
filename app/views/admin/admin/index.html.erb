@@ -1,0 +1,42 @@
+<%= link_to 'Thing', :controller => 'admin/punter' %>
+
+<h2>Punters</h2>
+<table>
+  <tr>
+    <td>Total</td>
+    <td><%= @punter_stats[:total] %></td>
+  </tr>
+  <tr>
+    <td>New</td>
+    <td><%= @punter_stats[:new] %></td>
+  </tr>
+  <tr>
+    <td>Invited</td>
+    <td><%= @punter_stats[:invited] %></td>
+  </tr>
+  <tr>
+    <td>Confirmed</td>
+    <td><%= @punter_stats[:confirmed] %></td>
+  </tr>
+</table>   
+
+<h2>Orders</h2>
+<table>
+  <tr>
+    <td>Total</td>
+    <td><%= @order_stats[:total] %></td>
+  </tr>
+  <tr>
+    <td>New</td>
+    <td><%= @order_stats[:new] %></td>
+  </tr>
+  <tr>
+    <td>Confirmed</td>
+    <td><%= @order_stats[:confirmed] %></td>
+  </tr>
+  <tr>
+    <td>Paid</td>
+    <td><%= @order_stats[:paid] %></td>
+  </tr>
+</table>   
+

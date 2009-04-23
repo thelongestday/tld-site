@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  belongs_to :owner, :class_name => 'Punter'
+  belongs_to :owner, :class_name => 'Punter', :foreign_key => 'owner_id'
   has_many :tickets
   has_many :paypal_logs, :foreign_key => 'item_number'
 
@@ -44,6 +44,11 @@ class Order < ActiveRecord::Base
     rescue ActiveRecord::RecordNotFound
       logger.error("Tried to add #{p.to_i} to new Order, but Punter doesn't exist")
     end
+  end
+
+  # ActiveScaffold
+  def to_label
+    "[ #{self.id} / #{self.uid} ] for #{self.tickets.length} (#{self.state})"
   end
 
   def total_cost

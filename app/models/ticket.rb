@@ -15,4 +15,9 @@ class Ticket < ActiveRecord::Base
     !self.paid?
   end
 
+  # ActiveScaffold
+  def to_label
+    self.punter.name_with_email
+  end
+
 end
