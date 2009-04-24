@@ -138,7 +138,8 @@ class PunterTest < ActiveSupport::TestCase
 
   context "A new punter" do
     setup do
-      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+      @punter = Punter.generate!
+      @punter.inviters << Punter.generate!
     end
 
     should "be in state 'new'" do
@@ -165,7 +166,8 @@ class PunterTest < ActiveSupport::TestCase
 
   context "An invited punter" do
     setup do
-      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+      @punter = Punter.generate!
+      @punter.inviters << Punter.generate!
       @punter.invite!
     end
 
@@ -182,7 +184,8 @@ class PunterTest < ActiveSupport::TestCase
 
   context "A confirmed punter" do
     setup do
-      @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+      @punter = Punter.generate!
+      @punter.inviters << Punter.generate!
       @punter.invite!
       @punter.confirm!
     end
@@ -212,7 +215,8 @@ class PunterTest < ActiveSupport::TestCase
   context "An invited punter" do
     context "being reinvited" do
       setup do
-        @punter = Punter.create!(:name => 'foo bar', :email => 'foo@zomo.co.uk')
+        @punter = Punter.generate!
+        @punter.inviters << Punter.generate!
       end
 
       should "not call invite! if already confirmed" do

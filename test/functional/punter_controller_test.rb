@@ -79,7 +79,8 @@ class PunterControllerTest < ActionController::TestCase
 
     context "with correct parameters" do
       setup do
-        @punter = Punter.create!(:name => 'foo bar', :email => 'foo@example.com')
+        @punter = Punter.generate!
+        @punter.inviters << Punter.generate!
         @punter.invite!
         Punter.expects(:authenticate_by_token).with('abc').returns(@punter)
         @punter.expects(:confirm!)

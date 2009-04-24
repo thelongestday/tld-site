@@ -3,9 +3,12 @@ require 'test_helper'
 class NotifierTest < ActionMailer::TestCase
   test "invitation" do
     punter = Punter.new
+    inviter = Punter.generate!
+    punter.inviters << inviter
     punter.expects(:email_with_name).returns('foo bar <foo@example.com>')
     punter.expects(:name).returns('foo bar')
     punter.expects(:authentication_token).returns('T0k3n')
+    inviter.expects(:name_with_email).returns('woo yay <bar@example.com>')
 
     Notifier.deliver_invitation(punter, @expected.date)
 
@@ -13,6 +16,7 @@ class NotifierTest < ActionMailer::TestCase
       email.to.include?('foo@example.com')
       email.from.include?('site@thelongestday.net')
       email.body.include?("You've been invited")
+      email.body.include?("woo yay")
       email.body.include?('T0k3n')
     end
   end
