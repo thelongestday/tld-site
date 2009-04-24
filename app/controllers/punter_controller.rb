@@ -55,7 +55,7 @@ class PunterController < ApplicationController
     punter.confirm!
     
     session[:punter_id] = punter.id
-    flash[:notice] = "Thanks for signing up! Please now check your details and chose a password."
+    flash[:notice] = "Thanks for signing up! Please now check your details and choose a password."
 
     redirect_to user_edit_path
   end
