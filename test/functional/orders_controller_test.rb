@@ -263,6 +263,16 @@ class OrdersControllerTest < ActionController::TestCase
         end
       end
     end
+
+    context "with a confirmed order" do
+      def setup
+        @o = Order.generate!
+        @o.confirm!
+        login_as(@o.owner)
+        get :show
+      end
+      should_render_a_form
+    end
   end
 
   def setup

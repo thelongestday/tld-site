@@ -28,5 +28,3 @@ config.to_prepare do
   load("#{Rails.root}/config/initializers/site_config.rb")
 end
 
-ActionView::Base.send(:include, Paypal::Helpers)
-
