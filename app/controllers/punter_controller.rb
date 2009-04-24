@@ -60,6 +60,10 @@ class PunterController < ApplicationController
     redirect_to user_edit_path
   end
 
+  def confirm_frame
+    render :layout => 'tld_frame'
+  end
+
   def edit
     @must_set_password = @punter.salted_password.empty?
   end

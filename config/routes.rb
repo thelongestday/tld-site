@@ -10,6 +10,7 @@ ActionController::Routing::Routes.draw do |map|
     m.user_reset  '/user/reset',  :action => 'reset'
     m.user_reject '/user/reject', :action => 'reject'
     m.user_confirm '/u/:token',   :action => 'confirm'
+    m.user_confirm_frame '/v/:token',   :action => 'confirm_frame'
     m.user_invite '/user/invite', :action => 'invite'
   end
 
