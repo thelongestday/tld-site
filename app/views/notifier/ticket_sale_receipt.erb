@@ -6,9 +6,9 @@ Here is your receipt. If you have any hassle please quote the following informat
 
 Order: <%= @order.id %> (<%= @order.uid %>)
 Number of tickets: <%= @order.tickets.length %>
-<% unless @order.paypal_logs.empty? %>
+<% unless @order.paypal_logs.empty? -%>
 Paypal transaction: <%= @order.paypal_logs.last.txn_id %>
-<% end %>
+<% end -%>
 
 We'll mail a seperate message to each person you bought tickets for.
 

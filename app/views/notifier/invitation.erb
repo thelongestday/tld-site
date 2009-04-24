@@ -1,4 +1,8 @@
+<% if @invitee.name -%>
 Hi <%=h @invitee.name %>,
+<% else -%>
+Hi,
+<% end -%>
 
 You've been invited to <%= Site::Config.event.name %>!
 

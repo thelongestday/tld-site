@@ -1,11 +1,12 @@
 Hi <%=h @ticket.punter.name %>,
 
-<% if @ticket.punter == @order.owner %>
+
+<% if @ticket.punter == @order.owner -%>
 Thanks for buying a ticket for <%= Site::Config.event.name %>. You will have received
 a separate mail with your receipt.
-<% else %>
+<% else -%>
 Lucky you! <%=h @order.owner.name %> bought you a ticket for <%= Site::Config.event.name %>.
-<% end %>
+<% end -%>
 
 For reference, the details of your ticket are:
 
