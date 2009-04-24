@@ -6,7 +6,7 @@ class NotifierTest < ActionMailer::TestCase
     inviter = Punter.generate!
     punter.inviters << inviter
     punter.expects(:email_with_name).returns('foo bar <foo@example.com>')
-    punter.expects(:name).returns('foo bar')
+    punter.expects(:name).at_least(1).returns('foo bar')
     punter.expects(:authentication_token).returns('T0k3n')
     inviter.expects(:name_with_email).returns('woo yay <bar@example.com>')
 
