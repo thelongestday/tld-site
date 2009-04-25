@@ -1,11 +1,13 @@
-<h2><%=h @punter.name_with_email %></h2>
+<div class="form">
+  <h2><%=h @punter.name_with_email %></h2>
 
-<% form_for :punter, @punter, :url => { :action => :update }, :html => { :class => 'punter_form' } do |f| %>
-  <%= f.error_messages :header_message => 'Computer says no!', :message => 'Please fix the following:' %>
-  <div class="form-field"><%= f.label :name %><%= f.text_field :name %></div> 
-  <div class="form-field"><%= f.label :password %><%= f.password_field :password %> <%= @must_set_password ? 'required' : '' %></div>
-  <div class="form-field"><%= f.label :password_confirmation %><%= f.password_field :password_confirmation %> <%= @must_set_password ? 'required' : '' %></div>
+  <% form_for :punter, @punter, :url => { :action => :update } do |f| %>
+    <%= f.error_messages :header_message => 'Computer says no!', :message => 'Please fix the following:' %>
+    <div class="form-field"><%= f.label :name %><%= f.text_field :name %></div> 
+    <div class="form-field"><%= f.label :password %><%= f.password_field :password %> <%= @must_set_password ? 'required' : '' %></div>
+    <div class="form-field"><%= f.label :password_confirmation %><%= f.password_field :password_confirmation %> <%= @must_set_password ? 'required' : '' %></div>
 
-  <%= submit_tag "Update" %>
+    <%= submit_tag "Update" %>
 
-<% end %>
+  <% end %>
+</div>

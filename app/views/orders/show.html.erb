@@ -4,12 +4,12 @@
     <li><%=h t.punter.name_with_email %> - <%=h t.event.name %> @ &pound;<%= t.cost / 100 %></li>
   <% end %>
 </ul>
-<p>The total cost of this order is &pound;<%= @order.total_cost / 100 %></p>
+<p>The total cost of this order is &pound;<%= @order.total_cost / 100 %>.</p>
 
 <ul class="nav">
   <% if @order.new? %>
-    <li>This order is still funky fresh, and can be <%= link_to 'changed', edit_order_path(@order) %></li>
-    <li>Even better, you could <strong><%= link_to 'confirm and pay', confirm_order_path(@order), :method => :post %> it!</strong></li>
+    <li>This order is still funky fresh, and can be <%= link_to 'changed', edit_order_path(@order) %>.</li>
+    <li>Even better, you could <strong><%= link_to 'confirm and pay', confirm_order_path(@order), :method => :post %></strong> it!</li>
     <li>If you no longer like us you might <%= link_to 'cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %> it.</li>
   <% elsif @order.confirmed? %>
     <li>You've confirmed this order. Now you need to <%= render :partial => 'paypal_button' %></li>
@@ -19,15 +19,17 @@
   <% elsif @order.cancelled? %>
     <li>This order has been cancelled. Nothing to see here.</li>
   <% end %>
+</ul>
 
-  <div class="lame-excuse">
-    <p>Attento! To avoid the glare of the world's media and law enforcement we've cunningly not named our Paypal account "The Longest Day".<br />
-    Instead we've called it "Andreas Stoker". They'll never guess. You know Andreas, he's this chap here:<p>
-    <img src="http://site.thelongestday.net/images/whoareyou/small-andreas.png" alt="Andreas" />
-    <p>Don't let this curveball give you the fear when it comes to paying up the moolah!</p>
-  </div>
+<div class="lame-excuse">
+  <p class="attento">Attento!</p>
+  <img src="http://site.thelongestday.net/images/whoareyou/small-andreas.png" alt="Andreas" width="50"/>
+  <p>To avoid the glare of the world's media and law enforcement we've cunningly not named our Paypal account "The Longest Day".<br />
+  Instead we've called it "Andreas Stoker". They'll never guess. You know Andreas, he's this chap.</p>
+  <p>Don't let this curveball give you the fear when it comes to paying up the moolah!</p>
+</div>
 
-  <li><a href="/">Return to site</a></li>
-  <li>Or maybe <%= link_to 'back', orders_path %> to your orders.</li>
-  <li>Final offer: <%= link_to 'back', user_show_path %> to your details.</li>
+<ul class="nav">
+  <li><a href="/">Return to site</a>.</li>
+  <li><%= link_to 'View', orders_path %> your orders.</li>
 </ul>

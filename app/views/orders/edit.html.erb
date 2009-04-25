@@ -1,8 +1,8 @@
-<h2>[ #<%= @order.id %> ] <%= "#{pluralize(@order.tickets.length, 'ticket')} (#{@order.state})" %></h2>
+<div class="form">
+  <h2>[ #<%= @order.id %> ] <%= "#{pluralize(@order.tickets.length, 'ticket')} (#{@order.state})" %></h2>
 
-<%= render :partial => 'form' %>
-
+  <%= render :partial => 'form' %>
+</div>
 <ul class="nav">
-  <li><%= link_to 'Show', @order %></li>
-  <li><%= link_to 'Back', orders_path %></li>
+  <li><%= link_to 'Back', orders_path %> to your orders</li>
 </ul>
