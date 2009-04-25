@@ -50,7 +50,7 @@
 <% end %>
 
 <% if @punter.unpaid_ticket_candidates.length > 0 %>
-  <p>There's <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. Why not <%= link_to 'order some more tickets!', new_order_path %></p>
+  <p>There's <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. Why not <%= link_to 'order some tickets!', new_order_path %></p>
 <% else %>
   <p>If you're still desperate to give us your money, you best <%= link_to 'invite', user_show_path %> some more people!</p>
 <% end %>

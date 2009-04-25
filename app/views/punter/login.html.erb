@@ -3,14 +3,13 @@
 <p>Please note that this year's The Longest Day is by invitation. If you have not received an email invitation then you will not be able to login.</p>
 <p>If you have been invited, then please do login:</p>
 
-<% form_for :punter, @punter, :url => { :action => :login }, :html => { :class => :punter_form } do |f| %>
-
-  <div class="form-field"><%= f.label :email %><%= f.text_field :email %></div>
-  <div class="form-field"><%= f.label :password %><%= f.password_field :password %></div>
-
-  <div><%= submit_tag "Login", {:class => "form-submit"} %></div>
-
-<% end %>
+<div class="form">
+  <% form_for :punter, @punter, :url => { :action => :login }, :html => { :class => :punter_form } do |f| %>
+    <div class="form-field"><%= f.label :email %><%= f.text_field :email %></div>
+    <div class="form-field"><%= f.label :password %><%= f.password_field :password %></div>
+    <div><%= submit_tag "Login", {:class => "form-submit"} %></div>
+  <% end %>
+</div>
 
 <p>Click <%= link_to 'here', :action => :reset %> if you have forgotten your password.</p>
 
