@@ -1,4 +1,5 @@
 <% form_for :invitee, @invitee,  :url => { :action => :invite } , :html => { :class => 'invite_form' } do |f| %>
+  <h2>Invite someone</h2>
   <%= f.error_messages :header_message => 'Computer says no!', :message => 'Please fix the following:' %>
   <div class="form-field"><%= f.label :name %><%= f.text_field :name %></div>
   <div class="form-field"><%= f.label :email %><%= f.text_field :email %></div>
