@@ -1,6 +1,6 @@
 class PunterController < ApplicationController
   include PunterSystem
-  layout 'tld'
+  layout 'tld_app'
 
   before_filter :login_required, :only => [ :edit, :invite, :show, :update ]
   before_filter :admin_required, :only => [ :reject ]

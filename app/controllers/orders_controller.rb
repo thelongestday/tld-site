@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   protect_from_forgery :except => :ack
 
   include PunterSystem
-  layout 'tld'
+  layout 'tld_app'
 
   before_filter :login_required
   before_filter :retrieve_order,        :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
