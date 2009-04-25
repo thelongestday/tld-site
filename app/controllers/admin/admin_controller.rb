@@ -7,6 +7,7 @@ class Admin::AdminController < ApplicationController
     @punter_stats = {}
     @order_stats  = {}
     @ticket_stats = {}
+    @paypal_stats = {}
 
     @punter_stats[:total]      = Punter.count
     @punter_stats[:new ]       = Punter.count(:conditions => [ "state = 'new'" ] )
@@ -21,6 +22,18 @@ class Admin::AdminController < ApplicationController
     t = 0
     Order.find_all_by_state('paid').each { |o| t += o.tickets.length }
     @ticket_stats[:paid] = t
+
+    gross = 0
+    commission = 0
+    PaypalLog.find_all_by_payment_status('Completed').each do |pp|
+      gross += (pp.mc_gross * 100)
+      commission += (pp.mc_fee * 100)
+      logger.error(commission)
+    end
+    @paypal_stats[:gross] = (gross / 100).round
+    @paypal_stats[:commission] = (commission / 100).round
+
+
   end
 
 end
