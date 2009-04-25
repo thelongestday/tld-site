@@ -31,7 +31,9 @@
                 <% end %>
               </div>
               <%= render :partial => 'layouts/flashes' -%>
-              <%= yield %>
+              <div id="app">
+                <%= yield %>
+              </div>
             </td>
           </tr>
         </tbody>
