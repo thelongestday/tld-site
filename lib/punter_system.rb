@@ -43,6 +43,10 @@ module PunterSystem
         return
       end
     else
+      begin
+        @punter = Punter.find(session[:punter_id])
+      rescue
+      end
       true
     end
   end
