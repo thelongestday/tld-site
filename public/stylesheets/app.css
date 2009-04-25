@@ -1,6 +1,5 @@
-
-div#ap {
-  padding: 50px;
+div#app {
+  padding: 20px;
 }
 
 div.lame-excuse {
@@ -22,7 +21,7 @@ div.lame-excuse img {
 
 body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  font-size: 0.9em;
+  font-size: 0.7em;
 }
 
 .form-field {
@@ -42,7 +41,7 @@ body {
 }
 
 div.form {
-  padding: 1em;
+  padding: 5px;
   border-width: 1px;
   border-style: solid;
   border-color: grey;
@@ -61,7 +60,7 @@ div#flash {
 }   
 
 div.nav {
+  font-size: 12px;
   text-align: right;
-  font-size: 0.7em;
 }
 
