@@ -44,11 +44,11 @@
 <table>
   <tr>
     <td>Gross</td>
-    <td>&pound; <%= @paypal_stats[:gross] %></td>
+    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:gross] / 100)%></td>
   </tr>
   <tr>
     <td>Commission</td>
-    <td>&pound; <%= @paypal_stats[:commission] %></td>
+    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:commission] / 100)%></td>
   </tr>
 </table>
 

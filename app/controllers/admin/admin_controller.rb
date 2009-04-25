@@ -30,8 +30,8 @@ class Admin::AdminController < ApplicationController
       commission += (pp.mc_fee * 100)
       logger.error(commission)
     end
-    @paypal_stats[:gross] = (gross / 100).round
-    @paypal_stats[:commission] = (commission / 100).round
+    @paypal_stats[:gross] = gross
+    @paypal_stats[:commission] = commission
 
 
   end
