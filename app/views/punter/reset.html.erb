@@ -2,12 +2,11 @@
 <p>If you have been invited but have mislaid your password, please enter the email address by which you were invited and we'll sender another invite.</p>
 
 
-<% form_for :punter, @punter, :url => { :action => :reset } do |f| %>
-
-  <p class="form-field"><%= f.label :email %><%= f.text_field :email %></p>
-
-  <div><%= submit_tag "Sort it", {:class => "form-submit"} %></div>
-
-<% end %>
+<div class="form">
+  <% form_for :punter, @punter, :url => { :action => :reset } do |f| %>
+    <p class="form-field"><%= f.label :email %><%= f.text_field :email %></p>
+    <div><%= submit_tag "Sort it", {:class => "form-submit"} %></div>
+  <% end %>
+</div>
 
 <p>Problems? Please mail <font face="courier"><a href="mailto:site@thelongestday.net">site@thelongestday.net</a></font></p>
