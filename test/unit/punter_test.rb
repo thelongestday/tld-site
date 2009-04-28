@@ -20,6 +20,14 @@ class PunterTest < ActiveSupport::TestCase
     should_have_many :orders
     should_have_many :tickets
 
+    should "downcase email address" do
+      @p1 = Punter.create(:email => 'MiXeD@example.com', :name => 'confused')
+      @p1.save!
+      @p2 =  Punter.find_by_email('mixed@example.com')
+      assert_equal @p1, @p2
+      assert_equal @p2.email, 'mixed@example.com'
+    end
+
     should "create a email address with display name" do
       assert_equal 'foo bar <foo@example.com>', @punter.email_with_name
     end
@@ -109,6 +117,11 @@ class PunterTest < ActiveSupport::TestCase
     end
 
     should "authenticate using right email and right password" do
+      punter = Punter.authenticate_by_password('fOo@EXAMPle.com', 'foobar') 
+      assert_equal punter, @punter
+    end
+
+    should "authenticate using right mixed case email and right password" do
       punter = Punter.authenticate_by_password('foo@example.com', 'foobar') 
       assert_equal punter, @punter
     end

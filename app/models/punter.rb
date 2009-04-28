@@ -10,6 +10,7 @@ class Punter < ActiveRecord::Base
   validates_length_of :password, :within => 6 .. 64, :if => :validate_password?
 
   before_save :set_password
+  before_save :downcase_email
   after_save :clear_tmp_password
 
   has_many :sent_invitations, :foreign_key => 'inviter_id', :class_name => 'Invitation'
@@ -51,6 +52,10 @@ class Punter < ActiveRecord::Base
     all = self.inviters + self.invitees
     all << self
     all.reject { |p| p.id == Site::Config.root_user.id }
+  end
+
+  def downcase_email
+    self.email.downcase!
   end
 
   def clear_tmp_password
@@ -135,6 +140,7 @@ class Punter < ActiveRecord::Base
   end
 
   def self.authenticate_by_password(email, password)
+    email.downcase!
     punter = Punter.find_by_email(email)
     raise(PunterException, 'Login failed') if punter.nil?
     punter = Punter.find_by_email_and_salted_password(email, Punter.to_hash(punter.salt + password))

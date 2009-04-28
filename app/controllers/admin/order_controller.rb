@@ -3,6 +3,5 @@ class Admin::OrderController < Admin::AdminController
     active_scaffold :order do |config|
       config.actions = [ :list, :nested ]
       config.columns = core_columns
-#      config.show.columns = core_columns + [ :orders ]
     end
 end
