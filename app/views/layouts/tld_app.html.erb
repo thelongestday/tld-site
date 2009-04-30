@@ -24,7 +24,7 @@
               <div class="nav">
                 <a href="/">Site</a> |
                 <% if session.has_key?(:punter_id) %>
-                  <%= link_to 'You', user_show_path %> |
+                  <%= link_to 'Tickets', user_show_path %> |
                   <%= link_to 'Logout', logout_path %>
                 <% else %>
                   <%= link_to 'Login', login_path %>
