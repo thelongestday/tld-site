@@ -77,10 +77,10 @@ class PunterController < ApplicationController
     if @invitee.valid?
       begin
         Invitation.invite_punter(@punter, @invitee.email, @invitee.name)
+        flash[:notice] = "OK, #{@invitee.name_with_email} invited!"
       rescue PunterException => e
         flash[:error] = e.message
       end
-      flash[:notice] = "OK, #{@invitee.name_with_email} invited!"
       redirect_to user_show_path
       return
     else

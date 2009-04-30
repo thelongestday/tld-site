@@ -81,6 +81,10 @@ class Punter < ActiveRecord::Base
   end
 
   def invite_if_necessary
+    if self.confirmed?
+      raise(PunterException, "#{self.name_with_email} has already accepted an invitation.")
+    end
+
     unless self.confirmed? or self.rejected?
       self.invite!
     end

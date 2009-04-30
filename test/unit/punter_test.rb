@@ -232,11 +232,11 @@ class PunterTest < ActiveSupport::TestCase
         @punter.inviters << Punter.generate!
       end
 
-      should "not call invite! if already confirmed" do
+      should "not call invite! if already confirmed, but raise a PunterException instead" do
         @punter.invite!
         @punter.expects(:invite!).never
         @punter.confirm!
-        @punter.invite_if_necessary
+        assert_raise(PunterException) { @punter.invite_if_necessary }
       end
 
       should "not call invite! if rejected" do
