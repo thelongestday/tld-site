@@ -2,7 +2,7 @@
   <% form_for :punter, @punter, :url => { :action => :login }, :html => { :class => :punter_form } do |f| %>
     <div class="form-field"><%= f.label :email %><%= f.text_field :email %></div>
     <div class="form-field"><%= f.label :password %><%= f.password_field :password %></div>
-    <div><%= submit_tag "Login", {:class => "form-submit"} %></div>
+    <div><%= submit_tag "Login" %></div>
   <% end %>
 </div>
 

@@ -19,7 +19,7 @@
 
 <% if @punter.unpaid_ticket_candidates.length > 0 %>
   <% if @punter.has_paid_ticket? %>
-    <p><strong>You're ticketed up, yay! </strong>Tickets will be issued from this website from June, we'll send you a mail. You can still buy your friends some though, <%= link_to 'click here', orders_path %>!</p>
+    <p><%= link_to "You're ticketed up", orders_path %>, yay! Tickets will be issued from this website from June, we'll send you a mail. You can still buy your friends some though, <%= link_to 'click here', orders_path %>!</p>
   <% else %>
     <% if @punter.orders.empty? %> 
       <p>You don't have a ticket yet, <%= link_to 'click here', orders_path %> to sort it out!</p> 
