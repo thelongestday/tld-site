@@ -23,7 +23,7 @@
             <td valign="top" width="900" height="439">
               <div class="nav">
                 <a href="/">Home</a> |
-                <% if session.has_key?(:punter_id) %>
+                <% if @punter %>
                   <%= link_to 'Tickets', user_show_path %> |
                   <%= link_to 'Logout', logout_path %>
                 <% else %>

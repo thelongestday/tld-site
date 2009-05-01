@@ -45,6 +45,7 @@ div.form {
   border-width: 1px;
   border-style: solid;
   border-color: grey;
+  margin-right: 10em;
 }
 
 .note {
@@ -66,7 +67,8 @@ div.nav {
   font-size: 12px;
   padding: 5px;
   padding-right: 20px;
-  padding-top: 20px;
+  padding-top: 25px;
   text-align: right;
+  float: right;
 }
 
