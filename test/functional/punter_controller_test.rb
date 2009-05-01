@@ -74,7 +74,7 @@ class PunterControllerTest < ActionController::TestCase
         get :confirm, { :email => 'foo@example.com', :token => 'abc' } 
       end
       # should_set_the_flash_to /Incorrect/
-      should_redirect_to("Login page") { login_path }
+      should_redirect_to("Home page") { '/' }
     end
 
     context "with correct parameters" do
