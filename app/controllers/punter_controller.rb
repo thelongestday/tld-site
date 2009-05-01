@@ -47,7 +47,7 @@ class PunterController < ApplicationController
     begin
       punter = Punter.authenticate_by_token(params[:token])
     rescue PunterException
-      flash[:error] = 'Incorrect user confirmation details.'
+      # flash[:error] = 'Incorrect user confirmation details.'
       redirect_to login_path
       return
     end
