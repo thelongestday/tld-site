@@ -52,7 +52,10 @@ class PunterController < ApplicationController
       return
     end
 
+    # argh - we don't have a name at the moment, so AASM transition fails
+    # keep it in since we test for it
     punter.confirm!
+    punter.update_attribute(:state, 'confirmed') # ouch
     
     session[:punter_id] = punter.id
     flash[:notice] = "Thanks for signing up! Please now check your details and choose a password."

@@ -90,6 +90,9 @@ class PunterControllerTest < ActionController::TestCase
       should_set_session(:punter_id) { @punter.id }
       should_set_the_flash_to /Thanks for signing/
       should_redirect_to("User edit page") { user_edit_path }
+      should "set the punter to confirmed" do
+        assert @punter.confirmed?
+      end
     end
   end
 
