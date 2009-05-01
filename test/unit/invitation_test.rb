@@ -16,6 +16,7 @@ class InvitationTest < ActiveSupport::TestCase
 
       should "create the invitee Punter and Invitation" do
         @invitee = Punter.find_by_email('unknown@example.com')
+        @inviter.reload
         assert @invitee.inviters.include?(@inviter)
         assert @inviter.invitees.include?(@invitee)
       end
