@@ -23,6 +23,12 @@ class Invitation < ActiveRecord::Base
       raise(PunterException,'Inviting yourself is quite kinky! And not allowed.')
     end
 
+    inviter.invitees.each do |ii|
+      if ii.email == invitee_email
+        raise(PunterException, "Hey, you've already invited #{ii.name_with_email}!")
+      end
+    end
+
     inviter.inviters.each do |ii|
       if ii.email == invitee_email
         raise(PunterException, "Hey, #{ii.name_with_email} invited you!")
