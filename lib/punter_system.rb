@@ -6,9 +6,15 @@ module PunterSystem
 
   def login_required
     begin
-      raise PunterException unless session[:punter_id]
+      unless session[:punter_id]
+        logger.error("PunterSystem: no punter_id in session")
+        raise PunterException, "no cookie!"
+      end
       @punter = Punter.find(session[:punter_id])
-      raise PunterException unless @punter
+      unless @punter
+        logger.error("PunterSystem: couldn't find Punter id #{session[:punter_id]}")
+        raise PunterException, "unfound punter"
+      end
     rescue PunterException
       flash[:error] = "Please login."
       return_here_after_login
