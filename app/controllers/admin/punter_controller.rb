@@ -5,5 +5,6 @@ class Admin::PunterController < Admin::AdminController
       config.columns = core_columns
       config.columns[:orders].association.reverse = :owner
       config.columns[:has_paid_ticket?].label = 'Has a paid ticket?'
+      config.list.per_page = 100
     end
 end
