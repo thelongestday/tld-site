@@ -68,6 +68,10 @@ class Punter < ActiveRecord::Base
     "#{self.name} <#{self.email}>"
   end
 
+  def has_flailed_signup?
+    self.confirmed? && ( self.name.nil? || self.name.empty? )
+  end
+
   def has_ordered_ticket?
     self.tickets.detect { |t| t.on_order? }.nil? ? false : true
   end
