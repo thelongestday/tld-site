@@ -13,6 +13,7 @@ class Admin::AdminController < ApplicationController
     @punter_stats[:new ]       = Punter.count(:conditions => [ "state = 'new'" ] )
     @punter_stats[:invited ]   = Punter.count(:conditions => [ "state = 'invited'" ] )
     @punter_stats[:confirmed ] = Punter.count(:conditions => [ "state = 'confirmed'" ] )
+    @punter_stats[:flailed ]   = Punter.count(:conditions => [ "state = 'confirmed' AND name IS NULL" ] )
 
     @order_stats[:total]      = Order.count
     @order_stats[:new ]       = Order.count(:conditions => [ "state = 'new'" ] )
@@ -31,7 +32,7 @@ class Admin::AdminController < ApplicationController
       logger.error(commission)
     end
     @paypal_stats[:gross] = gross
-    @paypal_stats[:commission] = commission
+    @paypal_stats[:commission] = commission / 100
 
 
   end
