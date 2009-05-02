@@ -27,9 +27,8 @@ class Admin::AdminController < ApplicationController
     gross = 0
     commission = 0
     PaypalLog.find_all_by_payment_status('Completed').each do |pp|
-      gross += (pp.mc_gross * 100)
-      commission += (pp.mc_fee * 100)
-      logger.error(commission)
+      gross      += (pp.mc_gross * 100)
+      commission += (pp.mc_fee   * 100)
     end
     @paypal_stats[:gross] = gross
     @paypal_stats[:commission] = commission / 100
