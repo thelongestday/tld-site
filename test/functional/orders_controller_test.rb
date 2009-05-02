@@ -277,9 +277,9 @@ class OrdersControllerTest < ActionController::TestCase
 
     context "adding tickets to an order " do
       setup do
-        @p1 = Punter.generate!
-        @p2 = Punter.generate!
-        @p3 = Punter.generate!
+        @p1 = Punter.generate! ; @p1.confirm!
+        @p2 = Punter.generate! ; @p2.confirm!
+        @p3 = Punter.generate! ; @p3.confirm!
         @i1 = Invitation.create!(:inviter => @p1, :invitee => @p2)
         login_as(@p1)
       end
@@ -322,6 +322,7 @@ class OrdersControllerTest < ActionController::TestCase
 
   def setup
     @o = Order.generate!
+    @o.owner.confirm!
     login_as(@o.owner)
   end
 
@@ -363,7 +364,7 @@ class OrdersControllerTest < ActionController::TestCase
   end
 
   test "should update order, deleting and replacing tickets" do
-    p = Punter.generate!
+    p = Punter.generate! ; p.confirm!
     t = create_ticket(:order => @o, :punter => p)
     @o.update_attribute(:owner, p)
     login_as(p)

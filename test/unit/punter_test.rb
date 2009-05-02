@@ -262,18 +262,20 @@ class PunterTest < ActiveSupport::TestCase
   context "ordering" do
     context "punter's ticket candidates" do
       setup do
-        @pr1 = Punter.generate!
-        @pr2 = Punter.generate!
-        @p   = Punter.generate!
-        @pe1 = Punter.generate!
-        @pe2 = Punter.generate!
+        @pr1 = Punter.generate! ; @pr1.confirm!
+        @pr2 = Punter.generate! ; @pr2.confirm!
+        @p   = Punter.generate! ; @p.confirm!
+        @pe1 = Punter.generate! ; @pe1.confirm!
+        @pe2 = Punter.generate! ; @pe2.confirm!
+        @pe3 = Punter.generate! 
         
         @i1 = Invitation.create!(:inviter => @pr1, :invitee => @p )
         @i2 = Invitation.create!(:inviter => @pr2, :invitee => @p )
         @i3 = Invitation.create!(:inviter => @p,   :invitee => @pe1 )
+        @i4 = Invitation.create!(:inviter => @p,   :invitee => @pe3 )
       end
 
-      should "return list of all candidates" do
+      should "return list of all confirmed candidates" do
         all = @p.all_ticket_candidates
 
         assert_contains @p.inviters, @pr1
@@ -284,6 +286,7 @@ class PunterTest < ActiveSupport::TestCase
         assert_contains all, @pr2
         assert_contains all, @pe1
         assert_does_not_contain all, @pe2
+        assert_does_not_contain all, @pe3
       end
 
       should "return list of paid candidates" do

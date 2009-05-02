@@ -51,7 +51,7 @@ class Punter < ActiveRecord::Base
   def all_ticket_candidates
     all = self.inviters + self.invitees
     all << self
-    all.reject { |p| p.id == Site::Config.root_user.id }
+    all.reject { |p| p.id == Site::Config.root_user.id || !p.confirmed? }
   end
 
   def downcase_email
