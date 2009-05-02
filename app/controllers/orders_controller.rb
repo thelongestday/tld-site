@@ -57,7 +57,11 @@ class OrdersController < ApplicationController
   def create
     @order = Order.create
     @order.update_attribute(:owner, @punter) # protected
-    params[:order_punter].keys.each { |p| @order.add_ticket_by_punter_id(p) }
+
+    candidates = @punter.unpaid_ticket_candidates.map { |p| p.id }
+    punters = params[:order_punter].keys.find_all { |p| candidates.include?(p.to_i) }
+    logger.debug("#{params[:order_punter].keys.join(',')} vs #{punters.join(',')} via #{candidates.join(',')}")
+    punters.each { |p| @order.add_ticket_by_punter_id(p) }
     if @order.save
       flash[:notice] = 'Order created.'
       redirect_to order_path(@order)
@@ -87,7 +91,10 @@ class OrdersController < ApplicationController
     end
 
     # add new tickets
-    params[:order_punter].keys.each { |p| @order.add_ticket_by_punter_id(p) }
+    candidates = @punter.unpaid_ticket_candidates.map { |p| p.id }
+    punters = params[:order_punter].keys.find_all { |p| candidates.include?(p.to_i) }
+    punters.each { |p| @order.add_ticket_by_punter_id(p) }
+
     flash[:notice] = 'Order was successfully updated.'
     redirect_to order_path(@order)
   end

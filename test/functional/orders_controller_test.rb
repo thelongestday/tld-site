@@ -274,6 +274,50 @@ class OrdersControllerTest < ActionController::TestCase
       # XXX TypeError: can't convert Array into String
       # should_render_a_form
     end
+
+    context "adding tickets to an order " do
+      setup do
+        @p1 = Punter.generate!
+        @p2 = Punter.generate!
+        @p3 = Punter.generate!
+        @i1 = Invitation.create!(:inviter => @p1, :invitee => @p2)
+        login_as(@p1)
+      end
+
+      context "via :create" do
+        should "not add punters who aren't candidates" do
+          assert_contains @p1.unpaid_ticket_candidates, @p1
+          assert_contains @p1.unpaid_ticket_candidates, @p2
+
+          post :create, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" }
+          @o = assigns(:order)
+          punters = @o.tickets.map { |t| t.punter }
+
+          assert_contains punters, @p1
+          assert_contains punters, @p2
+          assert_does_not_contain @o.tickets.map { |t| t.punter }, @p3
+        end
+      end
+
+      context "via :update" do
+        setup do
+          @o = Order.create
+          @o.update_attribute(:owner, @p1)
+        end
+
+        should "not add punters who aren't candidates" do
+          assert_contains @p1.unpaid_ticket_candidates, @p1
+          assert_contains @p1.unpaid_ticket_candidates, @p2
+
+          put :update, { :id => @o.to_param, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" } }
+          punters = @o.tickets.map { |t| t.punter }
+
+          assert_contains punters, @p1
+          assert_contains punters, @p2
+          assert_does_not_contain @o.tickets.map { |t| t.punter }, @p3
+        end
+      end
+    end
   end
 
   def setup
@@ -320,14 +364,13 @@ class OrdersControllerTest < ActionController::TestCase
 
   test "should update order, deleting and replacing tickets" do
     p = Punter.generate!
-    t = Ticket.create
-    t.update_attribute(:cost,   Site::Config.event.cost)
-    t.update_attribute(:event,  Site::Config.event)
-    t.update_attribute(:order,  @o)
-    t.update_attribute(:punter, p)
-    @o.tickets << t
+    t = create_ticket(:order => @o, :punter => p)
+    @o.update_attribute(:owner, p)
+    login_as(p)
+
     put :update, :id => @o.to_param, :order_punter => { p.id => "1" }
-    assert_does_not_contain @o.tickets, t
+
+    assert_does_not_contain @o.tickets.map { |t| t.id} , t
     assert_equal @o.tickets.first.punter, p
     assert_redirected_to order_path(assigns(:order))
   end
