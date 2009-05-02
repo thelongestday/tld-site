@@ -27,6 +27,19 @@ class OrdersControllerTest < ActionController::TestCase
       should_set_the_flash_to /Order not found/
     end
 
+    context "looking at someone else's stuff if they're an admin" do
+      setup do
+        @p1 = Punter.generate! ; @p1.update_attribute(:admin, true)
+        @p2 = Punter.generate!
+        @o = Order.generate! { |o| o.owner = @p1 }
+        @o2 = Order.generate! { |o| o.owner = @p2 }
+        login_as(@p1)
+        get :show, :id => @o2
+      end
+
+      should_respond_with :success
+    end
+
     context "looking at a non-existent order" do
       setup do
         @p1 = Punter.generate!

@@ -135,7 +135,7 @@ class OrdersController < ApplicationController
   end
 
   def check_order_owner
-    unless @order.owner == @punter
+    unless @order.owner == @punter || @punter.admin?
       flash[:error] = 'Order not found.'
       redirect_to orders_path
       return
