@@ -74,8 +74,53 @@ div.nav {
   float: right;
 }
 
-a:visited {
-  color:#5e5a80;
-  text-decoration:
+a:link {
+	color: red;
+	text-decoration: none;
+	border: 0;
 }
+a {
+	font-family: Arial, Helvetica, sans-serif;
+	color: red;
+	border: 0;
+}
+a:visited {
+	text-decoration: none;
+	color: red;
+}
+a:hover {
+	text-decoration: none;
+	color: blue;
+}
+a:active {
+	text-decoration: none;
+}
+
+li a {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+div.nav a:link {
+	color: #5e5a80;
+	text-decoration: none;
+	border: 0;
+}
+div.nav a {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #FF66CC;
+	border: 0;
+}
+div.nav a:visited {
+	text-decoration: none;
+	color: #806d7e;
+}
+div.nav a:hover {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+div.nav a:active {
+	text-decoration: none;
+}
+
 

@@ -9,7 +9,7 @@
 <ul class="nav">
   <% if @order.new? %>
     <li><%= button_to 'Confirm and pay', confirm_order_path(@order), :method => :post %></li>
-    <li><%= link_to 'Edit', edit_order_path(@order) %></li>
+    <li><%= button_to 'Edit', edit_order_path(@order), :method => :get  %></li>
     <li><%= button_to 'Cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %></li>
   <% elsif @order.confirmed? %>
     <li><%= render :partial => 'paypal_button' %></li>
