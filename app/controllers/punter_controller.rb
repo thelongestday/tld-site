@@ -45,7 +45,8 @@ class PunterController < ApplicationController
     end
 
     begin
-      punter = Punter.authenticate_by_token(params[:token])
+      @punter = Punter.authenticate_by_token(params[:token])
+      logger.info("PunterController: #{@punter.name_with_email} confirmed")
     rescue PunterException
       # flash[:error] = 'Incorrect user confirmation details.'
       redirect_to '/'
@@ -54,13 +55,15 @@ class PunterController < ApplicationController
 
     # argh - we don't have a name at the moment, so AASM transition fails
     # keep it in since we test for it
-    punter.confirm!
-    punter.update_attribute(:state, 'confirmed') # ouch
+    @punter.confirm!
+    @punter.update_attribute(:state, 'confirmed') # ouch
     
-    session[:punter_id] = punter.id
-    flash[:notice] = "Thanks for signing up! Please now check your details and choose a password."
+    session[:punter_id] = @punter.id
+    flash[:notice] = "Thanks for signing up! Please now check your details and choose a password. If you don't do this you'll be unable to log in - doh!"
 
-    redirect_to user_edit_path
+    @must_set_password = true
+    @punter = Punter.find(@punter)
+    render :action => :edit
   end
 
   def confirm_frame
@@ -144,6 +147,7 @@ class PunterController < ApplicationController
       flash[:notice] = 'Details updated.'
       redirect_to user_show_path
     else
+      @must_set_password = @punter.salted_password.empty?
       render :edit
     end
   end

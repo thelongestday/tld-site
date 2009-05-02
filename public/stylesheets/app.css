@@ -123,4 +123,6 @@ div.nav a:active {
 	text-decoration: none;
 }
 
-
+div.fieldWithErrors {
+  float: left;
+}
