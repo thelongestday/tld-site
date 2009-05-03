@@ -8,6 +8,7 @@ db/snap
 db/*.sqlite3
 public/system
 *.DS_Store
+coverage.data
 coverage/*
 *.swp
 
