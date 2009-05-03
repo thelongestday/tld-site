@@ -31,7 +31,7 @@ class Admin::AdminController < ApplicationController
       commission += (pp.mc_fee   * 100)
     end
     @paypal_stats[:gross] = gross
-    @paypal_stats[:commission] = commission / 100
+    @paypal_stats[:commission] = commission
 
 
   end
