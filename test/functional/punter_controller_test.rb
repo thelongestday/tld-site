@@ -206,7 +206,7 @@ class PunterControllerTest < ActionController::TestCase
     context "with absent params" do
       context "redirect to user page" do
         setup do 
-          post :update
+          put :update
         end
         should_redirect_to("user page") { user_show_path }
       end
@@ -215,7 +215,7 @@ class PunterControllerTest < ActionController::TestCase
     context "with wrong params" do
       context "redirect to user page" do
         setup do
-          post :update, { :foo => 'bar' }
+          put :update, { :foo => 'bar' }
         end
         should_redirect_to("user page") { user_show_path }
       end
@@ -227,7 +227,7 @@ class PunterControllerTest < ActionController::TestCase
         context "set the remaining attributes" do
           setup do
             @punter.expects(:update_attributes).with({:name =>'bar'}).returns(true)
-            post :update, { :punter => { :name => 'bar' } }
+            put :update, { :punter => { :name => 'bar' } }
           end
 #          should_set_the_flash_to /updated/
 #          should_redirect_to("user page") { user_show_path }
@@ -238,7 +238,7 @@ class PunterControllerTest < ActionController::TestCase
           setup do
             @punter.expects(:set_new_password).with(true)
             @punter.expects(:update_attributes).with({ :password => 'foofoo', :password_confirmation => 'bXarbar' }).returns(true) 
-            post :update, { :punter => { :password => 'foofoo', :password_confirmation => 'barbar' } }
+            put :update, { :punter => { :password => 'foofoo', :password_confirmation => 'barbar' } }
           end
 #          should_set_the_flash_to /updated/
 #          should_redirect_to("user page") { user_show_path }
@@ -319,6 +319,36 @@ class PunterControllerTest < ActionController::TestCase
       end
       should_assign_to :punter, :equals => @punter
       # should_render_template :show # :reject renders :show
+    end
+
+    context "when in a state of signup flail" do
+      context "calling login_required" do
+        setup do
+          @punter = Punter.generate!
+          @punter.confirm!
+          @punter.update_attribute(:name, nil)
+          session[:punter_id] = @punter.id
+        end
+        context ":show" do
+          setup do
+            get :show
+          end
+          should_set_the_flash_to /Please update/
+          should_redirect_to('edit page') { user_edit_path }
+        end
+        context ":edit" do
+          setup do
+            get :edit
+          end
+          should_respond_with :success
+        end
+        context ":update" do
+          setup do
+            put :update, { :punter => { :name => 'bar' } }
+          end
+          should_respond_with :success
+        end
+      end
     end
   end
 

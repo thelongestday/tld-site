@@ -50,5 +50,17 @@ class ComatoseControllerTest < ActionController::TestCase
 #    end
 #    should_respond_with :success
 #  end
+  context "on GET to a page when logged in" do
+    context "in a state of signup flail" do
+      setup do
+        login_as_user
+        @punter.confirm!
+        @punter.update_attribute(:name, nil)
+        get :show, "use_cache"=>"true", "layout"=>"tld", "cache_path"=>nil, "page"=>[], "root"=>"/", "index"=>"the-longest-day-2009" 
+      end
+
+      should_redirect_to('edit') { user_edit_path }
+    end
+  end
 end
 

@@ -22,6 +22,9 @@ module PunterSystem
       return_here_after_login
       redirect_to login_path
     end
+
+    enforce_signup
+
   end
 
   def admin_required
@@ -57,6 +60,20 @@ module PunterSystem
       rescue
       end
       true
+    end
+
+    enforce_signup
+
+  end
+
+  def enforce_signup
+    if @punter && @punter.has_flailed_signup?
+      unless [ user_edit_path, user_update_path ].include? request.path
+        flash[:notice] = 'Please update your details.'
+        logger.info("PunterSystem: punting #{@punter.name_with_email} back to edit page")
+        redirect_to user_edit_path
+        return
+      end
     end
   end
 
