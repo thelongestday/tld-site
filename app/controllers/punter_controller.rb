@@ -25,6 +25,7 @@ class PunterController < ApplicationController
     session[:punter_id] = punter.id
     if session[:after_login]
       redirect_to(session[:after_login])
+      session[:after_login] = nil
     else
       redirect_to user_show_path
     end
