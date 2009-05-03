@@ -20,9 +20,13 @@ class Admin::AdminController < ApplicationController
     @order_stats[:confirmed ] = Order.count(:conditions => [ "state = 'confirmed'" ] )
     @order_stats[:paid ]      = Order.count(:conditions => [ "state = 'paid'" ] )
 
-    t = 0
-    Order.find_all_by_state('paid').each { |o| t += o.tickets.length }
-    @ticket_stats[:paid] = t
+    tickets = []
+    Order.find_all_by_state('paid').each { |o| o.tickets.each { |t| tickets << t } }
+
+    @ticket_stats[:total] = tickets.length
+    @ticket_stats[:test]  = tickets.find_all { |t| t.cost == 100 }.length
+    @ticket_stats[:real]  = @ticket_stats[:total] - @ticket_stats[:test]
+
 
     gross = 0
     commission = 0
@@ -32,7 +36,8 @@ class Admin::AdminController < ApplicationController
     end
     @paypal_stats[:gross] = gross
     @paypal_stats[:commission] = commission
-
+    @paypal_stats[:expected] = gross - commission
+    @paypal_stats[:face] = Site::Config.event.cost * @ticket_stats[:real] 
 
   end
 

@@ -45,11 +45,19 @@
   </tr>
 </table>   
 
-<h2>Tickets</h2>
+<h2>Paid Tickets</h2>
 <table>
   <tr>
-    <td>Paid</td>
-    <td><%= @ticket_stats[:paid] %></td>
+    <td>Total</td>
+    <td><%= @ticket_stats[:total] %></td>
+  </tr>
+  <tr>
+    <td>Real</td>
+    <td><%= @ticket_stats[:real] %></td>
+  </tr>
+  <tr>
+    <td>Test</td>
+    <td><%= @ticket_stats[:test] %></td>
   </tr>
 </table>
 
@@ -62,6 +70,14 @@
   <tr>
     <td>Commission</td>
     <td>&pound; <%= sprintf("%.02f", @paypal_stats[:commission] / 100)%></td>
+  </tr>
+  <tr>
+    <td>Face value of real tickets</td>
+    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:face] / 100)%></td>
+  </tr>
+  <tr>
+    <td>Expected balance</td>
+    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:expected] / 100)%></td>
   </tr>
 </table>
 
