@@ -4,6 +4,8 @@ class Punter < ActiveRecord::Base
     user.succ + '@' + domain
   end
 
+  generator_for :salted_password => 'xyz'
+
   generator_for :name, :method => :next_user
 
   def self.next_user

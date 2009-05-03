@@ -69,7 +69,7 @@ class Punter < ActiveRecord::Base
   end
 
   def has_flailed_signup?
-    self.confirmed? && ( self.name.nil? || self.name.empty? )
+    self.confirmed? && ( self.salted_password.nil? || self.salted_password.empty? )
   end
 
   def has_ordered_ticket?
