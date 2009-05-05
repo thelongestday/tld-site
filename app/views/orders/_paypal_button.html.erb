@@ -1,4 +1,4 @@
-<%= paypal_form_tag %>
+<%= paypal_form_tag Paypal::Notification.ipn_url, :target => 'paypal', :onsubmit => "document.getElementById('paypal_button').innerHTML = 'See Paypal window'; return true" %>
   <%= paypal_setup @order.id, @order.total_cost / 100, Site::Config.paypal[:account],
     :item_name => "#{pluralize(@order.tickets.length, 'Ticket')} for #{Site::Config.event.name}",
     :currency => 'GBP',
@@ -9,6 +9,7 @@
     :notify_url => paypal_ipn_url,
     :return => ack_order_url(@order),
     :cancel_return => order_url(@order) %>
-  <%= submit_tag "Fess up the #{number_to_currency @order.total_cost / 100, :unit => '&pound;'} at Paypal >>" %>
-
+  <div id="paypal_button">
+    <%= submit_tag "Fess up the #{number_to_currency @order.total_cost / 100, :unit => '&pound;'} at Paypal >>" %>
+  </div>
 </form>

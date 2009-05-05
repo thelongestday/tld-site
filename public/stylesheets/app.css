@@ -126,3 +126,7 @@ div.nav a:active {
 div.fieldWithErrors {
   float: left;
 }
+
+div#paypal_button {
+  display: inline;
+}

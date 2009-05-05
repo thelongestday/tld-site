@@ -12,7 +12,7 @@
     <li><%= button_to 'Edit', edit_order_path(@order), :method => :get  %></li>
     <li><%= button_to 'Cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %></li>
   <% elsif @order.confirmed? %>
-    <li><%= render :partial => 'paypal_button' %></li>
+    <li><%= render :partial => 'paypal_button' %> <span style="font-size: smaller;">(Paypal will open in a new window)</span></li>
     <li><%= button_to 'Cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %></li>
   <% elsif @order.paid? %>
     <li>This order is paid for. Wonderful. We'll issue tickets closer to the day, and drop you mail to say when.</li>
