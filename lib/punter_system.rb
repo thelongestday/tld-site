@@ -15,7 +15,7 @@ module PunterSystem
         logger.error("PunterSystem: couldn't find Punter id #{session[:punter_id]}")
         raise PunterException, "unfound punter"
       end
-      logger.info("PunterSystem: #{@punter.name_with_email}")
+      logger.info("PunterSystem: [#{@punter.id}] #{@punter.name_with_email}")
       logger.info("UA: #{request.env['HTTP_USER_AGENT']}")
     rescue PunterException
       flash[:error] = "Please login."
