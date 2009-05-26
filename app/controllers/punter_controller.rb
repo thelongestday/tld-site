@@ -103,6 +103,7 @@ class PunterController < ApplicationController
     end
     if punter = Punter.find_by_email(params[:punter][:email])
       punter.reset!
+      logger.info("PunterController: reset for #{punter.name_with_email} with token #{punter.authentication_token}")
       flash[:notice] = "We've resent an invite link to #{punter.email}. Please check your mail."
       redirect_to login_path
       return
