@@ -1,6 +1,6 @@
 <div class="form">
   <h2>Invite someone else</h2>
-  <p><strong>Note:</strong> If possible please <span class="jfri">avoid using Hotmail addresses</span>. Hotmail have taken to silently discarding our mails or pretending your friends don't exist. Please try alternative address if your mate has one.</p>
+  <p><strong>Note:</strong> If possible please <span class="jfri">avoid using Hotmail addresses</span>. Hotmail have taken to silently discarding our mails or pretending your friends don't exist. Please try an alternative address if your mate has one. If not, give the Hotmail address a go anyway, they work sometimes.</p>
   <% form_for :invitee, @invitee,  :url => { :action => :invite } do |f| %>
     <%= f.error_messages :header_message => 'Computer says no!', :message => 'Please fix the following:' %>
     <div class="form-field"><%= f.label :name %><%= f.text_field :name %></div>
