@@ -32,7 +32,6 @@
     <p>Click to <%= link_to 'buy tickets for your invitees', orders_path, :class => 'jfri' %></p>
   <% else %>
     <% if @punter.orders.empty? %> 
-      <p><%= link_to 'Buy tickets', orders_path, :class => 'jfri' %></p>
       <p>You don't have a ticket yet, <%= link_to 'order some tickets', orders_path, :class => 'jfri' %> to sort it out!</p> 
     <% else %>
       <p>You have ordered some tickets, but don't have one yourself! <%= link_to 'Order a ticket', orders_path, :class => 'jfri' %> to stay pure.</p>
