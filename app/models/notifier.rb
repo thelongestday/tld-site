@@ -9,6 +9,15 @@ class Notifier < ActionMailer::Base
     body       :invitee => punter
   end
 
+  def reset(punter, sent_at = Time.now)
+    subject    "[TLD] Password reset"
+    recipients punter.email_with_name
+    from       'site@thelongestday.net'
+    sent_on    sent_at
+
+    body       :invitee => punter
+  end
+
   def ticket_sale_receipt(order)
     subject    "[TLD] Your receipt for #{Site::Config.event.name} tickets"
     recipients order.owner.email_with_name

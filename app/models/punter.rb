@@ -111,7 +111,7 @@ class Punter < ActiveRecord::Base
   end
 
   def reset!
-    self.send_invitation
+    self.send_reset
   end
 
   def set_password!
@@ -183,6 +183,11 @@ class Punter < ActiveRecord::Base
   def send_invitation
     self.set_token!
     Notifier.deliver_invitation(self)
+  end
+
+  def send_reset
+    self.set_token!
+    Notifier.deliver_reset(self)
   end
 
   def self.to_hash(plain, length = 62)

@@ -1,0 +1,13 @@
+<% if @invitee.name -%>
+Hi <%=h @invitee.name %>,
+<% else -%>
+Hi,
+<% end -%>
+
+You asked for help with logging into your TLD account. We've reset your password.
+
+Click this link to choose a new password.
+
+    <http://www.thelongestday.net<%= url_for :controller => :punter, :action => :confirm_frame, :token => @invitee.authentication_token %>>
+
+Thanks, Hetty.

@@ -89,11 +89,12 @@ a:visited {
 	color: red;
 }
 a:hover {
-	text-decoration: none;
-	color: blue;
+	text-decoration: underline;
+	color: red;
 }
 a:active {
 	text-decoration: none;
+	color: red;
 }
 
 li a {
@@ -129,4 +130,10 @@ div.fieldWithErrors {
 
 div#paypal_button {
   display: inline;
+}
+
+.jfri {
+  font-size: 16px;
+  font-weight: bold;
+  color: blue;
 }

@@ -57,6 +57,7 @@ class PunterController < ApplicationController
     # argh - we don't have a name at the moment, so AASM transition fails
     # keep it in since we test for it
     @punter.confirm!
+    # fake the transition
     @punter.update_attribute(:state, 'confirmed') # ouch
     
     session[:punter_id] = @punter.id
@@ -104,7 +105,7 @@ class PunterController < ApplicationController
     if punter = Punter.find_by_email(params[:punter][:email])
       punter.reset!
       logger.info("PunterController: reset for #{punter.name_with_email} with token #{punter.authentication_token}")
-      flash[:notice] = "We've resent an invite link to #{punter.email}. Please check your mail."
+      flash[:notice] = "We've sent an password reset mail to #{punter.email}. Please check your mail."
       redirect_to login_path
       return
     else

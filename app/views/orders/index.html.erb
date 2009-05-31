@@ -29,7 +29,7 @@
   </ul>
 <% end %>
 
-<p>If there are people not on this list that you want to come along, <%= link_to 'invite', user_show_path %> them!<p>
+<p>Want to buy tickets for people not on this list? <%= link_to 'Invite them here!', user_show_path, :class => 'jfri' %></p>
 
 <% if @punter.orders.empty? %>
   <p>You haven't ordered any tickets this year.</p>
@@ -51,9 +51,9 @@
 <% end %>
 
 <% if @punter.unpaid_ticket_candidates.length > 0 %>
-  <p>There's <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. Why not <%= link_to 'order some tickets!', new_order_path %></p>
+  <p>There's <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. Why not <%= link_to 'order some tickets!', new_order_path, :class => 'jfri' %></p>
 <% else %>
-  <p>If you're still desperate to give us your money, you best <%= link_to 'invite', user_show_path %> some more people!</p>
+  <p>If you're still desperate to give us your money, you best <%= link_to 'invite', user_show_path, :class => 'jfri' %> some more people!</p>
 <% end %>
 
 <p>Concessions are available to handy helpers...email for details <a href="mailto:site@thelongestday.net">site@thelongestday.net</a></p>

@@ -7,29 +7,40 @@
 </ul>
 
 <% if @punter.invitees.empty? %>
-  <p>You haven't invited anyone. Use the form below if you want to invite your friends along.</p>
+  <p>You haven't invited anyone. Use the form below if you want to <span class="jfri">invite your friends along</span>.</p>
 <% else %>
   <h2>People you have invited</h2>
   <ul>
     <% @punter.invitees.each do |i| %>
-      <li><%=h i.name_with_email %></li>
+      <li>
+        <%=h i.name_with_email %>
+        <% if i.confirmed? %>
+          <span class="note">(accepted)</span>
+        <% else %>
+          <span class="note">(this person has not accepted the invite yet)</span>
+        <% end %>
+
+      </li>
     <% end %>
   </ul>
-  <p>People you've invited need to confirm their invite before you can buy them a ticket.</p>
+  <p>People you've invited need to accept their invite before you can buy them a ticket.</p>
 <% end %>
 
 <% if @punter.unpaid_ticket_candidates.length > 0 %>
   <% if @punter.has_paid_ticket? %>
-    <p><%= link_to "You're ticketed up", orders_path %>, yay! Tickets will be issued from this website from June, we'll send you a mail. You can still buy your friends some though, <%= link_to 'click here', orders_path %>!</p>
+    <p><%= link_to "You're ticketed up", orders_path, :class => 'jfri' %>, yay! Tickets will be issued from this website from June, we'll send you a mail.</p>
+    <p>Click to <%= link_to 'buy tickets for your invitees', orders_path, :class => 'jfri' %></p>
   <% else %>
     <% if @punter.orders.empty? %> 
-      <p>You don't have a ticket yet, <%= link_to 'click here', orders_path %> to sort it out!</p> 
+      <p><%= link_to 'Buy tickets', orders_path, :class => 'jfri' %></p>
+      <p>You don't have a ticket yet, <%= link_to 'order some tickets', orders_path, :class => 'jfri' %> to sort it out!</p> 
     <% else %>
-      <p>You have ordered some tickets, but don't have one yourself! <%= link_to 'Click here', orders_path %> to stay pure.</p>
+      <p>You have ordered some tickets, but don't have one yourself! <%= link_to 'Order a ticket', orders_path, :class => 'jfri' %> to stay pure.</p>
     <% end %>
   <% end %>
 <% else %>
-  <p><strong>You're ticketed up, yay!</strong> Tickets will be issued from this website from June, we'll send you a mail. You're welcome to invite more people of course!</p>
+  <p><span class="jfri">You're ticketed up, yay!</span> Tickets will be issued from this website from June, we'll send you a mail.</p>
+  <p>You're welcome to <span class="jfri">invite more people</span> of course, use the form below.</p>
 <% end %>
 
 <%= render :partial => 'invitee' %>
