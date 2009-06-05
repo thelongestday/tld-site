@@ -6,7 +6,8 @@
   <% end %>
 </div>
 
-<p>Click <%= link_to 'here', :action => :reset %> if you have forgotten your password.  Problems? Please mail <font face="courier"><a href="mailto:site@thelongestday.net">site@thelongestday.net</a></font></p>
+<p><%= link_to 'Click here if you have forgotten your password', { :action => :reset }, { :class => 'jfri' } %>
+<p>Problems? Please mail <font face="courier"><a href="mailto:site@thelongestday.net">site@thelongestday.net</a></font></p>
 
 <p>This year TLD ticketing is done by invitation. We're inviting everyone
 on our mailing list and everyone who had a ticket last year.</p>
