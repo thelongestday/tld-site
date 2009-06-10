@@ -237,11 +237,11 @@ class PunterControllerTest < ActionController::TestCase
         context "set the password" do
           setup do
             @punter.expects(:set_new_password).with(true)
-            @punter.expects(:update_attributes).with({ :password => 'foofoo', :password_confirmation => 'bXarbar' }).returns(true) 
-            put :update, { :punter => { :password => 'foofoo', :password_confirmation => 'barbar' } }
+            @punter.expects(:update_attributes).with({ :password => 'foofoo', :password_confirmation => 'foofoo' }).returns(true) 
+            put :update, { :punter => { :password => 'foofoo', :password_confirmation => 'foofoo' } }
           end
-#          should_set_the_flash_to /updated/
-#          should_redirect_to("user page") { user_show_path }
+#        should_set_the_flash_to /updated/
+#        should_redirect_to("user page") { user_show_path }
         end
       end
     end

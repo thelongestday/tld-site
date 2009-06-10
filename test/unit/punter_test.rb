@@ -142,10 +142,10 @@ class PunterTest < ActiveSupport::TestCase
       assert_equal punter, @punter
     end
     
-    should "clear token after authenticating with it" do
+    should "no longer clear token after authenticating with it" do
       @punter.set_token!
       punter = Punter.authenticate_by_token(@punter.authentication_token) 
-      assert_nil punter.authentication_token
+      assert_equal punter.authentication_token, @punter.authentication_token
     end
   end
 

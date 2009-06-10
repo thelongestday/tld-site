@@ -148,6 +148,7 @@ class PunterController < ApplicationController
 
     if @punter.update_attributes(params[:punter])
       flash[:notice] = 'Details updated.'
+      @punter.clear_token
       redirect_to user_show_path
     else
       @must_set_password = @punter.salted_password.empty?

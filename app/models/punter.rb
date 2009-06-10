@@ -64,6 +64,10 @@ class Punter < ActiveRecord::Base
     self.set_new_password = nil
   end
 
+  def clear_token
+    self.update_attribute(:authentication_token, nil)
+  end
+
   def email_with_name 
     "#{self.name} <#{self.email}>"
   end
@@ -162,7 +166,7 @@ class Punter < ActiveRecord::Base
     punter = Punter.find_by_authentication_token(token)
     raise(PunterException, 'Login failed') if punter.nil? || punter.authentication_token != token
 
-    punter.update_attribute(:authentication_token, nil)
+#   punter.update_attribute(:authentication_token, nil)
     punter.update_attribute(:last_login, Time.now)
     punter
   end
