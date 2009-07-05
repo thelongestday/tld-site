@@ -1,0 +1,10 @@
+<table>
+<% @shame.each do |s| %>
+  <tr>
+    <td><%= s[:punter].name_with_email %></td>
+    <td><%= s[:invited] %></td>
+    <td><%= s[:accepted] %></td>
+  </tr>
+<% end %>
+</table>
+

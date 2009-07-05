@@ -53,4 +53,25 @@ class Admin::AdminController < ApplicationController
     render :layout => false
   end
 
+  def shame
+    cabal = [
+      'site@thelongestday.net',
+      '732@lemonia.org',
+      'simon@lemonia.org',
+      'boli@thelongestday.net',
+    ]
+
+    @shame = []
+
+    cabal.each do |c|
+      p = Punter.find_by_email(c, :include => :invitees)
+      i = p.invitees.length
+      a = p.invitees.find_all { |x| x.confirmed? }.length
+      logger.info("#{p} - #{i} - #{a}")
+      @shame.push({ :punter => p,
+                    :invited => i,
+                    :accepted => a })
+    end
+  end
+
 end
