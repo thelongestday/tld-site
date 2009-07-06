@@ -20,6 +20,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect '/tld_admin', :controller => 'admin/admin', :action => 'index'
   map.connect '/tld_admin/tickets', :controller => 'admin/admin', :action => 'tickets'
+  map.connect '/tld_admin/shame', :controller => 'admin/admin', :action => 'shame'
   map.connect '/tld_admin/punter/:action', :controller => "admin/punter"
   map.connect '/tld_admin/order/:action', :controller => "admin/order"
   map.connect '/tld_admin/ticket/:action', :controller => "admin/ticket"
