@@ -160,33 +160,53 @@ class PunterControllerTest < ActionController::TestCase
   end
 
   context "on POST to :invite" do
-    context "with invalid params" do
-      setup do
-        login_as_user
-        post :invite, { :invitee => { :name => 'a', :email => 'b' } }
+    context "when logged in" do
+      context "with invalid params" do
+        setup do
+          login_as_user
+          post :invite, { :invitee => { :name => 'a', :email => 'b' } }
+        end
+
+        should_render_template :show
+        should_render_a_form
       end
 
-      should_render_template :show
-      should_render_a_form
+      context "with valid params" do
+        setup do
+          login_as_user
+          post :invite, { :invitee => { :name => 'foo', :email => 'new@example.com' } }
+        end
+
+        should_redirect_to("user_show_path") { user_show_path }
+        should "create a new invite" do
+          i = Punter.find_by_email('new@example.com')
+          assert_contains i.inviters, @punter
+        end
+      end
+
+      context "inviting self" do
+        setup do
+          login_as_user
+          post :invite, { :invitee => { :name => 'foo', :email => 'foo@example.com' } }
+        end
+
+        should_redirect_to("user_show_path") { user_show_path }
+        should_set_the_flash_to /kinky/
+      end
     end
 
-    context "with valid params" do
-      setup do
-        login_as_user
-        post :invite, { :invitee => { :name => 'foo', :email => 'new@example.com' } }
+    context "when not logged in" do
+      context "with valid params" do
+        setup do
+          post :invite_self, { :invitee => { :name => 'foo', :email => 'new@example.com' } }
+        end
+
+        should_redirect_to("signup_ack_path") { signup_ack_path }
+        should "create a new invite from the signup user" do
+          i = Punter.find_by_email('new@example.com')
+          assert_contains i.inviters, Site::Config.signup_user
+        end
       end
-
-      should_redirect_to("user_show_path") { user_show_path }
-    end
-
-    context "inviting self" do
-      setup do
-        login_as_user
-        post :invite, { :invitee => { :name => 'foo', :email => 'foo@example.com' } }
-      end
-
-      should_redirect_to("user_show_path") { user_show_path }
-      should_set_the_flash_to /kinky/
     end
   end
 

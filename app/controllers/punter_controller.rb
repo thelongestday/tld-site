@@ -96,6 +96,33 @@ class PunterController < ApplicationController
     end
   end
 
+  def invite_self
+    redirect_to user_show_path if request.get?
+
+    if Punter.find_by_email(params[:invitee][:email])
+      flash[:notice] = "You've already signed up. Reset your password below, or use the Login link."
+      redirect_to user_reset_path
+      return
+    end
+
+    @invitee = Punter.new(params[:invitee])
+
+    if @invitee.valid?
+      begin
+        Invitation.invite_punter(Site::Config.signup_user, @invitee.email, @invitee.name)
+        flash[:notice] = "Signup under way!"
+      rescue PunterException => e
+        flash[:error] = e.message
+      end
+
+      redirect_to signup_ack_path
+      return
+    else
+      render :signup
+    end
+  end
+
+
   def reset
     return if request.get? # reset form
     unless params[:punter] && params[:punter][:email] && !params[:punter][:email].empty?
@@ -115,6 +142,12 @@ class PunterController < ApplicationController
 
   def reject
     render :show
+  end
+
+  def signup
+  end
+
+  def signup_ack
   end
 
   def show
