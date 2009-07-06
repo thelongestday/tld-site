@@ -29,10 +29,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/tld_admin/ticket/:action', :controller => "admin/ticket"
   map.connect '/tld_admin/paypal_log/:action', :controller => "admin/paypal_log"
 
+  map.connect 'stylesheets/:id.:format', :controller => 'stylesheets', :action => 'application'
+
   map.comatose_admin
   map.comatose_root 'invitees',  :index => 'invitees',             :layout => 'tld'
   map.comatose_root 'attendees', :index => 'attendees',            :layout => 'tld'
   map.comatose_root '',          :index => 'the-longest-day-2009', :layout => 'tld'
-
 
 end
