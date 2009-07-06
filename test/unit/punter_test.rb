@@ -286,7 +286,7 @@ class PunterTest < ActiveSupport::TestCase
         assert_contains all, @pr2
         assert_contains all, @pe1
         assert_does_not_contain all, @pe2
-        assert_does_not_contain all, @pe3
+        assert_contains all, @pe3 # now allow unconfirmed ticketing
       end
 
       should "return list of paid candidates" do
