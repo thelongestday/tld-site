@@ -326,7 +326,7 @@ class PunterControllerTest < ActionController::TestCase
         setup do
           @punter = Punter.generate!
           @punter.confirm!
-          @punter.update_attribute(:salted_password, "")
+          @punter.update_attribute(:name, nil)
           session[:punter_id] = @punter.id
         end
         context ":show" do
