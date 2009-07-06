@@ -21,12 +21,14 @@ class Admin::AdminController < ApplicationController
     @order_stats[:paid ]      = Order.count(:conditions => [ "state = 'paid'" ] )
 
     tickets = []
-    Order.find_all_by_state('paid').each { |o| o.tickets.each { |t| tickets << t } }
+    paid_orders = Order.find_all_by_state('paid', :include => :tickets)
+    paid_orders.each { |o| o.tickets.each { |t| tickets << t } }
 
     @ticket_stats[:total] = tickets.length
     @ticket_stats[:test]  = tickets.find_all { |t| t.cost == 100 }.length
     @ticket_stats[:real]  = @ticket_stats[:total] - @ticket_stats[:test]
 
+    @children = paid_orders.inject(0) { |t,o| t += o.children }
 
     gross = 0
     commission = 0

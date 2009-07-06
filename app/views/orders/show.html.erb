@@ -4,7 +4,7 @@
     <li><%=h t.punter.name_with_email %> - <%=h t.event.name %> @ &pound;<%= t.cost / 100 %></li>
   <% end %>
 </ul>
-<p>This order includes <%= pluralize @order.children, 'kids'%> under 12 years old or younger.</p>
+<p>This order includes <%= pluralize @order.children, 'kids'%> under 12 years old or younger (free).</p>
 <p>The total cost of this order is &pound;<%= @order.total_cost / 100 %>.</p>
 
 <ul class="nav">
