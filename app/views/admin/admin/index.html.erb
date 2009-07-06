@@ -6,23 +6,23 @@
 <table>
   <tr>
     <td>Total</td>
-    <td><%= @punter_stats[:total] %></td>
+    <td align="right"><%= @punter_stats[:total] %></td>
   </tr>
   <tr>
     <td>New</td>
-    <td><%= @punter_stats[:new] %></td>
+    <td align="right"><%= @punter_stats[:new] %></td>
   </tr>
   <tr>
     <td>Invited</td>
-    <td><%= @punter_stats[:invited] %></td>
+    <td align="right"><%= @punter_stats[:invited] %></td>
   </tr>
   <tr>
     <td>Confirmed</td>
-    <td><%= @punter_stats[:confirmed] %></td>
+    <td align="right"><%= @punter_stats[:confirmed] %></td>
   </tr>
   <tr>
     <td>Flailed with invite</td>
-    <td><%= @punter_stats[:flailed] %></td>
+    <td align="right"><%= @punter_stats[:flailed] %></td>
   </tr>
 </table>   
 
@@ -30,23 +30,23 @@
 <table>
   <tr>
     <td>Total</td>
-    <td><%= @order_stats[:total] %></td>
+    <td align="right"><%= @order_stats[:total] %></td>
   </tr>
   <tr>
     <td>New</td>
-    <td><%= @order_stats[:new] %></td>
+    <td align="right"><%= @order_stats[:new] %></td>
   </tr>
   <tr>
     <td>Confirmed</td>
-    <td><%= @order_stats[:confirmed] %></td>
+    <td align="right"><%= @order_stats[:confirmed] %></td>
   </tr>
   <tr>
     <td>Paid</td>
-    <td><%= @order_stats[:paid] %></td>
+    <td align="right"><%= @order_stats[:paid] %></td>
   </tr>
   <tr>
-    <td>Children (on paid orders)</td>
-    <td><%= @children %></td>
+    <td>Children</td>
+    <td align="right"><%= @children %></td>
   </tr>
 </table>   
 
@@ -54,15 +54,15 @@
 <table>
   <tr>
     <td>Total</td>
-    <td><%= @ticket_stats[:total] %></td>
+    <td align="right"><%= @ticket_stats[:total] %></td>
   </tr>
   <tr>
     <td>Real</td>
-    <td><%= @ticket_stats[:real] %></td>
+    <td align="right"><%= @ticket_stats[:real] %></td>
   </tr>
   <tr>
     <td>Test</td>
-    <td><%= @ticket_stats[:test] %></td>
+    <td align="right"><%= @ticket_stats[:test] %></td>
   </tr>
 </table>
 
@@ -70,19 +70,19 @@
 <table>
   <tr>
     <td>Gross</td>
-    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:gross] / 100)%></td>
+    <td align="right">&pound; <%= sprintf("%.02f", @paypal_stats[:gross] / 100)%></td>
   </tr>
   <tr>
     <td>Commission</td>
-    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:commission] / 100)%></td>
+    <td align="right">&pound; <%= sprintf("%.02f", @paypal_stats[:commission] / 100)%></td>
   </tr>
   <tr>
     <td>Face value of real tickets</td>
-    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:face] / 100)%></td>
+    <td align="right">&pound; <%= sprintf("%.02f", @paypal_stats[:face] / 100)%></td>
   </tr>
   <tr>
     <td>Expected balance</td>
-    <td>&pound; <%= sprintf("%.02f", @paypal_stats[:expected] / 100)%></td>
+    <td align="right">&pound; <%= sprintf("%.02f", @paypal_stats[:expected] / 100)%></td>
   </tr>
 </table>
 
