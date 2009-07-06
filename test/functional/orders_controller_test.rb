@@ -53,15 +53,32 @@ class OrdersControllerTest < ActionController::TestCase
     end
 
     context "trying to update a non-new order" do
-      setup do
-        @o = Order.generate!
-        @o.confirm!
-        login_as(@o.owner)
-        put :update, :id => @o.to_param, :order_punter => { }
+
+      context "where the number of children hasn't changed" do
+        setup do
+          @o = Order.generate!
+          @o.confirm!
+          login_as(@o.owner)
+          put :update, :id => @o.to_param, :order_punter => { }, :order => { :children => '0' }
+        end
+        should_redirect_to("order show") { order_path(@o) }
+        should_set_the_flash_to /locked/
       end
 
-      should_redirect_to("order show") { order_path(@o) }
-      should_set_the_flash_to /locked/
+      context "where the number of children has changed" do
+        setup do
+          @o = Order.generate!
+          @o.confirm!
+          login_as(@o.owner)
+          put :update, :id => @o.to_param, :order_punter => { }, :order => { :children => '3' }
+        end
+        should "update the number of children" do
+          assert_equal 3, assigns(:order).children
+        end
+
+        should_redirect_to("order show") { order_path(@o) }
+        should_set_the_flash_to /updated/
+      end
     end
 
     context "cancelling an order" do
@@ -302,7 +319,7 @@ class OrdersControllerTest < ActionController::TestCase
           assert_contains @p1.unpaid_ticket_candidates, @p1
           assert_contains @p1.unpaid_ticket_candidates, @p2
 
-          post :create, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" }
+          post :create, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" }, :order => { :children => 0 }
           @o = assigns(:order)
           punters = @o.tickets.map { |t| t.punter }
 
@@ -310,6 +327,13 @@ class OrdersControllerTest < ActionController::TestCase
           assert_contains punters, @p2
           assert_does_not_contain @o.tickets.map { |t| t.punter }, @p3
         end
+
+        should "update children" do
+          post :create, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" }, :order => { :children => 3 }
+          @o = assigns(:order)
+          assert_equal 3, @o.children
+        end
+
       end
 
       context "via :update" do
@@ -322,12 +346,18 @@ class OrdersControllerTest < ActionController::TestCase
           assert_contains @p1.unpaid_ticket_candidates, @p1
           assert_contains @p1.unpaid_ticket_candidates, @p2
 
-          put :update, { :id => @o.to_param, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" } }
+          put :update, :id => @o.to_param, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" }, :order => { :children => 0 } 
           punters = @o.tickets.map { |t| t.punter }
 
           assert_contains punters, @p1
           assert_contains punters, @p2
           assert_does_not_contain @o.tickets.map { |t| t.punter }, @p3
+        end
+
+        should "update children" do
+          put :update, :id => @o.to_param, :order_punter => { @p1.id.to_s => "1", @p2.id.to_s => "1", @p3.id.to_s => "1" }, :order => { :children => 2 } 
+          @o = assigns(:order)
+          assert_equal 2, @o.children
         end
       end
     end
@@ -356,11 +386,11 @@ class OrdersControllerTest < ActionController::TestCase
 
   test "should create order" do
     assert_difference('Order.count') do
-      post :create, :order_punter => { }
+      post :create, :order_punter => { }, :order => { :children => 0 }
     end
 
     assert_difference('Ticket.count') do
-      post :create, :order_punter => { @o.owner.id => "1" }
+      post :create, :order_punter => { @o.owner.id => "1" }, :order => { :children => 0 }
     end
 
     assert_redirected_to order_path(assigns(:order))
@@ -382,7 +412,7 @@ class OrdersControllerTest < ActionController::TestCase
     @o.update_attribute(:owner, p)
     login_as(p)
 
-    put :update, :id => @o.to_param, :order_punter => { p.id => "1" }
+    put :update, :id => @o.to_param, :order_punter => { p.id => "1" }, :order => { :children => 0 }
 
     assert_does_not_contain @o.tickets.map { |t| t.id} , t
     assert_equal @o.tickets.first.punter, p

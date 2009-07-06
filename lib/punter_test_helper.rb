@@ -12,6 +12,7 @@ module PunterTestHelper
 
   def login_as(punter)
     session[:punter_id] = punter
+    session[:after_login] = nil
   end
 
 end

@@ -4,6 +4,7 @@ class Order < ActiveRecord::Base
   has_many :paypal_logs, :foreign_key => 'item_number'
 
   validates_presence_of :owner
+  validates_numericality_of :children, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 5
   attr_protected :owner, :state
 
   include AASM

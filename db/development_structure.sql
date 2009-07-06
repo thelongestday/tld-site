@@ -14,7 +14,7 @@ CREATE TABLE `comatose_page_versions` (
   `updated_on` datetime default NULL,
   `created_on` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=195 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comatose_pages` (
   `id` int(11) NOT NULL auto_increment,
@@ -49,7 +49,7 @@ CREATE TABLE `invitations` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1722 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL auto_increment,
@@ -58,8 +58,9 @@ CREATE TABLE `orders` (
   `money_received` int(11) default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
+  `children` int(11) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1208 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `paypal_logs` (
   `id` int(11) NOT NULL auto_increment,
@@ -76,7 +77,7 @@ CREATE TABLE `paypal_logs` (
   `mc_currency` varchar(128) default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `punters` (
   `id` int(11) NOT NULL auto_increment,
@@ -91,7 +92,7 @@ CREATE TABLE `punters` (
   `last_login` datetime default NULL,
   `admin` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1636 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `schema_migrations` (
   `version` varchar(255) NOT NULL,
@@ -107,7 +108,7 @@ CREATE TABLE `tickets` (
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1261 DEFAULT CHARSET=utf8;
 
 INSERT INTO schema_migrations (version) VALUES ('20090331195807');
 
@@ -128,3 +129,5 @@ INSERT INTO schema_migrations (version) VALUES ('20090418090527');
 INSERT INTO schema_migrations (version) VALUES ('20090419095044');
 
 INSERT INTO schema_migrations (version) VALUES ('20090420064509');
+
+INSERT INTO schema_migrations (version) VALUES ('20090705133724');

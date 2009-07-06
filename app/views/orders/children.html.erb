@@ -1,0 +1,13 @@
+<div class="form">
+  <h2>[ #<%= @order.id %> ] <%= "#{pluralize(@order.tickets.length, 'ticket')} (#{@order.state})" %></h2>
+
+  <% form_for(@order) do |f| %>
+  <p>Kids under 12 years old or younger come free! How busy have you been in the sack? <%= f.select 'children', @children_select %> sprogs</p>
+  <p>
+    <%= f.submit 'Do it!' %>
+  </p>
+  <% end %>
+</div>
+<ul class="nav">
+  <li><%= link_to 'Back', orders_path %> to your orders</li>
+</ul>

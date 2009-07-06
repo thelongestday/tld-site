@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :orders, :member => { :confirm => :post, :ack => :any }
+  map.resources :orders, :member => { :confirm => :post, :ack => :any, :children => :any }
 
   map.with_options :controller => 'punter' do |m|
     m.login  '/login',      :action => 'login'

@@ -5,8 +5,8 @@ class OrdersController < ApplicationController
   layout 'tld_app'
 
   before_filter :login_required
-  before_filter :retrieve_order,        :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
-  before_filter :check_order_owner,     :only => [ :ack, :confirm, :destroy, :edit, :show, :update ]
+  before_filter :retrieve_order,        :only => [ :ack, :confirm, :destroy, :edit, :show, :update, :children ]
+  before_filter :check_order_owner,     :only => [ :ack, :confirm, :destroy, :edit, :show, :update, :children ]
   before_filter :check_order_collision, :only => [ :confirm, :show ]
   verify :params => :order_punter,      :only => [ :create ], :redirect_to => :orders_path
 
@@ -30,6 +30,7 @@ class OrdersController < ApplicationController
     @unpaid_punters = @punter.unpaid_ticket_candidates
     @order_punters = {}
     @event = Site::Config.event
+    @children_select = (0..5).map { |c| [ c.to_s, c ] }
   end
 
   # GET /orders/1/edit
@@ -38,6 +39,11 @@ class OrdersController < ApplicationController
     @order_punters = Hash.new { |h,k| h[k] = "0" }
     @order.tickets.each { |t| @order_punters[t.punter.id] = "1" }
     @event = Site::Config.event
+    @children_select = (0..5).map { |c| [ c.to_s, c ] }
+  end
+
+  def children
+    @children_select = (0..5).map { |c| [ c.to_s, c ] }
   end
 
   def confirm
@@ -62,6 +68,9 @@ class OrdersController < ApplicationController
     punters = params[:order_punter].keys.find_all { |p| candidates.include?(p.to_i) }
     logger.debug("#{params[:order_punter].keys.join(',')} vs #{punters.join(',')} via #{candidates.join(',')}")
     punters.each { |p| @order.add_ticket_by_punter_id(p) }
+
+    @order.update_attribute(:children, params[:order][:children].to_i)
+
     if @order.save
       flash[:notice] = 'Order created.'
       redirect_to order_path(@order)
@@ -74,9 +83,18 @@ class OrdersController < ApplicationController
   def update
     # check order can be updated
     unless @order.new?
-      flash[:error] = 'Order is locked.'
-      redirect_to order_path(@order)
-      return
+      # allow # of children to be updated
+      if params[:order][:children].to_i != @order.children
+        @order.update_attribute(:children, params[:order][:children].to_i)
+        @order.reload
+        flash[:notice] = 'Order updated.'
+        redirect_to order_path(@order)
+        return
+      else
+        flash[:error] = 'Order is locked.'
+        redirect_to order_path(@order)
+        return
+      end
     end
 
     # remove all the previous tickets
@@ -94,6 +112,8 @@ class OrdersController < ApplicationController
     candidates = @punter.unpaid_ticket_candidates.map { |p| p.id }
     punters = params[:order_punter].keys.find_all { |p| candidates.include?(p.to_i) }
     punters.each { |p| @order.add_ticket_by_punter_id(p) }
+
+    @order.update_attribute(:children, params[:order][:children].to_i)
 
     flash[:notice] = 'Order was successfully updated.'
     redirect_to order_path(@order)

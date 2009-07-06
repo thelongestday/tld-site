@@ -68,12 +68,16 @@ module PunterSystem
 
   def enforce_signup
     if @punter && @punter.has_flailed_signup?
+      logger.debug('flail')
       unless [ user_edit_path, user_update_path ].include? request.path
+        logger.debug('more flail')
         flash[:notice] = 'Please update your details.'
         logger.info("PunterSystem: punting #{@punter.name_with_email} back to edit page")
         redirect_to user_edit_path
         return
       end
+    else
+      logger.debug('no flail')
     end
   end
 

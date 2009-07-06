@@ -73,7 +73,8 @@ class Punter < ActiveRecord::Base
   end
 
   def has_flailed_signup?
-    self.confirmed? && ( self.name.nil? )
+    flail = self.confirmed? && self.name.nil? 
+    flail
   end
 
   def has_ordered_ticket?

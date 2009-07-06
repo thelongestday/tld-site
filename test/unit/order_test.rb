@@ -6,6 +6,7 @@ class OrderTest < ActiveSupport::TestCase
   should_belong_to :owner
   should_not_allow_mass_assignment_of :owner
   should_not_allow_mass_assignment_of :state
+  should_ensure_value_in_range  :children, ( 0 .. 5 ), :high_message => /less than/, :low_message => /greater than/
 
   context "tickets" do
     setup do 
