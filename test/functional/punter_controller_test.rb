@@ -327,7 +327,7 @@ class PunterControllerTest < ActionController::TestCase
           @punter = Punter.generate!
           @punter.confirm!
           @punter.update_attribute(:name, nil)
-          session[:punter_id] = @punter.id
+          login_as(@punter)
         end
         context ":show" do
           setup do
@@ -346,7 +346,8 @@ class PunterControllerTest < ActionController::TestCase
           setup do
             put :update, { :punter => { :name => 'bar' } }
           end
-          should_respond_with :success
+          should_respond_with :redirect
+          should_redirect_to('home') { user_show_path }
         end
       end
     end
