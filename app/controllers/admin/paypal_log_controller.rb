@@ -6,6 +6,7 @@ class Admin::PaypalLogController < Admin::AdminController
     config.columns[:item_number].label = 'Order'
     config.columns[:mc_gross].label = 'Amount'
     config.list.per_page = 100
+    config.list.sorting = { :id => :desc }
   end
 end
 
