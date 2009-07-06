@@ -1,9 +1,15 @@
 <table>
-<% @shame.each do |s| %>
+  <tr>
+    <th>Entity</th>
+    <th>Invited</th>
+    <th>Accepted</th>
+  </tr>
+
+  <% @shame.sort { |x,y| y[:invited] <=> x[:invited] }.each do |s| %>
   <tr>
     <td><%= s[:punter].name_with_email %></td>
-    <td><%= s[:invited] %></td>
-    <td><%= s[:accepted] %></td>
+    <td align="right"><%= s[:invited] %></td>
+    <td align="right"><%= s[:accepted] %></td>
   </tr>
 <% end %>
 </table>
