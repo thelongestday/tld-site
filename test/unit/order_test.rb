@@ -21,6 +21,15 @@ class OrderTest < ActiveSupport::TestCase
       assert_equal @o.tickets.first.cost, Site::Config.event.cost
     end
 
+    should "add a cheaper admin ticket" do
+      @p = Punter.generate!
+      @p.update_attribute(:admin, true)
+      @o.add_ticket_by_punter_id(@p.id)
+      
+      assert_equal @o.tickets.first.punter, @p
+      assert_equal @o.tickets.first.cost, Site::Config.admin_cost
+    end
+
     should "handle invalid punter id" do
       @o.add_ticket_by_punter_id(732)
     end

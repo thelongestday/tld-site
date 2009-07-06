@@ -37,7 +37,11 @@ class Order < ActiveRecord::Base
     begin
       punter = Punter.find(punter_id)
       ticket = Ticket.create
-      ticket.update_attribute(:cost,   Site::Config.event.cost)
+      if punter.admin?
+        ticket.update_attribute(:cost,   Site::Config.admin_cost)
+      else
+        ticket.update_attribute(:cost,   Site::Config.event.cost)
+      end
       ticket.update_attribute(:event,  Site::Config.event)
       ticket.update_attribute(:order,  self)
       ticket.update_attribute(:punter, punter)

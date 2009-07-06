@@ -1,10 +1,12 @@
 module Site
   module Config
-    mattr_accessor :root_user, :signup_user, :event, :paypal
+    mattr_accessor :root_user, :signup_user, :event, :paypal, :admin_cost
 
     @@root_user   = Punter.find_by_email('site@thelongestday.net')   || Punter.create!(:name => 'The Longest Day', :email => 'site@thelongestday.net')
     @@signup_user = Punter.find_by_email('signup@thelongestday.net') || Punter.create!(:name => 'The Longest Day', :email => 'signup@thelongestday.net')
     @@event       = Event.find_by_name('The Longest Day 2009')       || Event.create!(:name => 'The Longest Day 2009', :cost => 4000)
+
+    @@admin_cost = 2000
 
     if ENV['RAILS_ENV'] == 'production'
       Paypal::Notification.ipn_url = 'https://www.paypal.com/cgi-bin/webscr'
