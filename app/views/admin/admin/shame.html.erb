@@ -7,7 +7,7 @@
 
   <% @shame.sort { |x,y| y[:invited] <=> x[:invited] }.each do |s| %>
   <tr>
-    <td><%= s[:punter].name_with_email %></td>
+    <td><%=h s[:punter].name_with_email %></td>
     <td align="right"><%= s[:invited] %></td>
     <td align="right"><%= s[:accepted] %></td>
   </tr>
