@@ -2,8 +2,8 @@
   orders = Order.find_all_by_state('paid', :include => :tickets).sort { |x,y| x.updated_at <=> y.updated_at }
 
   start  = orders.first.updated_at.to_date
-  finish = orders.last.updated_at.to_date
   today  = Date.today
+  finish = today - 1.day
 
   sales = Sale.find(:all, :order => 'date ASC')
   if sales.empty?
