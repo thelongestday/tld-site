@@ -8,12 +8,16 @@ class Admin::AdminController < ApplicationController
     @order_stats  = {}
     @ticket_stats = {}
     @paypal_stats = {}
+    @signup_stats = {}
 
     @punter_stats[:total]      = Punter.count
     @punter_stats[:new ]       = Punter.count(:conditions => [ "state = 'new'" ] )
     @punter_stats[:invited ]   = Punter.count(:conditions => [ "state = 'invited'" ] )
     @punter_stats[:confirmed ] = Punter.count(:conditions => [ "state = 'confirmed'" ] )
     @punter_stats[:flailed ]   = Punter.count(:conditions => [ "state = 'confirmed' AND name IS NULL" ] )
+
+    @signup_stats[:total]      = Site::Config.signup_user.invitees.length
+    @signup_stats[:tickets]    = Site::Config.signup_user.invitees.inject(0) { |t,p| t+= p.orders.inject(0) { |n,o| n += o.tickets.length } }
 
     @order_stats[:total]      = Order.count
     @order_stats[:new ]       = Order.count(:conditions => [ "state = 'new'" ] )
