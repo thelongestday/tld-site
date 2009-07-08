@@ -9,6 +9,16 @@ class Notifier < ActionMailer::Base
     body       :invitee => punter
   end
 
+  def hassle(punter, sent_at = Time.now)
+
+    subject    "[TLD] That buy-a-ticket-nudge you've been waiting for"
+    recipients punter.email_with_name
+    from       'site@thelongestday.net'
+    sent_on    sent_at
+    
+    body       :invitee => punter
+  end
+
   def reset(punter, sent_at = Time.now)
     subject    "[TLD] Password reset"
     recipients punter.email_with_name
