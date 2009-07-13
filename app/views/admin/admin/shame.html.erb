@@ -3,6 +3,7 @@
     <th>Entity</th>
     <th>Invited</th>
     <th>Accepted</th>
+    <th>Ticketed?</th>
   </tr>
 
   <% @shame.sort { |x,y| y[:invited] <=> x[:invited] }.each do |s| %>
@@ -10,6 +11,7 @@
     <td><%=h s[:punter].name_with_email %></td>
     <td align="right"><%= s[:invited] %></td>
     <td align="right"><%= s[:accepted] %></td>
+    <td><%= s[:punter].has_paid_ticket? ? 'yep' : 'nope' %></td>
   </tr>
 <% end %>
 </table>
