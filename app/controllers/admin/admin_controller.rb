@@ -30,7 +30,8 @@ class Admin::AdminController < ApplicationController
 
     @ticket_stats[:total] = tickets.length
     @ticket_stats[:test]  = tickets.find_all { |t| t.cost == 100 }.length
-    @ticket_stats[:real]  = @ticket_stats[:total] - @ticket_stats[:test]
+    @ticket_stats[:admin] = tickets.find_all { |t| t.cost == 2000 }.length
+    @ticket_stats[:real]  = @ticket_stats[:total] - @ticket_stats[:test] - @ticket_stats[:admin]
 
     @children = paid_orders.inject(0) { |t,o| t += o.children }
 
@@ -43,7 +44,7 @@ class Admin::AdminController < ApplicationController
     @paypal_stats[:gross] = gross
     @paypal_stats[:commission] = commission
     @paypal_stats[:expected] = gross - commission
-    @paypal_stats[:face] = Site::Config.event.cost * @ticket_stats[:real] 
+    @paypal_stats[:face] = Site::Config.event.cost * @ticket_stats[:real]
 
   end
 
