@@ -168,7 +168,7 @@ class PunterControllerTest < ActionController::TestCase
         end
 
         should_render_template :show
-        should_render_a_form
+#        should_render_a_form
       end
 
       context "with valid params" do
