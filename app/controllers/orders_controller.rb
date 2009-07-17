@@ -10,6 +10,10 @@ class OrdersController < ApplicationController
   before_filter :check_order_collision, :only => [ :confirm, :show ]
   verify :params => :order_punter,      :only => [ :create ], :redirect_to => :orders_path
 
+  def order_frame
+    render :layout => 'tld_frame'
+  end
+
   # GET /orders
   def index
     @orders = Order.find_all_by_owner_id(@punter)

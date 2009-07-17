@@ -21,6 +21,8 @@ ActionController::Routing::Routes.draw do |map|
     m.paypal_ipn '/paypal/ipn', :action => 'ipn'
   end
 
+  map.connect '/late/:id', :controller => 'orders', :action => 'order_frame'
+
   map.connect '/tld_admin', :controller => 'admin/admin', :action => 'index'
   map.connect '/tld_admin/tickets', :controller => 'admin/admin', :action => 'tickets'
   map.connect '/tld_admin/shame', :controller => 'admin/admin', :action => 'shame'
