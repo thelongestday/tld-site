@@ -177,7 +177,7 @@ class PunterControllerTest < ActionController::TestCase
           post :invite, { :invitee => { :name => 'foo', :email => 'new@example.com' } }
         end
 
-        should_redirect_to("user_show_path") { user_show_path }
+        should_redirect_to("orders_path") { orders_path }
         should "create a new invite" do
           i = Punter.find_by_email('new@example.com')
           assert_contains i.inviters, @punter
@@ -190,7 +190,7 @@ class PunterControllerTest < ActionController::TestCase
           post :invite, { :invitee => { :name => 'foo', :email => 'foo@example.com' } }
         end
 
-        should_redirect_to("user_show_path") { user_show_path }
+        should_redirect_to("orders_path") { orders_path }
         should_set_the_flash_to /kinky/
       end
     end

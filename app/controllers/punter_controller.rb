@@ -89,7 +89,7 @@ class PunterController < ApplicationController
       rescue PunterException => e
         flash[:error] = e.message
       end
-      redirect_to user_show_path
+      redirect_to orders_path
       return
     else
       render :show

@@ -1,4 +1,5 @@
-<p><%= link_to 'Click here to sign up!', { :action => :signup }, { :class => 'jfri'} %></p>
+<p><span class="jfri">Tickets are no longer on sale! Mail <a href="mailto:site@thelongestday.net">site@thelongestday.net</a> to enquire further</span>.</p>
+
 
 <div class="form">
   <% form_for :punter, @punter, :url => { :action => :login }, :html => { :class => :punter_form } do |f| %>
@@ -8,6 +9,7 @@
   <% end %>
 </div>
 
+<p><%= link_to 'Click here to sign up!', { :action => :signup }, { :class => 'jfri'} %></p>
 <p><%= link_to 'Click here if you have forgotten your password', { :action => :reset }, { :class => 'jfri' } %></p>
 <p>Problems? Please mail <font face="courier"><a href="mailto:site@thelongestday.net">site@thelongestday.net</a></font></p>
 
