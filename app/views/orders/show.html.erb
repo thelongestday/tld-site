@@ -16,7 +16,7 @@
     <li><%= render :partial => 'paypal_button' %> <span style="font-size: smaller;">(Paypal will open in a new window)</span></li>
     <li><%= button_to 'Cancel', order_path(@order), :confirm => 'Sure, eh?', :method => :delete %></li>
   <% elsif @order.paid? %>
-    <li>This order is paid for. Wonderful. We'll issue tickets closer to the day, and drop you mail to say when.</li>
+    <li>This order is paid for. <%= link_to 'Click here', pdf_order_path(@order), { :class => 'jfri' } %> to grab all its tickets!</li>
   <% elsif @order.cancelled? %>
     <li>This order has been cancelled. Nothing to see here.</li>
   <% end %>

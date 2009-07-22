@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :orders, :member => { :confirm => :post, :ack => :any, :children => :any }
+  map.resources :orders, :member => { :confirm => :post, :ack => :any, :children => :any, :pdf => :get }
 
   map.with_options :controller => 'punter' do |m|
     m.login  '/login',      :action => 'login'
@@ -15,6 +15,7 @@ ActionController::Routing::Routes.draw do |map|
     m.user_confirm_frame '/v/:token',   :action => 'confirm_frame'
     m.user_invite '/user/invite', :action => 'invite'
     m.signup_ack '/signup/ack',   :action => 'signup_ack'
+    m.ticket_pdf '/your_ticket',  :action => 'pdf'
   end
 
   map.with_options :controller => 'paypal' do |m|

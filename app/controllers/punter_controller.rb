@@ -2,7 +2,7 @@ class PunterController < ApplicationController
   include PunterSystem
   layout 'tld_app'
 
-  before_filter :login_required, :only => [ :edit, :invite, :show, :update ]
+  before_filter :login_required, :only => [ :edit, :invite, :show, :update, :pdf ]
   before_filter :admin_required, :only => [ :reject ]
   verify :params => :punter, :only => [ :update ], :redirect_to => :user_show_path
   verify :params => :invitee, :only => [ :invite ], :redirect_to => :user_show_path
@@ -122,6 +122,23 @@ class PunterController < ApplicationController
     end
   end
 
+  def pdf
+    if @punter.has_paid_ticket?
+      ticket = @punter.tickets.find_all { |t| t.paid? }.first
+      
+      if ticket.order.tickets.length == 1 && ticket.order.owner == @punter
+        filename = TicketPdf.pdf_for_order(ticket.order)
+      else
+        filename = TicketPdf.pdf_for_ticket(ticket)
+      end
+
+      send_file(filename, :type => 'appplication/pdf')
+
+    else
+      redirect_to :show
+    end
+
+  end
 
   def reset
     return if request.get? # reset form

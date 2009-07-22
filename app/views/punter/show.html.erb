@@ -35,7 +35,8 @@
 <% end %>
 
 <% if @punter.has_paid_ticket? %>
-  <p><span class="jfri">You're ticketed up, yay!</span> Tickets will be issued from this website soon, we'll send you a mail.</p>
+  <p><span class="jfri">You're ticketed up, yay!</span> <%= link_to 'Click here', ticket_pdf_path, { :class => 'jfri' } %> to pick up your ticket.</p>
+  <p>Alternatively, if you'd like to pick up all the tickets on your order, please click on the order in the list above.</p>
   <p>Tickets are no longer on sale. <span class="jfri">Mail <a href="mailto:site@thelongestday.net">site@thelongestday.net</a> to enquire further</span>.</p>
 <% else %>
   <p>Tickets are no longer on sale. <span class="jfri">Mail <a href="mailto:site@thelongestday.net">site@thelongestday.net</a> to enquire further</span>.</p>

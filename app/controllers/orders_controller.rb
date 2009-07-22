@@ -5,8 +5,8 @@ class OrdersController < ApplicationController
   layout 'tld_app'
 
   before_filter :login_required
-  before_filter :retrieve_order,        :only => [ :ack, :confirm, :destroy, :edit, :show, :update, :children ]
-  before_filter :check_order_owner,     :only => [ :ack, :confirm, :destroy, :edit, :show, :update, :children ]
+  before_filter :retrieve_order,        :only => [ :ack, :confirm, :destroy, :edit, :show, :update, :children, :pdf ]
+  before_filter :check_order_owner,     :only => [ :ack, :confirm, :destroy, :edit, :show, :update, :children, :pdf ]
   before_filter :check_order_collision, :only => [ :confirm, :show ]
   verify :params => :order_punter,      :only => [ :create ], :redirect_to => :orders_path
 
@@ -26,6 +26,11 @@ class OrdersController < ApplicationController
 
   # GET /orders/1
   def show
+  end
+
+  def pdf
+    filename = TicketPdf::pdf_for_order(@order)
+    send_file(filename, :type => 'appplication/pdf')
   end
 
   # GET /orders/new
