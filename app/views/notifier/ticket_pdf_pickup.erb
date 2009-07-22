@@ -1,0 +1,16 @@
+Hi <%=h @ticket.punter.name %>,
+
+At last - we've issued the tickets for <%= Site::Config.event.name %>.
+
+We've attached your ticket to this mail. You can also pick it up from the website.
+
+The ticket contains directions and other important info, please have a look.
+
+<% unless @ticket.order.is_just_for_owner? %>
+We've also sent <%=h @ticket.order.owner.name %> a copy of your ticket, since they were kind enough to buy it for you! :)
+<% end %>
+
+Awesome, see you there!
+
+Thanks, Hetty.
+

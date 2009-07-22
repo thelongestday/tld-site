@@ -126,7 +126,7 @@ class PunterController < ApplicationController
     if @punter.has_paid_ticket?
       ticket = @punter.tickets.find_all { |t| t.paid? }.first
       
-      if ticket.order.tickets.length == 1 && ticket.order.owner == @punter
+      if ticket.order.is_just_for_owner?
         filename = TicketPdf.pdf_for_order(ticket.order)
       else
         filename = TicketPdf.pdf_for_ticket(ticket)

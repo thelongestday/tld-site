@@ -46,4 +46,26 @@ class Notifier < ActionMailer::Base
     body       :order => order, :ticket => ticket
   end
 
+  def ticket_pdf_pickup(ticket)
+    subject    "[TLD] Your ticket for #{Site::Config.event.name}"
+    recipients ticket.punter.email_with_name
+    from       'site@thelongestday.net'
+    sent_on    Time.now
+
+    body       :ticket => ticket
+    filename = TicketPdf::pdf_for_ticket(ticket)
+    attachment :content_type => "application/pdf", :body => File.read(filename), :filename => File.basename(filename)
+    
+  end
+
+  def order_pdf_pickup(order)
+    subject    "[TLD] Your order for #{Site::Config.event.name} tickets"
+    recipients  order.owner.email_with_name
+    from       'site@thelongestday.net'
+    sent_on    Time.now
+
+    body       :order => order
+    filename = TicketPdf::pdf_for_ticket(ticket)
+    attachment :content_type => "application/pdf", :body => File.read(filename), :filename => File.basename(filename)
+  end
 end

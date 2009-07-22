@@ -74,4 +74,17 @@ class Order < ActiveRecord::Base
       Notifier.deliver_ticket_sale_message(self, t)
     end
   end
+
+  def is_just_for_owner?
+    if self.tickets.length == 1
+      ticket = self.tickets.first
+      if ticket.punter == self.owner
+        return true
+      end
+    end
+
+    return false
+
+  end
+
 end
