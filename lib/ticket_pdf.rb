@@ -68,7 +68,7 @@ class TicketPdf
         bounding_box [ 5, 233 ], :width => 235 do
           font_size(8) do
             text " "
-            text "Rules", :style => :bold
+            text "Read and understand this", :style => :bold
             text " ", :size => 4
             text "* Food and drink are available on site, you don't need to bring any..."
             text " ", :size => 4
