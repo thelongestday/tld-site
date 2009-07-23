@@ -7,8 +7,7 @@ The ticket contains directions and other important info, please have a look.
 <% if @order.is_just_for_owner? %>
 We've attached your ticket to this mail. You can also pick it up from the website.
 <% else %>
-We'll send each of the people you bought tickets for their own individual ticket
-but we've attached a combo one here also - it might help simplify the paperwork :)
+We'll send each of the people you bought tickets for their own individual ticket also.
 
 The order was for <%=h @order.tickets.map { |t| t.punter.name }.join(", ") %>
 <% end %>

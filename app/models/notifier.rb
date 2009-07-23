@@ -65,7 +65,7 @@ class Notifier < ActionMailer::Base
     sent_on    Time.now
 
     body       :order => order
-    filename = TicketPdf::pdf_for_ticket(ticket)
+    filename = TicketPdf::pdf_for_order(order)
     attachment :content_type => "application/pdf", :body => File.read(filename), :filename => File.basename(filename)
   end
 end
