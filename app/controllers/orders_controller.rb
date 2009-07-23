@@ -29,8 +29,12 @@ class OrdersController < ApplicationController
   end
 
   def pdf
-    filename = TicketPdf::pdf_for_order(@order)
-    send_file(filename, :type => 'appplication/pdf')
+    if @order.paid?
+      filename = TicketPdf::pdf_for_order(@order)
+      send_file(filename, :type => 'appplication/pdf')
+    else
+      redirect_to :show
+    end
   end
 
   # GET /orders/new
