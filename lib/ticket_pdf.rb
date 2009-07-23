@@ -2,7 +2,7 @@ require 'prawn/core'
 class TicketPdf
 
   def self.pdf_for_ticket(ticket, force = false)
-    filename = "#{RAILS_ROOT}/private/t-#{ticket.id}.pdf"
+    filename = "#{PDF_DIR}/t-#{ticket.id}.pdf"
     if !File.exists?(filename) || force
       order_text = "(one of #{ticket.order.tickets.length} invitations with this reference)"
       generate_pdf([ticket], filename, order_text)
@@ -11,7 +11,7 @@ class TicketPdf
   end
 
   def self.pdf_for_order(order, force = false)
-    filename = "#{RAILS_ROOT}/private/o-#{order.id}.pdf"
+    filename = "#{PDF_DIR}/o-#{order.id}.pdf"
     if !File.exists?(filename) || force
       order_text = "(all invitations with this reference shown)"
       generate_pdf(order.tickets, filename, order_text)

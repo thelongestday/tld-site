@@ -43,6 +43,7 @@ begin require 'redgreen'; rescue LoadError; end
 SALT_FILE = File.join(RAILS_ROOT, 'config', 'salt')  
 SITE_SALT = File.read(SALT_FILE)
 CERT_DIR = File.join(RAILS_ROOT, 'config', 'x509')
+PDF_DIR =  File.join(RAILS_ROOT, 'private')
 
 config.to_prepare do
   load("#{Rails.root}/config/initializers/site_config.rb")
