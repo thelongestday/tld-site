@@ -11,5 +11,6 @@ public/system
 coverage.data
 coverage/*
 *.swp
+private/*.pdf
 
 !.keep
