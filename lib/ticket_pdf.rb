@@ -53,7 +53,7 @@ class TicketPdf
         end
 
         font 'Helvetica'
-        text "We check the invite ids at the gate and the first person wins, so please don't give your mates copies of your invitation!", :at => [ 0, 10 ], :size => 8
+        text "We check the invite ids at the gate and the first person wins, so please don't give your mates copies of your invitation, mmkay?", :at => [ 0, 10 ], :size => 8
       end
       
       bounding_box [ 10, 570 ], :width => 515, :height => 260 do
