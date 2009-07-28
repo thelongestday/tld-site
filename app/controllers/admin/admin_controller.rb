@@ -49,6 +49,28 @@ class Admin::AdminController < ApplicationController
   end
 
   def tickets
+    paid_orders = Order.find_all_by_state('paid', :include => :tickets)
+    tickets = []
+    paid_orders.each { |o| tickets << o.tickets }
+    tickets.flatten!
+
+    case
+    when params.include?('alpha')
+      @tickets = tickets.sort { |x,y| x.punter.name.downcase <=> y.punter.name.downcase }
+      name = "tickets-sorted-by-name.csv"
+    else
+      @tickets = tickets.sort { |x,y| x.id <=> y.id }
+      name = "tickets-sorted-by-id.csv"
+    end
+
+    response.headers['Content-Type'] = 'text/csv; charset=iso-8859-1; header=present'
+    response.headers['Content-Disposition'] = "attachment; filename=#{name}"
+    
+    render :layout => false
+
+  end
+
+  def tickets_by_name
     paid_orders = Order.find_all_by_state('paid')
     @tickets = []
     paid_orders.each { |o| @tickets << o.tickets }

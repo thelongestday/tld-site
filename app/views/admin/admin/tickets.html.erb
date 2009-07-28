@@ -1,4 +1,4 @@
-ticketid,orderid,punter,orderer,whenpaid
+ticketid,punter-name,punter-email,order.id,orderer
 <% @tickets.each do |t| -%>
-<%= t.id %>,<%= t.order.id %>,<%= t.punter.name_with_email %>,<%= t.order.owner.name_with_email %>,<%= t.order.updated_at %>
+  <%= t.id %>,<%= t.punter.name %>,<%= t.punter.email %>,<%= t.order.id %>,<%= t.order.owner.name_with_email %>
 <% end -%>
