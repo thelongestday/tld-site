@@ -1,7 +1,7 @@
 <%
-  orders = Order.find_all_by_state('paid', :include => :tickets).sort { |x,y| x.updated_at <=> y.updated_at }
+  orders = Order.find_all_by_state('paid', :include => :tickets).sort { |x,y| x.created_at <=> y.created_at }
 
-  start  = orders.first.updated_at.to_date
+  start  = orders.first.created_at.to_date
   today  = Date.today
   finish = today - 1.day
 
@@ -13,7 +13,7 @@
   end
 
   while date <= finish
-    day_orders = orders.find_all { |o| o.updated_at.to_date == date }
+    day_orders = orders.find_all { |o| o.created_at.to_date == date }
     day_tickets = day_orders.inject(0) { |t,o| t += o.tickets.length }
     puts "#{date} : #{day_tickets}"
     Sale.create!(:date => date, :tickets => day_tickets)
