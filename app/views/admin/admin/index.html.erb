@@ -1,6 +1,8 @@
-<%= link_to 'Punters', :controller => 'admin/punter' %>
-<%= link_to 'PaypalLog', :controller => 'admin/paypal_log' %>
-<%= link_to 'Ticket CSV', :controller => 'admin/admin', :action => 'tickets' %>
+<%= link_to 'Punters', :controller => 'admin/punter' %> | 
+<%= link_to 'PaypalLog', :controller => 'admin/paypal_log' %> |
+Ticket CSV: 
+<%= link_to 'by ticket id ', :controller => 'admin/admin', :action => 'tickets' %> or 
+<%= link_to 'by name', :controller => 'admin/admin', :action => 'tickets', :alpha => 'weirdo' %>
 
 <h2>Punters</h2>
 <table>
