@@ -70,18 +70,6 @@ class Admin::AdminController < ApplicationController
 
   end
 
-  def tickets_by_name
-    paid_orders = Order.find_all_by_state('paid')
-    @tickets = []
-    paid_orders.each { |o| @tickets << o.tickets }
-    @tickets.flatten!
-
-    response.headers['Content-Type'] = 'text/csv; charset=iso-8859-1; header=present'
-    response.headers['Content-Disposition'] = 'attachment; filename=tickets.csv'
-    
-    render :layout => false
-  end
-
   def shame
     cabal = Punter.find_all_by_admin(true, :include => :invitees)
 
