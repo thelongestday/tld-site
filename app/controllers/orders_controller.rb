@@ -39,6 +39,9 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
+    redirect_to orders_path
+    return
+
     @order = Order.new
     @unpaid_punters = @punter.unpaid_ticket_candidates
     @order_punters = {}
@@ -48,6 +51,9 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+    redirect_to orders_path
+    return
+
     @unpaid_punters = @punter.unpaid_ticket_candidates
     @order_punters = Hash.new { |h,k| h[k] = "0" }
     @order.tickets.each { |t| @order_punters[t.punter.id] = "1" }
@@ -60,6 +66,9 @@ class OrdersController < ApplicationController
   end
 
   def confirm
+    redirect_to orders_path
+    return
+
     begin
       @order.confirm!
     rescue AASM::InvalidTransition
@@ -74,6 +83,9 @@ class OrdersController < ApplicationController
 
   # POST /orders
   def create
+    redirect_to orders_path
+    return
+
     @order = Order.create
     @order.update_attribute(:owner, @punter) # protected
 
@@ -94,6 +106,9 @@ class OrdersController < ApplicationController
 
   # PUT /orders/1
   def update
+    redirect_to user_show_path
+    return
+
     # check order can be updated
     unless @order.new?
       # allow # of children to be updated

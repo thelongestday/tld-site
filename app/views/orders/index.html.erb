@@ -1,4 +1,4 @@
-<h1>Ordering of the tickets. Yes!</h1>
+<h1>Ordering of the tickets. No - we're done!</h1>
 
 <% unless @unpaid_punters.empty? %>
   <h2>People you might want to buy tickets for</h2>
@@ -49,6 +49,7 @@
   </ul>
 <% end %>
 
+<% if false %>
 <% if @punter.unpaid_ticket_candidates.length > 0 %>
   <p>There's <%= pluralize(@punter.unpaid_ticket_candidates.length, 'person') %> you can buy tickets for. Why not <%= link_to 'order some tickets!', new_order_path, :class => 'jfri' %></p>
 <% else %>
@@ -59,6 +60,7 @@
 
 <p>Concessions are available to handy helpers...email for details <a href="mailto:site@thelongestday.net">site@thelongestday.net</a></p>
 
+<% end %>
 <ul class="nav">
   <li><a href="/">Return to site</a>.</li>
 </ul>
