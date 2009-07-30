@@ -58,6 +58,14 @@ class Notifier < ActionMailer::Base
     
   end
 
+  def final_jib(punter)
+    subject    "[TLD] Final instructions for #{Site::Config.event.name}"
+    recipients punter.email_with_name
+    from       'site@thelongestday.net'
+    sent_on    Time.now
+    body       :punter => punter
+  end
+
   def order_pdf_pickup(order)
     subject    "[TLD] Your order for #{Site::Config.event.name} tickets"
     recipients  order.owner.email_with_name
