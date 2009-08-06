@@ -5,6 +5,8 @@ tickets = []
 orders.each { |o| tickets << o.tickets }
 tickets.flatten!
 
+tickets = [ tickets.first ]
+
 puts "tickets: #{tickets.length}"
 
 tickets.each do |t|
@@ -12,7 +14,7 @@ tickets.each do |t|
   puts "sending to #{punter.name_with_email}"
   begin
     if ENV['DO_IT']
-       Notifier::deliver_final_jib(punter)
+       Notifier::deliver_all_over_jib(punter)
     else
       puts "not really"
     end

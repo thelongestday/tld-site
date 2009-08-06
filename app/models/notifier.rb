@@ -66,6 +66,14 @@ class Notifier < ActionMailer::Base
     body       :punter => punter
   end
 
+  def all_over_jib(punter)
+    subject    "[TLD] #{Site::Config.event.name} - it's all over"
+    recipients punter.email_with_name
+    from       'site@thelongestday.net'
+    sent_on    Time.now
+    body       :punter => punter
+  end
+
   def order_pdf_pickup(order)
     subject    "[TLD] Your order for #{Site::Config.event.name} tickets"
     recipients  order.owner.email_with_name
